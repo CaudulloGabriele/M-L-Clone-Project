@@ -8,14 +8,14 @@ public class CameraFollow : MonoBehaviour
 
 	#region Variables
 
-	//riferimento all'obiettivo che la telecamera deve seguire
+	//reference to the target the camera has to follow
 	[SerializeField]
 	private Transform followTarget;
-	//indica quanto velocemente si muove la telecamera
+	//camera's movement speed
 	[SerializeField]
 	private float camSpeed;
 	private float startCamSpeed;
-	//indica continuamente la posizione dell'obiettivo
+	//indicates the target's position continuosly
 	private Vector3 targetPos;
 
     #endregion
@@ -23,17 +23,17 @@ public class CameraFollow : MonoBehaviour
 
     private void Awake()
     {
-
+		//sets the camera initial speed
 		startCamSpeed = camSpeed;
 
     }
 
     void FixedUpdate()
 	{
-		//se si ha un obiettivo da seguire...
+		//if there is a terget to follow...
 		if (followTarget != null)
 		{
-			//...si muove verso di lui a poco, senza però cambiare la posizione nell'asse Z
+			//...the camera goes towards it, without changing the Z axis position
 			FollowTarget();
 
 		}
@@ -41,7 +41,7 @@ public class CameraFollow : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Si muove verso di lui a poco, senza però cambiare la posizione nell'asse Z
+	/// The camera goes towards the target, without changing the Z axis position
 	/// </summary>
 	private void FollowTarget()
     {
@@ -50,11 +50,19 @@ public class CameraFollow : MonoBehaviour
 		transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, 1.0f, Time.deltaTime);
 
 	}
-
+	/// <summary>
+	/// Allows to change the camera's target
+	/// </summary>
+	/// <param name="newTarget"></param>
 	public void ChangeTarget(Transform newTarget) { followTarget = newTarget; }
-
+	/// <summary>
+	/// Allows to change the camera's movement speed
+	/// </summary>
+	/// <param name="newSpeed"></param>
 	public void ChangeCameraSpeed(float newSpeed) { camSpeed = newSpeed; }
-
+	/// <summary>
+	/// Allows to return the camera's movement speed to the initial value
+	/// </summary>
 	public void ResetCameraSpeed() { camSpeed = startCamSpeed; }
 
 }

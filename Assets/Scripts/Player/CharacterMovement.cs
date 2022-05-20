@@ -1,36 +1,38 @@
-//Si occupa del movimento del giocatore
 using UnityEngine;
 
+/// <summary>
+/// Manages a character's movements
+/// </summary>
 public class CharacterMovement : MonoBehaviour
 {
-    //riferimento al Rigidbody2D del giocatore
+    //reference to the Rigidbody2D of the character
     private Rigidbody2D rb;
-    //indica la velocità di movimento del giocatore
+    //movement speed of the character
     [SerializeField]
     private float speed = 1;
 
 
     private void Awake()
     {
-        //ottiene il riferimento al Rigidbody2D dell'entità
+        //gets the reference to the Rigidbody2D of the character
         rb = GetComponent<Rigidbody2D>();
 
     }
 
     private void Update()
     {
-
+        //stops the movement, if the character is moving
         if (rb.velocity != Vector2.zero) rb.velocity = Vector2.zero;
 
     }
 
     /// <summary>
-    /// Muove il giocatore
+    /// Moves the character
     /// </summary>
     /// <param name="newVelocity"></param>
     public void Move(Vector2 newVelocity)
     {
-        //muove il giocatore, aggiungendo forza al Rigidbody del giocatore in base alla direzione ricevuta per la velocità
+        //moves the character based on the received vector multiplied by the character's movement speed
         rb.velocity = (newVelocity * speed);
 
     }

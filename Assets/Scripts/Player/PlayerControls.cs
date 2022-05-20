@@ -3,20 +3,18 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
-    //riferimento allo script che si occupa del movimento del giocatore(nella mappa)
+    //reference to the script that manages the movement of the player(while exploring)
     private CharacterMovement mapPlayerMovement;
-
-    //riferimento allo script che si occupa del movimento del giocatore(durante una battaglia)
-    //[SerializeField]
-    //private CharacterMovement battlePlayerMovement;
-
-    //riferimento allo script che si occupa delle azioni del giocatore
+    //reference to the script that manages the battle actions of the player(during battle)
+    [SerializeField]
+    private BattleActionsManager battleActionsManager;
+    //reference to the script that manages the player's actions
     private PlayerActionsManager playerActionsManager;
 
 
     private void Start()
     {
-        //ottiene i riferimenti agli script del giocatore
+        //obtains the references to the player's scripts
         mapPlayerMovement = GetComponent<CharacterMovement>();
         playerActionsManager = GetComponent<PlayerActionsManager>();
 
@@ -24,36 +22,35 @@ public class PlayerControls : MonoBehaviour
 
     private void LateUpdate()
     {
-        //se il gioco non è in pausa, controlla gli input del giocatore
+        //if the game isn't paused, checks the player's inputs
         if (!GameStateManager.IsGamePaused()) { CheckInputs(); }
-        //premendo il tasto di pausa, il gioco viene messo o tolto dalla pausa in base allo stato di pausa attuale
+        //by pressing the pause button, the game will be paused or restored to not paused
         if (Input.GetButtonDown("Pause")) { GameStateManager.SetPauseState(!GameStateManager.IsGamePaused()); }
 
     }
 
     /// <summary>
-    /// Controlla gli input del giocatore
+    /// Checks the player's inputs
     /// </summary>
     private void CheckInputs()
     {
-        //se preme il bottone d'azione, esegue l'azione che può essere eseguita in quel momento
+        //if the action button is pressed, executes the player action based on the state of the game
         if (Input.GetButtonDown("Action")) { playerActionsManager.ManageActionForCharacter(); }
-        //se il giocatore vuole muoversi, lo muove
+        //if the player wants to move, it either moves him or changes the current battle action
         Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         MovePlayer(movement);
 
     }
     /// <summary>
-    /// Muove il giocatore che si sta controllando in base allo stato del gioco
+    /// Moves the player or changes the current battle action based on the game's state
     /// </summary>
     /// <param name="movement"></param>
     private void MovePlayer(Vector2 movement)
     {
-        //se il giocatore non è in combattimento, si muove il suo personaggio nella mappa
+        //if the player is not in a fight, it moves the player in the overworld
         if (!GameStateManager.IsPlayerFighting()) { mapPlayerMovement.Move(movement); }
-
-        //altrimenti, verrà mosso il suo personaggio nel campo di battaglia
-        //else { battlePlayerMovement.Move(movement); }
+        //otherwise, it changes the current battle action based on the direction(only if the button was pressed this frame)
+        else if (Input.GetButtonDown("Horizontal")) { battleActionsManager.RotateActionBlocks(movement.x > 0); }
 
     }
 

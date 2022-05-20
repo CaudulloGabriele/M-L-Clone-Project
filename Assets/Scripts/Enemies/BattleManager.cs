@@ -7,35 +7,39 @@ public class BattleManager : MonoBehaviour
 
     #region Variables
 
-    public const int N_TYPES = 10, //numero di tipi di nemici presenti nel gioco
-        MAX_ENEMIES = 5, //numero massimo di nemici che possono essere in campo
-        START_OF_BOSS_LIST = 7; //indice da cui parte la lista dei nemici boss
+    public const int N_TYPES = 10, //number of enemy types in the game
+        MAX_ENEMIES = 5, //max number of possible enemies on the field
+        START_OF_BOSS_LIST = 7; //indicates the index at which the boss enemies start
 
-    //unica istanza di questo script nella scena
+    //only instance of this manager
     public static BattleManager instance;
 
-    //array di riferimenti ai nemici presenti nel gioco
+    //arrays of references to all the enemies
     private EnemyTypesBehaviours[] allEnemies;
     private GameObject[] allEnemiesGO;
-    //array di riferimenti di tutte le posizioni di combattimento dei nemici
+    //array of references to all enemies combat positions
     private Transform[] enemiesPositions;
-    //riferimento al contenitore delle posizioni del giocatore
+    //reference to the container of the player combat positions
     private Transform playerPositionsContainer;
-    //riferimento al contenitore dei nemici attualmente in combattimento
+    //reference to the container of the currently active enemies in the current fight
     private Transform activeEnemiesContainer;
-    //riferimento al contenitore dei nemici già spawnati e sconfitti
+    //reference to the container of all already spawned and defeated enemies
     private Transform spawnedEnemiesContainer;
-    //riferimento al giocatore...
+    //reference to the player...
     [SerializeField]
-    private Transform mapPlayer, //...nella mappa
-        battlePlayer; //...in battaglia
+    private Transform mapPlayer, //...in the map
+        battlePlayer; //...in combat
 
-    //riferimento allo script di movimento della telecamera
+    //reference to the camera movement script
     [SerializeField]
     private CameraFollow camFollow;
-    //riferimento alla posizione in cui il giocatore deve essere all'inizio del combattimento
+    //reference to the player fight position during battle
     private Transform playerFightPos;
-    //indica quanto tempo bisogna aspettare per posizionare il giocatore alla posizione di combattimento
+    //reference to the script that manages the battle actions of the player(during battle)
+    [SerializeField]
+    private BattleActionsManager battleActionsManager;
+
+    //time to wait to position player in the fight position
     [SerializeField]
     private float positionPlayerTimer = 1.5f;
 
@@ -45,16 +49,16 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        //imposta l'istanza, se non esiste già
+        //this becomes the only instance, if there is not another one
         if (!instance) instance = this;
-        //altrimenti, quest'istanza si distrugge
+        //otherwise, this instance destroys itself
         else { Destroy(gameObject); return; }
 
-        //prende i riferimenti di tutti nemici
+        //gets the references to all the enemies
         GetAllEnemies();
-        //prende i riferimenti di tutti i contenitori
+        //gets the references to all the containers
         GetAllContainers();
-        //prende i riferimenti di tutte le posizioni
+        //gets the references to all fight positions
         GetAllPositions();
 
 
@@ -68,7 +72,7 @@ public class BattleManager : MonoBehaviour
     #region Inizialization Methods
 
     /// <summary>
-    /// Prende il riferimento ai nemici e li disattiva
+    /// Gets the references to all the enemies and deactivates them
     /// </summary>
     private void GetAllEnemies()
     {
@@ -82,7 +86,7 @@ public class BattleManager : MonoBehaviour
 
     }
     /// <summary>
-    /// Ottiene i riferimenti ai contenitori di nemici attivi e previamente spawnati
+    /// Gets the references to all the containers of spawned and active enemies and of the player positions 
     /// </summary>
     private void GetAllContainers()
     {
@@ -95,20 +99,20 @@ public class BattleManager : MonoBehaviour
 
     }
     /// <summary>
-    /// Ottiene i riferimenti alle posizioni dei nemici e del giocatore
+    /// Gets the references to all fight positions
     /// </summary>
     private void GetAllPositions()
     {
-        //prende il riferimento a tutte le posizioni di battaglia per i nemici
+        //gets the references to all enemies positions
         Transform allPositionsContainer = transform.GetChild(0);
         Transform[] allPositions = allPositionsContainer.GetComponentsInChildren<Transform>();
-        //rimuove dall'array il riferimento al container delle posizioni
+        //removes from the array the container of enemies positions
         foreach (Transform pos in allPositions)
         {
-            //se la posizione controllata è invece il contenitore...
+            //if "pos" is actually the container of positions...
             if (pos == allPositionsContainer)
             {
-                //...la rimuove dall'array ed esce dal ciclo
+                //...it removes it from the array and exits the cycle
                 var recipient = new Transform[allPositions.Length - 1];
                 for (int i = 0; i < recipient.Length; i++) { recipient[i] = allPositions[i + 1]; }
                 allPositions = recipient;
@@ -118,9 +122,9 @@ public class BattleManager : MonoBehaviour
             }
 
         }
-        //salva le posizioni nell'array statico
+        //saves the positions in the static array
         enemiesPositions = allPositions;
-        //ottiene il riferimento alla posizione in cui mettere il giocatore ad inizio battaglia
+        //gets the reference to the player fight position
         playerFightPos = playerPositionsContainer.GetChild(0);
 
     }
@@ -130,72 +134,71 @@ public class BattleManager : MonoBehaviour
     #region Fight Managment
 
     /// <summary>
-    /// Fa partire la battaglia, mettendo i nemici in posizione
+    /// Starts the battle and positions the enemies to fight
     /// </summary>
     /// <param name="enemiesType"></param>
     public void FightStart(int[] enemiesType)
     {
-        //imposta lo stato di gioco a combattimento
+        //sets that the game is in the fight state
         GameStateManager.SetFightingState(true);
-        //crea un indice locale per la posizione in cui mettere il nemico
+        //creates a local index that indicates the position in which to put the enemy
         int posIndex = 0;
-        //cicla ogni tipo di nemico ricevuto...
+        //cycles all the enemies received as parameters...
         foreach (int enemyType in enemiesType)
         {
-            //...e li posiziona nel campo di battaglia
+            //...and positions them on the battleground...
             //allEnemies[enemyType].position = enemiesPositions[index].position;
             SpawnEnemy(enemyType, enemiesPositions[posIndex].position);
-            //...e incrementa l'indice di posizione per il prossimo nemico
+            //...and increments the index for the next enemy position
             posIndex++;
 
             Debug.Log("Spawn enemy type: " + enemyType);
         }
-        //fa partire la coroutine che si occupa della tempistica di inizio battaglia
+        //starts the coroutine that manages the start fight timing
         StartCoroutine(ManageStartFightTiming());
 
     }
     /// <summary>
-    /// Fa spawnare il nemico indicato nella posizione indicata, istanziandone uno nuovo se necessario
+    /// Spawns the indicated enemy in the indicated position, instantiating it if necessary
     /// </summary>
     /// <param name="enemyToSpawn"></param>
     /// <param name="enemyPos"></param>
     private void SpawnEnemy(int enemyToSpawn, Vector2 enemyPos)
     {
-        //prende il riferimento al contenitore del nemico di quel tipo da spawnare
+        //gets the reference to the container of already spawned enemies of the enemy's type received
         Transform remainingSpawnedEnemies = spawnedEnemiesContainer.GetChild(enemyToSpawn);
-        //se il contenitore contiene un nemico precedentemente istanziato...
+        //if the container contains an already spawned and defeated enemy...
         if (remainingSpawnedEnemies.childCount > 0)
         {
-            //...ne prende il riferimento...
+            //...it spawns it in the indicated position...
             Transform spawnableEnemy = remainingSpawnedEnemies.GetChild(0);
-            //...e lo spawna nella posizione indicata
             spawnableEnemy.parent = activeEnemiesContainer;
             spawnableEnemy.position = enemyPos;
 
-        } //altrimenti, istanzia un nuovo nemico di quel tipo
+        } //otherwise, it instantiates a new enemy of the received type
         else { Instantiate(allEnemiesGO[enemyToSpawn], enemyPos, Quaternion.identity, activeEnemiesContainer); }
 
     }
     /// <summary>
-    /// Richiamato da un nemico sconfitto, controlla se è stata vinta la battaglia dopo aver tolto questo nemico
+    /// Called when an enemy is defeated, checks if this was the last enemy(so that the player wins)
     /// </summary>
     /// <param name="enemyChildIndex"></param>
     /// <param name="enemyType"></param>
     public void AnEnemyWasDefeated(int enemyChildIndex, int enemyType)
     {
-        //porta il nemico sconfitto nel contenitore dei nemici già spawnati
+        //moves the defeated enemy to the container of defeated enemies
         Transform defeatedEnemy = activeEnemiesContainer.GetChild(enemyChildIndex);
         defeatedEnemy.parent = spawnedEnemiesContainer.GetChild(enemyType);
-        //se non ci sono più nemici attivi, il giocatore ha vinto la battaglia
+        //if there are no more active enemies, the player wins the battle
         if (activeEnemiesContainer.childCount == 0) { BattleWon(); }
 
     }
     /// <summary>
-    /// Rende il giocatore vincitore della battaglia corrente
+    /// Makes the player victorious of the current battle
     /// </summary>
     private void BattleWon()
     {
-        //esce dalla battaglia
+        //exits the battle
         ExitBattlePhase();
 
 
@@ -203,14 +206,14 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Battle Won!");
     }
     /// <summary>
-    /// Fa uscire il giocatore dalla battaglia
+    /// Returns the player to the overworld map
     /// </summary>
     private void ExitBattlePhase()
     {
-        //riporta la telecamera a seguire il giocatore come prima della battaglia
+        //the camera follows the overworld player like before the battle
         camFollow.ResetCameraSpeed();
         camFollow.ChangeTarget(mapPlayer);
-        //imposta lo stato di gioco a non combattimento(quindi di esplorazione)
+        //sets the game' state as no more in fight
         GameStateManager.SetFightingState(false);
 
     }
@@ -220,25 +223,27 @@ public class BattleManager : MonoBehaviour
     #region Timing Managment
 
     /// <summary>
-    /// Si occupa di far partire la battaglia solo dopo l'eventuale animazione di incontro con nemico
+    /// Starts the battle after the animation of enemy figth
     /// </summary>
     /// <returns></returns>
     private IEnumerator ManageStartFightTiming()
     {
-        //aspetta un po' di tempo
+        //waits a bit
         yield return new WaitForSeconds(positionPlayerTimer);
-        //porta la telecamera alla posizione di combattimento immediatamente
+        //immediately moves the camera in the position of the battleground
         camFollow.ChangeTarget(transform);
         camFollow.ChangeCameraSpeed(99999);
-        //porta il giocatore da battaglia nella posizione da battaglia
+        //moves the battle player in the combat position
         battlePlayer.position = playerFightPos.position;
+        //resets the action blocks
+        battleActionsManager.ResetActionBlocks();
 
     }
 
     #endregion
 
     /// <summary>
-    /// Ritorna lo sprite del nemico del tipo indicato
+    /// Returns the sprite of the enemy of the desired type
     /// </summary>
     /// <param name="enemyType"></param>
     /// <returns></returns>

@@ -3,75 +3,76 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    //crea un enumeratore per i possibili stati di gioco
+    //enum for all the possible states of the game
     private enum GameState { exploring = 0, fighting = 1, paused = 2 };
-    //indica lo stato corrente di gameplay
+    //tells the current state of the game
     private static GameState currentState = GameState.exploring;
-    //indica lo stato in cui il gioco si trovava prima di essere messo in pausa
+    //tells the state in which the game was before getting paused
     private static GameState beforePauseState;
 
-    //riferimento statico al bottone per caricare i dati, da attivare solo quando ci si trova nel menù principale
+    //static reference to the load button in the save menu, to activate only if the currently loaded scene is the MainMenu
     private static GameObject staticLoadSaveButton;
+    //static reference to the player battle manager
     private static PlayerBattleManager staticPbm;
 
-    //riferimento al bottone per caricare i dati, da attivare solo quando ci si trova nel menù principale
+    //reference to the load button in the save menu, to activate only if the currently loaded scene is the MainMenu
     [SerializeField]
     private GameObject loadSaveButton;
-
+    //reference to the player battle manager
     [SerializeField]
     private PlayerBattleManager pbm;
 
 
     private void Awake()
     {
-        //ottiene i riferimenti statici
+        //gets the static references
         staticLoadSaveButton = loadSaveButton;
         staticPbm = pbm;
 
-        //carica la scena di gameplay, additivamente
+        //additively loads the MainMenu scene
         SceneChange.StaticLoadThisScene(1, true);
 
     }
 
     /// <summary>
-    /// Inizializza varie cose quando viene caricata una scena, in base alla scena
+    /// Initializes various things when a scene is loaded, based on the scene
     /// </summary>
     public static void OnSceneLoad(bool loadedMainMenu)
     {
-
+        //activates or deactivates the load button based on wheter the loaded scene is the MainMenu or not
         staticLoadSaveButton.SetActive(loadedMainMenu);
-
+        //if this is not the MainMenu
         if (!loadedMainMenu)
         {
-
+            //...loads the save slot in use...
             DataManager.instance.SaveDataAfterUpdate(DataManager.GetCurrentlyLoadedSlotName());
-
+            //...and calculates the player stats
             staticPbm.GetSavedPlayerStats();
             staticPbm.CalculatePlayerStats();
-            Debug.Log("NONNOO");
+            //Debug.Log("NONNOO");
         }
 
     }
     /// <summary>
-    /// Permette di mettere il gioco in pausa, o di farne uscire
+    /// Allows to pause or resume the game
     /// </summary>
     /// <param name="pauseState"></param>
     public static void SetPauseState(bool pauseState)
     {
-        //se il gioco deve essere messo in pausa, e non lo è già...
+        //if the game has to be paused, and is not already...
         if (pauseState && !IsGamePaused())
         {
-            //...salva lo stato in cui era il gioco prima di metterlo in pausa...
+            //...it saves the previous state before pausing...
             beforePauseState = currentState;
-            //...e mette il gioco in pausa
+            //...and pauses the game
             currentState = GameState.paused;
 
-        } //altrimenti, torna allo stato precedente alla pausa
+        } //otherwise, sets the game in the state it was before pausing
         else { currentState = beforePauseState; }
 
     }
     /// <summary>
-    /// Permette di impostare se il gioco è in stato di combattimento o meno
+    /// Allows to set if the game is in fight state or not
     /// </summary>
     /// <param name="isFighting"></param>
     public static void SetFightingState(bool isFighting)
@@ -83,17 +84,17 @@ public class GameStateManager : MonoBehaviour
     
     }
     /// <summary>
-    /// Comunica se in questo momento il gioco è in stato esplorativo
+    /// Returns true if the state of the game is set to "exploring"
     /// </summary>
     /// <returns></returns>
     public static bool IsPlayerExploring() { return (currentState == GameState.exploring); }
     /// <summary>
-    /// Comunica se in questo momento il gioco è in stato di combattimento
+    /// Returns true if the state of the game is set to "fighting"
     /// </summary>
     /// <returns></returns>
     public static bool IsPlayerFighting() { return (currentState == GameState.fighting); }
     /// <summary>
-    /// Comunica se in questo momento il gioco è in pausa
+    /// Returns true if the game is paused
     /// </summary>
     /// <returns></returns>
     public static bool IsGamePaused() { return (currentState == GameState.paused); }

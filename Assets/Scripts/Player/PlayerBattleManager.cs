@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerBattleManager : MonoBehaviour, IUpdateData
 {
-    //riferimento alla classe che tiene conto delle statistiche del giocatore
+    //reference to the class that manages the player's stats
     private BattleStats playerStats;
-    //indica il livello del giocatore
+    //indicates the player's level
     [SerializeField]
     private int playerLevel = 1;
-    //indica di quanto devono essere moltiplicate le statistiche del giocatore
+    //indicates how much to amplify the player's battle stats
     // 0 - hp
     // 1 - attack
     // 2 - speed
@@ -19,16 +19,16 @@ public class PlayerBattleManager : MonoBehaviour, IUpdateData
 
     private void Start()
     {
-        //ottiene i valori salvati
+        //gets the saved values
         GetSavedPlayerStats();
-        //inizializza le statistiche del giocatore in base al livello e moltiplicatore salvato
+        //initializes the player's battle stats
         playerStats = new BattleStats();
-        //calcola le statistiche del giocatore
+        //calculates player's stats
         CalculatePlayerStats();
 
     }
     /// <summary>
-    /// Ottiene i valori salvati riguardanti le statistiche del giocatore
+    /// Gets the player's saved battle stats values
     /// </summary>
     public void GetSavedPlayerStats()
     {
@@ -37,7 +37,7 @@ public class PlayerBattleManager : MonoBehaviour, IUpdateData
 
     }
     /// <summary>
-    /// Calcola le statistiche del giocatore in base ai moltiplicatori
+    /// Calculates the player's battle stats based on the multipliers
     /// </summary>
     public void CalculatePlayerStats()
     {
@@ -45,14 +45,14 @@ public class PlayerBattleManager : MonoBehaviour, IUpdateData
         bool thereWasAnError = playerStats.InitializeStats(playerLevel, playerStatsMultipliers);
 
 
-        if (thereWasAnError) { Debug.LogError("C'è stato un errore con l'inizializzazione delle statistiche del giocatore"); }
+        if (thereWasAnError) { Debug.LogError("There was an error with the initialization of player's stats:"); }
         Debug.Log("Player Level: " + playerLevel);
         Debug.Log("Player HP: " + playerStats.GetCurrentHealth());
         Debug.Log("Player Attack: " + playerStats.GetAttack());
         Debug.Log("Player Speed: " + playerStats.GetSpeed());
-        Debug.Log("Inizio Debug Log per moltiplicatori di statistiche");
+        Debug.LogWarning("Begin Debug Log of stats multipliers");
         for (int i = 0; i < playerStatsMultipliers.Length; i++) { Debug.Log(i+") " + playerStatsMultipliers[i]); }
-        Debug.Log("Fine Debug Log per moltiplicatori di statistiche");
+        Debug.LogWarning("End Debug Log of stats multipliers");
     }
 
 

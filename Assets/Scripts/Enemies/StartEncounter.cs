@@ -5,33 +5,33 @@ using UnityEngine;
 
 public class StartEncounter : MonoBehaviour
 {
-    //riferimento allo SpriteRenderer del nemico nell'OverWorld
+    //reference to the enemy's overworld sprite
     [SerializeField]
     private SpriteRenderer enemySprite;
-    //riferimento all'istanza del battleManager
+    //reference to the BattleManager instance
     private BattleManager battleManager;
 
     [SerializeField]
-    private bool randomized, //indica se i nemici devono essere randomizzati per questo incontro
-        isBoss; //indica se questo è un incontro con un boss
+    private bool randomized, //tells if, for this fight, the enemies have to be randomized
+        isBoss; //tells if this is a boss fight
 
-    //array di tutti i tipi di nemici nell'incontro
+    //array of all enemies to spawn in the fight
     [SerializeField]
     private int[] enemiesType;
 
 
     private void Start()
     {
-        //prende il riferimento all'istanza del battleManager
+        //gets the reference to the BattleManager instance
         battleManager = BattleManager.instance;
-        //imposta lo sprite del nemico in OverWorld a quello del primo nemico nella lista di nemici
+        //sets the overworld sprite of the enemy as the one of the first enemy in the array
         enemySprite.sprite = battleManager.GetEnemySpriteBasedOnType(enemiesType[0]);
 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //se si collide con il giocatore, comincia la battaglia
+        //if this enemy collides with the player, it starts a battle
         if (collision.CompareTag("Player")) { StartTheBattle(); }
 
     }
@@ -44,28 +44,28 @@ public class StartEncounter : MonoBehaviour
     }
 
     /// <summary>
-    /// Fa partire la battaglia contro i nemici stabili
+    /// Starts the battle with the enemies in the array
     /// </summary>
     private void StartTheBattle()
     {
-        //se bisogna randomizzare i nemici, li randomizza
+        //randomizes enemies, if it has to
         if (randomized) { RandomizeEnemies(); }
-        //fa cominciare la battaglia
+        //starts the battle
         battleManager.FightStart(enemiesType);
 
     }
     /// <summary>
-    /// Randomizza i nemici da affrontare(sia in numero che in tipo)
+    /// Randomizes the enemies to fight(both in type and quantity)
     /// </summary>
     private void RandomizeEnemies()
     {
-        //randomizza il numero di nemici presenti nell'incontro(minimo 1)
+        //randomizes the number of enemies to fight(min 1)
         int n_Enemies = UnityEngine.Random.Range(0, BattleManager.MAX_ENEMIES) + 1;
         enemiesType = new int[n_Enemies];
-        //calcola il range di nemici randomizzabili, in base a se questo è un incontro con un boss o meno
+        //sets the range of possible enemies to spawn, based on wheter this is a boss fight or not
         int minRange = !isBoss ? 0 : BattleManager.START_OF_BOSS_LIST;
         int maxRange = !isBoss ? BattleManager.START_OF_BOSS_LIST : BattleManager.N_TYPES;
-        //infine, imposta i nuovi e randomizzati nemici da affrontare
+        //sets the new and randomized enemies
         for (int i = 0; i < n_Enemies; i++) { enemiesType[i] = UnityEngine.Random.Range(minRange, maxRange); }
 
     }

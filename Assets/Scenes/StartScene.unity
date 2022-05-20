@@ -308,6 +308,10 @@ PrefabInstance:
       propertyPath: battlePlayer
       value: 
       objectReference: {fileID: 603498675}
+    - target: {fileID: 3499004955797352219, guid: 134081b2682167f47b1763b7657afff5, type: 3}
+      propertyPath: battleActionsManager
+      value: 
+      objectReference: {fileID: 914820047}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 134081b2682167f47b1763b7657afff5, type: 3}
 --- !u!4 &603498675 stripped
@@ -607,6 +611,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 345589201295686374, guid: 80c800a1f53cd054baae198ee70402b1, type: 3}
   m_PrefabInstance: {fileID: 750192391}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &914820047 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3902702876966139700, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
+  m_PrefabInstance: {fileID: 5217026462840296679}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f58dbd26c01923f4da30b2fd9803d472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1006146950
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,6 +687,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5217026461614833712, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
+      propertyPath: battleActionsManager
+      value: 
+      objectReference: {fileID: 914820047}
+    - target: {fileID: 5217026461614833714, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
+      propertyPath: battleActionsManager
+      value: 
+      objectReference: {fileID: 914820047}
     - target: {fileID: 5217026461614833717, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
       propertyPath: m_Name
       value: Player

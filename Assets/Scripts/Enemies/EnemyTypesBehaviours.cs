@@ -12,20 +12,19 @@ public class EnemyTypesBehaviours : MonoBehaviour
 
     }
 
-    //riferimento allo SpriteRenderer di questo nemico
+    //references to the SpriteRenderer of this Enemy
     [SerializeField]
     private SpriteRenderer thisEnemySR;
-    //riferimento all'istanza del battleManager
+    //reference to the instance of the BattleManager
     private BattleManager battleManager;
-    //indica il tipo di questo nemico
+    //indicates the enemy's type
     [SerializeField]
-
     private int thisEnemyType = 0;
 
 
     private void Start()
     {
-        //prende il riferimento all'istanza del battleManager
+        //gets the BattleManager instance
         battleManager = BattleManager.instance;
 
     }
@@ -41,7 +40,7 @@ public class EnemyTypesBehaviours : MonoBehaviour
     }
 
     /// <summary>
-    /// Ritorna lo sprite di questo nemico
+    /// Returns this enemy's sprite
     /// </summary>
     /// <returns></returns>
     public Sprite GetEnemySprite() { return thisEnemySR.sprite; }
