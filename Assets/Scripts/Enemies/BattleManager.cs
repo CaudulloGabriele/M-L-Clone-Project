@@ -242,11 +242,24 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
+    #region Getter Methods
+
+    public EnemyTypesBehaviours GetActiveEnemyAtIndex(int index)
+    {
+
+        if (index >= activeEnemiesContainer.childCount) index = 0;
+
+        return activeEnemiesContainer.GetChild(index).GetComponent<EnemyTypesBehaviours>();
+
+    }
+
     /// <summary>
     /// Returns the sprite of the enemy of the desired type
     /// </summary>
     /// <param name="enemyType"></param>
     /// <returns></returns>
     public Sprite GetEnemySpriteBasedOnType(int enemyType) { return allEnemies[enemyType].GetEnemySprite(); }
+
+    #endregion
 
 }

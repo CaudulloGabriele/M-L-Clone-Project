@@ -49,8 +49,8 @@ public class PlayerControls : MonoBehaviour
     {
         //if the player is not in a fight, it moves the player in the overworld
         if (!GameStateManager.IsPlayerFighting()) { mapPlayerMovement.Move(movement); }
-        //otherwise, it changes the current battle action based on the direction(only if the button was pressed this frame)
-        else if (Input.GetButtonDown("Horizontal")) { battleActionsManager.RotateActionBlocks(movement.x > 0); }
+        //otherwise, it changes the current battle action selection based on the direction(only if the button was pressed this frame)
+        else if (Input.GetButtonDown("Horizontal")) { battleActionsManager.ChangeSelection(movement); }
 
     }
 

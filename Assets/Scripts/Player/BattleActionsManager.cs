@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class BattleActionsManager : MonoBehaviour
 {
+    /// <summary>
+    /// enum that indicates the states of battle actions
+    /// </summary>
+    private enum ActionChoiceState { choosingTypeOfAction = 0, choosingItem = 1, choosingEnemyOrPlayer = 2 }
+
+    //tells the current state of choice of battle action
+    private ActionChoiceState currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
 
     [Tooltip("References to the SpriteRenderers of the action blocks in this order:\n1)Current\n2)Right\n3)Back\n4)Left")]
     [SerializeField]
@@ -13,8 +20,13 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    //reference to the instance of the BattleManager
+    private BattleManager battleManager;
+
     //index of the current action
     private int currentActionIndex = 0;
+    //index of the current selected enemy
+    private int currentlySelectedEnemyIndex = -1;
     //number of possible actions during battle
     private int nActionBlocks = -1;
 
@@ -26,11 +38,27 @@ public class BattleActionsManager : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        //gets the reference to the instance of the BattleManager
+        battleManager = BattleManager.instance;
+
+    }
+
+    public void ChangeSelection(Vector2 selection)
+    {
+
+        if (IsChoosingAction()) RotateActionBlocks(selection.x > 0);
+        else if (IsChoosingItem()) { /*CAMBIA SELEZIONE NEL MENU' DEGLI OGGETTI*/ }
+        else { ChangeSelectedEnemy(selection); }
+    }
     /// <summary>
-    /// Resets the action blocks state(the Sprite they have)
+    /// Resets the action blocks state
     /// </summary>
     public void ResetActionBlocks()
     {
+
+        currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
 
         currentActionIndex = -1;
 
@@ -41,7 +69,7 @@ public class BattleActionsManager : MonoBehaviour
     /// Rotates the action blocks right or left based on the received parameter
     /// </summary>
     /// <param name="right"></param>
-    public void RotateActionBlocks(bool right)
+    private void RotateActionBlocks(bool right)
     {
         //increments or decrements the index of the current action based on the parameter
         currentActionIndex += right ? 1 : -1;
@@ -57,6 +85,61 @@ public class BattleActionsManager : MonoBehaviour
             if (actionIndex >= nActionBlocks) actionIndex -= nActionBlocks;
 
             actionBlocksSprites[i].sprite = actionsSprites[actionIndex];
+
+        }
+
+    }
+
+    private void ChangeSelectedEnemy(Vector2 selection, bool firstSelection = false)
+    {
+
+        /*SELECTS ENEMY BASED ON SELECTION VECTOR, MOVES AN ARROW IN THE ENEMY'S POSITION(GOTTEN FROM BATTLEMANAGER)*/
+
+    }
+
+    public void PerformAnAction()
+    {
+
+        switch (currentActionChoiceState)
+        {
+            //CHOOSING TYPE OF ACTION
+            case ActionChoiceState.choosingTypeOfAction:
+                {
+
+                    Debug.LogError("STILL DOESN'T GO TO ENEMY OR ITEM SELECTION");
+
+                    if (SelectedActionIsBasicAttack())
+                    {
+
+                        ChangeSelectedEnemy(Vector2.zero, true);
+
+                        currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer;
+
+                    }
+
+                    break;
+
+                }
+            //CHOOSING ITEM
+            case ActionChoiceState.choosingItem:
+                {
+
+                    Debug.LogError("STILL DOESN'T EXIT FROM ITEM SELECTION MENU");
+
+                    break;
+
+                }
+            //CHOOSING ENEMY OR PLAYER
+            case ActionChoiceState.choosingEnemyOrPlayer:
+                {
+
+                    PerformCurrentAction();
+
+                    break;
+
+                }
+            //ERROR
+            default: break;
 
         }
 
@@ -116,5 +199,14 @@ public class BattleActionsManager : MonoBehaviour
         }
 
     }
+
+    private bool SelectedActionIsBasicAttack() { return currentActionIndex == 0; }
+    private bool SelectedActionIsCoopAttack() { return currentActionIndex == 1; }
+    private bool SelectedActionIsRunAway() { return currentActionIndex == 2; }
+    private bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
+
+    private bool IsChoosingAction() { return currentActionChoiceState == ActionChoiceState.choosingTypeOfAction; }
+    private bool IsChoosingItem() { return currentActionChoiceState == ActionChoiceState.choosingItem; }
+    private bool IsChoosingEnemyOrPlayer() { return currentActionChoiceState == ActionChoiceState.choosingEnemyOrPlayer; }
 
 }

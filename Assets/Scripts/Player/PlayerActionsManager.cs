@@ -28,8 +28,8 @@ public class PlayerActionsManager : MonoBehaviour
         //otherwise, if the player is fighting...
         else if (GameStateManager.IsPlayerFighting())
         {
-            //...performs the currently selected action
-            battleActionsManager.PerformCurrentAction();
+            //...performs the currently possible battle action
+            battleActionsManager.PerformAnAction();
 
         }
 
