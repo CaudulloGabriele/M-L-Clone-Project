@@ -190,7 +190,7 @@ public class BattleManager : MonoBehaviour
         Transform defeatedEnemy = activeEnemiesContainer.GetChild(enemyChildIndex);
         defeatedEnemy.parent = spawnedEnemiesContainer.GetChild(enemyType);
         //if there are no more active enemies, the player wins the battle
-        if (activeEnemiesContainer.childCount == 0) { BattleWon(); }
+        if (GetNumberOfCurrentlyActiveEnemies() == 0) { BattleWon(); }
 
     }
     /// <summary>
@@ -244,10 +244,12 @@ public class BattleManager : MonoBehaviour
 
     #region Getter Methods
 
+    public int GetNumberOfCurrentlyActiveEnemies() { return activeEnemiesContainer.childCount; }
+
     public EnemyTypesBehaviours GetActiveEnemyAtIndex(int index)
     {
 
-        if (index >= activeEnemiesContainer.childCount) index = 0;
+        if (index >= GetNumberOfCurrentlyActiveEnemies()) index = 0;
 
         return activeEnemiesContainer.GetChild(index).GetComponent<EnemyTypesBehaviours>();
 

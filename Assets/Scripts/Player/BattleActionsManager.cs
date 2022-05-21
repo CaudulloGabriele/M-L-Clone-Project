@@ -9,6 +9,8 @@ public class BattleActionsManager : MonoBehaviour
     /// </summary>
     private enum ActionChoiceState { choosingTypeOfAction = 0, choosingItem = 1, choosingEnemyOrPlayer = 2 }
 
+    #region Variables
+
     //tells the current state of choice of battle action
     private ActionChoiceState currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
 
@@ -20,6 +22,9 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    [SerializeField]
+    private Transform selectionArrow;
+
     //reference to the instance of the BattleManager
     private BattleManager battleManager;
 
@@ -30,6 +35,9 @@ public class BattleActionsManager : MonoBehaviour
     //number of possible actions during battle
     private int nActionBlocks = -1;
 
+    #endregion
+
+    #region MonoBehaviour Methods
 
     private void Awake()
     {
@@ -45,68 +53,23 @@ public class BattleActionsManager : MonoBehaviour
 
     }
 
-    public void ChangeSelection(Vector2 selection)
-    {
+    #endregion
 
-        if (IsChoosingAction()) RotateActionBlocks(selection.x > 0);
-        else if (IsChoosingItem()) { /*CAMBIA SELEZIONE NEL MENU' DEGLI OGGETTI*/ }
-        else { ChangeSelectedEnemy(selection); }
-    }
+    #region Action Perform
+
     /// <summary>
-    /// Resets the action blocks state
+    /// Performs an action based on the current state of choice of action
     /// </summary>
-    public void ResetActionBlocks()
-    {
-
-        currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
-
-        currentActionIndex = -1;
-
-        RotateActionBlocks(true);
-
-    }
-    /// <summary>
-    /// Rotates the action blocks right or left based on the received parameter
-    /// </summary>
-    /// <param name="right"></param>
-    private void RotateActionBlocks(bool right)
-    {
-        //increments or decrements the index of the current action based on the parameter
-        currentActionIndex += right ? 1 : -1;
-        //corrects the index if is out of the array range
-        if (currentActionIndex > nActionBlocks) currentActionIndex -= nActionBlocks;
-        else if (currentActionIndex < 0) currentActionIndex += nActionBlocks;
-        //cycles each action block and changes its sprite based on where its rotating
-        for (int i = 0; i < nActionBlocks; i++)
-        {
-
-            int actionIndex = i + currentActionIndex;
-
-            if (actionIndex >= nActionBlocks) actionIndex -= nActionBlocks;
-
-            actionBlocksSprites[i].sprite = actionsSprites[actionIndex];
-
-        }
-
-    }
-
-    private void ChangeSelectedEnemy(Vector2 selection, bool firstSelection = false)
-    {
-
-        /*SELECTS ENEMY BASED ON SELECTION VECTOR, MOVES AN ARROW IN THE ENEMY'S POSITION(GOTTEN FROM BATTLEMANAGER)*/
-
-    }
-
     public void PerformAnAction()
     {
-
+        //based on the current choice state, does something different
         switch (currentActionChoiceState)
         {
             //CHOOSING TYPE OF ACTION
             case ActionChoiceState.choosingTypeOfAction:
                 {
 
-                    Debug.LogError("STILL DOESN'T GO TO ENEMY OR ITEM SELECTION");
+                    Debug.LogError("STILL DOESN'T GO TO ITEM SELECTION");
 
                     if (SelectedActionIsBasicAttack())
                     {
@@ -142,6 +105,13 @@ public class BattleActionsManager : MonoBehaviour
             default: break;
 
         }
+
+    }
+
+    private void ExitCurrentChoiceOfAction()
+    {
+
+
 
     }
 
@@ -200,13 +170,112 @@ public class BattleActionsManager : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region Selection Managment
+
+    /// <summary>
+    /// Allows to change the current selection(be it of an action, item or enemy)
+    /// </summary>
+    /// <param name="selection"></param>
+    public void ChangeSelection(Vector2 selection)
+    {
+        //if an action is being chosen, rotates the action blocks in the desired direction
+        if (IsChoosingAction()) RotateActionBlocks(selection.x > 0);
+        //otherwise, if an item is being chosen, moves the selection to the desired item
+        else if (IsChoosingItem()) { /*CAMBIA SELEZIONE NEL MENU' DEGLI OGGETTI*/ }
+        //otherwise, an enemy is being chosen so selects the next enemy based on the desired direction
+        else { ChangeSelectedEnemy(selection); }
+    }
+    /// <summary>
+    /// Resets the action blocks state
+    /// </summary>
+    public void ResetActionBlocks()
+    {
+
+        currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
+
+        currentActionIndex = -1;
+
+        RotateActionBlocks(true);
+
+    }
+    /// <summary>
+    /// Rotates the action blocks right or left based on the received parameter
+    /// </summary>
+    /// <param name="right"></param>
+    private void RotateActionBlocks(bool right)
+    {
+        //increments or decrements the index of the current action based on the parameter
+        currentActionIndex += right ? 1 : -1;
+        //corrects the index if is out of the array range
+        if (currentActionIndex > nActionBlocks) currentActionIndex -= nActionBlocks;
+        else if (currentActionIndex < 0) currentActionIndex += nActionBlocks;
+        //cycles each action block and changes its sprite based on where its rotating
+        for (int i = 0; i < nActionBlocks; i++)
+        {
+
+            int actionIndex = i + currentActionIndex;
+
+            if (actionIndex >= nActionBlocks) actionIndex -= nActionBlocks;
+
+            actionBlocksSprites[i].sprite = actionsSprites[actionIndex];
+
+        }
+
+    }
+    /// <summary>
+    /// Changes the currently selected enemy
+    /// </summary>
+    /// <param name="selection"></param>
+    /// <param name="firstSelection"></param>
+    private void ChangeSelectedEnemy(Vector2 selection, bool firstSelection = false)
+    {
+        //if this is the first selection, selects the first active enemy
+        if (firstSelection) currentlySelectedEnemyIndex = 0;
+        //otherwise...
+        else
+        {
+            //...selects the next enemy based on selection...
+            currentlySelectedEnemyIndex += (selection.x > 0) ? 1 : -1;
+
+            //...and makes sure the index doesn't go out of the expected range
+            int currentlyActiveEnemiesAmount = battleManager.GetNumberOfCurrentlyActiveEnemies();
+
+            if (currentlySelectedEnemyIndex >= currentlyActiveEnemiesAmount) currentlySelectedEnemyIndex = 0;
+
+            else if (currentlySelectedEnemyIndex < 0) currentlySelectedEnemyIndex = currentlyActiveEnemiesAmount - 1;
+
+        }
+
+        //positions the arrow over the selected enemy
+        Vector2 overEnemyPos = battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetSelectionArrowPos();
+        PositionSelectionArrow(overEnemyPos);
+
+    }
+    /// <summary>
+    /// Allows to change the position of the selection arrow
+    /// </summary>
+    /// <param name="newPos"></param>
+    private void PositionSelectionArrow(Vector2 newPos) { selectionArrow.position = newPos; }
+
+    #endregion
+
+    #region Getter Methods for Current Action
+
     private bool SelectedActionIsBasicAttack() { return currentActionIndex == 0; }
     private bool SelectedActionIsCoopAttack() { return currentActionIndex == 1; }
     private bool SelectedActionIsRunAway() { return currentActionIndex == 2; }
     private bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
 
+    #endregion
+
+    #region Getter Methods for Current Action Choice State
+
     private bool IsChoosingAction() { return currentActionChoiceState == ActionChoiceState.choosingTypeOfAction; }
     private bool IsChoosingItem() { return currentActionChoiceState == ActionChoiceState.choosingItem; }
     private bool IsChoosingEnemyOrPlayer() { return currentActionChoiceState == ActionChoiceState.choosingEnemyOrPlayer; }
+
+    #endregion
 
 }
