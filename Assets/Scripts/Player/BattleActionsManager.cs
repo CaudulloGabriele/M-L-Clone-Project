@@ -22,8 +22,10 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    //reference to the selection arrow
     [SerializeField]
     private Transform selectionArrow;
+    private GameObject selectionArrowGO;
 
     //reference to the instance of the BattleManager
     private BattleManager battleManager;
@@ -43,6 +45,8 @@ public class BattleActionsManager : MonoBehaviour
     {
         //obtains the number of possible actions during battle
         nActionBlocks = actionBlocksSprites.Length;
+        //obtains the reference to the gameObject of the selection arrow
+        selectionArrowGO = selectionArrow.gameObject;
 
     }
 
@@ -170,7 +174,7 @@ public class BattleActionsManager : MonoBehaviour
                     //returns to the action blocks selection state
                     SetIsChoosingAction();
                     //hides the selection arrow
-                    PositionSelectionArrow(Vector2.zero);
+                    PositionSelectionArrow(Vector2.zero, true);
 
                     break;
 
@@ -321,10 +325,19 @@ public class BattleActionsManager : MonoBehaviour
 
     }
     /// <summary>
-    /// Allows to change the position of the selection arrow
+    /// Allows to change the position of the selection arrow or hide it
     /// </summary>
     /// <param name="newPos"></param>
-    private void PositionSelectionArrow(Vector2 newPos) { selectionArrow.position = newPos; }
+    private void PositionSelectionArrow(Vector2 newPos, bool hide = false)
+    {
+
+        selectionArrowGO.SetActive(!hide);
+
+        if (hide) return;
+
+        selectionArrow.position = newPos;
+    
+    }
 
     #endregion
 

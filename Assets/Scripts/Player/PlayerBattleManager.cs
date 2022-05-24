@@ -9,7 +9,7 @@ public class PlayerBattleManager : MonoBehaviour, IUpdateData
     //indicates the player's level
     [SerializeField]
     private int playerLevel = 1;
-    //indicates how much to amplify the player's battle stats
+    //indicates by how much to amplify the player's battle stats
     // 0 - hp
     // 1 - attack
     // 2 - speed
