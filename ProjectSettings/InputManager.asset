@@ -57,7 +57,7 @@ InputManager:
     m_Name: Cancel
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
+    negativeButton: z
     positiveButton: x
     altNegativeButton: 
     altPositiveButton: 
@@ -73,10 +73,10 @@ InputManager:
     m_Name: Action
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
+    negativeButton: s
     positiveButton: a
     altNegativeButton: 
-    altPositiveButton: s
+    altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000

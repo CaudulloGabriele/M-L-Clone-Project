@@ -7,7 +7,7 @@ public class BattleActionsManager : MonoBehaviour
     /// <summary>
     /// enum that indicates the states of battle actions
     /// </summary>
-    private enum ActionChoiceState { choosingTypeOfAction = 0, choosingItem = 1, choosingEnemyOrPlayer = 2 }
+    private enum ActionChoiceState { notOwnTurn = -1, choosingTypeOfAction = 0, choosingItem = 1, choosingEnemyOrPlayer = 2 }
 
     #region Variables
 
@@ -69,15 +69,31 @@ public class BattleActionsManager : MonoBehaviour
             case ActionChoiceState.choosingTypeOfAction:
                 {
 
-                    Debug.LogError("STILL DOESN'T GO TO ITEM SELECTION");
+                    Debug.LogError("STILL DOESN'T GO TO ITEM SELECTION WHEN PERFORMING ACTION: " + SelectedActionIsBasicAttack());
 
+                    //if the solo attack block was selected...
                     if (SelectedActionIsBasicAttack())
                     {
-
+                        //...selects the first active enemy...
                         ChangeSelectedEnemy(Vector2.zero, true);
+                        //...indicates that the player is selecting which enemy to attack
+                        SetIsChoosingEnemyOrPlayer();
 
-                        currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer;
+                    }
+                    else if (SelectedActionIsItemUse())
+                    {
 
+                        Debug.LogError("STILL DOESN'T GO TO ITEM SELECTION WHEN PERFORMING ACTION");
+                    }
+                    else if (SelectedActionIsRunAway())
+                    {
+
+                        Debug.LogError("NOTHING HAPPENS FOR RUN-AWAY SELECTION WHEN PERFORMING ACTION");
+                    }
+                    else if (SelectedActionIsCoopAttack())
+                    {
+
+                        Debug.LogError("NOTHING HAPPENS FOR CO-OP ACTION SELECTION WHEN PERFORMING ACTION");
                     }
 
                     break;
@@ -87,7 +103,9 @@ public class BattleActionsManager : MonoBehaviour
             case ActionChoiceState.choosingItem:
                 {
 
-                    Debug.LogError("STILL DOESN'T EXIT FROM ITEM SELECTION MENU");
+                    Debug.LogError("STILL DOESN'T EXIT FROM ITEM SELECTION MENU WHEN PERFORMING ACTION");
+
+                    //NEEDS TO GO TO STATE "choosingEnemyOrPlayer" AND CLOSE ITEM MENU
 
                     break;
 
@@ -95,7 +113,7 @@ public class BattleActionsManager : MonoBehaviour
             //CHOOSING ENEMY OR PLAYER
             case ActionChoiceState.choosingEnemyOrPlayer:
                 {
-
+                    //performs the selected action
                     PerformCurrentAction();
 
                     break;
@@ -107,11 +125,60 @@ public class BattleActionsManager : MonoBehaviour
         }
 
     }
-
-    private void ExitCurrentChoiceOfAction()
+    /// <summary>
+    /// Cancels the current action
+    /// </summary>
+    public void ExitCurrentChoiceOfAction()
     {
+        //based on the current choice state, does something different
+        switch (currentActionChoiceState)
+        {
+            //CHOOSING TYPE OF ACTION
+            case ActionChoiceState.choosingTypeOfAction:
+                {
 
+                    Debug.LogError("DOESN'T NEED TO GO BACK WHEN CANCELLING");
 
+                    /*
+                    if (SelectedActionIsBasicAttack())
+                    {
+
+                        ChangeSelectedEnemy(Vector2.zero, true);
+
+                        currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer;
+
+                    }
+                    */
+
+                    break;
+
+                }
+            //CHOOSING ITEM
+            case ActionChoiceState.choosingItem:
+                {
+
+                    Debug.LogError("STILL DOESN'T EXIT FROM ITEM SELECTION MENU WHEN CANCELLING");
+
+                    SetIsChoosingAction();
+
+                    break;
+
+                }
+            //CHOOSING ENEMY OR PLAYER
+            case ActionChoiceState.choosingEnemyOrPlayer:
+                {
+                    //returns to the action blocks selection state
+                    SetIsChoosingAction();
+                    //hides the selection arrow
+                    PositionSelectionArrow(Vector2.zero);
+
+                    break;
+
+                }
+            //ERROR
+            default: break;
+
+        }
 
     }
 
@@ -193,7 +260,7 @@ public class BattleActionsManager : MonoBehaviour
     public void ResetActionBlocks()
     {
 
-        currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
+        SetIsChoosingAction();
 
         currentActionIndex = -1;
 
@@ -209,7 +276,7 @@ public class BattleActionsManager : MonoBehaviour
         //increments or decrements the index of the current action based on the parameter
         currentActionIndex += right ? 1 : -1;
         //corrects the index if is out of the array range
-        if (currentActionIndex > nActionBlocks) currentActionIndex -= nActionBlocks;
+        if (currentActionIndex >= nActionBlocks) currentActionIndex -= nActionBlocks;
         else if (currentActionIndex < 0) currentActionIndex += nActionBlocks;
         //cycles each action block and changes its sprite based on where its rotating
         for (int i = 0; i < nActionBlocks; i++)
@@ -272,9 +339,19 @@ public class BattleActionsManager : MonoBehaviour
 
     #region Getter Methods for Current Action Choice State
 
+    private bool IsNotOwnTurn() { return currentActionChoiceState == ActionChoiceState.notOwnTurn; }
     private bool IsChoosingAction() { return currentActionChoiceState == ActionChoiceState.choosingTypeOfAction; }
     private bool IsChoosingItem() { return currentActionChoiceState == ActionChoiceState.choosingItem; }
     private bool IsChoosingEnemyOrPlayer() { return currentActionChoiceState == ActionChoiceState.choosingEnemyOrPlayer; }
+
+    #endregion
+
+    #region Setter Methods for Current Action Choice State
+
+    private void SetIsNotOwnTurn() { currentActionChoiceState = ActionChoiceState.notOwnTurn; }
+    private void SetIsChoosingAction() { currentActionChoiceState = ActionChoiceState.choosingTypeOfAction; }
+    private void SetIsChoosingItem() { currentActionChoiceState = ActionChoiceState.choosingItem; }
+    private void SetIsChoosingEnemyOrPlayer() { currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer; }
 
     #endregion
 

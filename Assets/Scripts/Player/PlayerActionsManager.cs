@@ -15,7 +15,9 @@ public class PlayerActionsManager : MonoBehaviour
     /// <summary>
     /// Activates the right action of the player based on the game's state
     /// </summary>
-    public void ManageActionForCharacter()
+    /// <param name="confirm"></param>
+    /// <param name="actionOfFirstCharacter"></param>
+    public void ManageActionForCharacter(bool confirm, bool actionOfFirstCharacter)
     {
         //if an action is in execution, no other action can be executed
         if (inAction) return;
@@ -24,12 +26,17 @@ public class PlayerActionsManager : MonoBehaviour
         if (GameStateManager.IsPlayerExploring())
         {
             Debug.Log("Exploring Action");
+
+            if (confirm) { }
+            else { }
+
         }
         //otherwise, if the player is fighting...
         else if (GameStateManager.IsPlayerFighting())
         {
-            //...performs the currently possible battle action
-            battleActionsManager.PerformAnAction();
+            //...performs or cancels the currently possible battle action
+            if (confirm) { battleActionsManager.PerformAnAction(); }
+            else { battleActionsManager.ExitCurrentChoiceOfAction(); }
 
         }
 

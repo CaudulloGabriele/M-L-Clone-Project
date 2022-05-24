@@ -35,7 +35,9 @@ public class PlayerControls : MonoBehaviour
     private void CheckInputs()
     {
         //if the action button is pressed, executes the player action based on the state of the game
-        if (Input.GetButtonDown("Action")) { playerActionsManager.ManageActionForCharacter(); }
+        if (Input.GetButtonDown("Action")) { playerActionsManager.ManageActionForCharacter(true, Input.GetAxisRaw("Action") > 0); }
+        //if the cancel button is pressed, cancels the player action based on the state of the game
+        if (Input.GetButtonDown("Cancel")) { playerActionsManager.ManageActionForCharacter(false, Input.GetAxisRaw("Cancel") > 0); }
         //if the player wants to move, it either moves him or changes the current battle action
         Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         MovePlayer(movement);
