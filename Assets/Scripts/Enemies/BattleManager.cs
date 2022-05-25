@@ -5,11 +5,11 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
 
-    #region Variables
-
     public const int N_TYPES = 10, //number of enemy types in the game
         MAX_ENEMIES = 5, //max number of possible enemies on the field
         START_OF_BOSS_LIST = 7; //indicates the index at which the boss enemies start
+
+    #region Variables
 
     //only instance of this manager
     public static BattleManager instance;
@@ -35,6 +35,9 @@ public class BattleManager : MonoBehaviour
     private CameraFollow camFollow;
     //reference to the player fight position during battle
     private Transform playerFightPos;
+    //reference to the center of the battle ground
+    [SerializeField]
+    private Transform centerPos;
     //reference to the script that manages the battle actions of the player(during battle)
     [SerializeField]
     private BattleActionsManager battleActionsManager;
@@ -244,8 +247,26 @@ public class BattleManager : MonoBehaviour
 
     #region Getter Methods
 
+    /// <summary>
+    /// Returns the position of the player fight position
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetPlayerFightPos() { return playerFightPos.position; }
+    /// <summary>
+    /// Returns the center position of the battle ground
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetCenterPos() { return centerPos.position; }
+    /// <summary>
+    /// Returns the number of currently active enemies
+    /// </summary>
+    /// <returns></returns>
     public int GetNumberOfCurrentlyActiveEnemies() { return activeEnemiesContainer.childCount; }
-
+    /// <summary>
+    /// Returns the active enemy desired
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public EnemyTypesBehaviours GetActiveEnemyAtIndex(int index)
     {
 
@@ -254,7 +275,6 @@ public class BattleManager : MonoBehaviour
         return activeEnemiesContainer.GetChild(index).GetComponent<EnemyTypesBehaviours>();
 
     }
-
     /// <summary>
     /// Returns the sprite of the enemy of the desired type
     /// </summary>

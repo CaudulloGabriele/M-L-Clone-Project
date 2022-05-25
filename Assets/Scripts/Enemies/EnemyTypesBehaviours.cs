@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyTypesBehaviours : MonoBehaviour
 {
 
-    private enum EnemyTypes 
+    private enum EnemyTypes
     {
         shroob = 0,
         commanderShroob = 1,
@@ -97,6 +97,15 @@ public class EnemyTypesBehaviours : MonoBehaviour
             ChangeHealth(999);
         }
 
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+
+            if (thisEnemyBehaviour == null) { Debug.LogError("THERE IS NO BEHAVIOUR IN ENEMY: " + name + " | TYPE = " + thisEnemyType); return; }
+
+            thisEnemyBehaviour.PerformAction();
+
+        }
+
     }
 
     #endregion
@@ -145,7 +154,7 @@ public class EnemyTypesBehaviours : MonoBehaviour
         }
 
         //gives itself as reference to the enemy's behaviour
-        if (thisEnemyBehaviour != null) thisEnemyBehaviour.SetEnemyTypesBehaviuorsRef(this);
+        if (thisEnemyBehaviour != null) thisEnemyBehaviour.SetEnemyTypesBehavioursRef(this);
 
     }
 

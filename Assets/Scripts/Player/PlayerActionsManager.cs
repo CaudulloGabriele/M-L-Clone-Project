@@ -81,7 +81,7 @@ public class PlayerActionsManager : MonoBehaviour
             if (Input.GetButtonDown("Action"))
             {
                 //...ends the anticipation of the solo action...
-                soloAction.EndAnticipation();
+                soloAction.SetIfPerforming(false);
 
                 Debug.LogWarning("Perfect Hit");
 
@@ -95,6 +95,8 @@ public class PlayerActionsManager : MonoBehaviour
             await Task.Delay(1);
             
         }
+
+        soloAction.SetIfPerforming(false);
 
         Debug.LogWarning("Missed Hit");
 

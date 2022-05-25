@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class BattleActionsManager : MonoBehaviour
 {
+    //indicates how much time to wait after end of an action to go ahead
+    public const float WAIT_AFTER_END_OF_ACTION = 0.8f;
+
     /// <summary>
     /// enum that indicates the states of battle actions
     /// </summary>

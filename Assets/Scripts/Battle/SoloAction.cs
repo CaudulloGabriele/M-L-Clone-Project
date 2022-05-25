@@ -3,9 +3,13 @@ using UnityEngine;
 
 public class SoloAction : MonoBehaviour
 {
-
-    public delegate void SoloActionDelegate(bool start, float anticipationTimer = 0);
-
+    /// <summary>
+    /// Delegate for SoloAction
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="timer"></param>
+    public delegate void SoloActionDelegate(bool start, float timer = 0);
+    //delegate for solo action of this entity
     private SoloActionDelegate soloAction;
 
     #region Variables
@@ -30,7 +34,11 @@ public class SoloAction : MonoBehaviour
     //indicates how much the anticipation attack lasts
     [SerializeField]
     private float anticipationTimer = 1;
-    private float startAnticipationTimer;
+    //private float startAnticipationTimer;
+
+
+    //indicates whether or not the solo action is being performed
+    private bool isPerforming = false;
 
     //indicates if there has to be an anticipation before attacking
     //[SerializeField]
@@ -49,7 +57,7 @@ public class SoloAction : MonoBehaviour
         performerCharMove = performer.GetComponent<CharacterMovement>();
 
         //obtains the timers starting values
-        startAnticipationTimer = anticipationTimer;
+        //startAnticipationTimer = anticipationTimer;
 
     }
 
@@ -74,8 +82,9 @@ public class SoloAction : MonoBehaviour
 
         //performs the solo action
         soloAction(true, anticipationTimer);
-        //waits for the anticipation to end
-        while (!HasAnticipationEnded()) { await Task.Delay(1); }
+        //waits for the action to end
+        SetIfPerforming(true);
+        while (isPerforming) { await Task.Delay(1); }
 
         //waits for the anticipation to end, if there has to be an anticipation
         /*
@@ -164,6 +173,7 @@ public class SoloAction : MonoBehaviour
     
     }
 
+    /*
     private bool HasAnticipationEnded()
     {
 
@@ -176,11 +186,16 @@ public class SoloAction : MonoBehaviour
         return ended;
 
     }
+    */
 
-    public void EndAnticipation() { anticipationTimer = 0; }
+    public void SetIfPerforming(bool state) { isPerforming = state; }
 
     #endregion
 
+    /// <summary>
+    /// Allows to set the solo action to perform for this entity
+    /// </summary>
+    /// <param name="newSoloAction"></param>
     public void SetSoloActionToPerform(SoloActionDelegate newSoloAction) { soloAction += newSoloAction; }
     /// <summary>
     /// Allows to change the performing position

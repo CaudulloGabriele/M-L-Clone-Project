@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2164812190260263764}
   - component: {fileID: 793085345712360488}
+  - component: {fileID: 8108852061838737011}
   m_Layer: 0
   m_Name: BattleEnemy
   m_TagString: Untagged
@@ -52,6 +53,22 @@ MonoBehaviour:
   damagePointPos: {fileID: 1743317704340766296}
   thisEnemyType: 0
   thisEnemyLevel: 1
+--- !u!114 &8108852061838737011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2164812190260263763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50427db004f91f43853d7102ef7172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  performer: {fileID: 6045673182449777546}
+  moveSpeed: 10
+  closeEnoughDist: 0.1
+  anticipationTimer: 1
 --- !u!1 &2240823615304696901
 GameObject:
   m_ObjectHideFlags: 0
