@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleActionsManager : MonoBehaviour
@@ -416,6 +414,12 @@ public class BattleActionsManager : MonoBehaviour
     private void SetIsChoosingAction() { currentActionChoiceState = ActionChoiceState.choosingTypeOfAction; }
     private void SetIsChoosingItem() { currentActionChoiceState = ActionChoiceState.choosingItem; }
     private void SetIsChoosingEnemyOrPlayer() { currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer; }
+
+    #endregion
+
+    #region Getter Methods for Actions Scripts
+
+    public SoloAction GetSoloActionManager() { return soloAction; }
 
     #endregion
 

@@ -177,6 +177,8 @@ public class SoloAction : MonoBehaviour
 
     }
 
+    public void EndAnticipation() { anticipationTimer = 0; }
+
     #endregion
 
     public void SetSoloActionToPerform(SoloActionDelegate newSoloAction) { soloAction += newSoloAction; }
