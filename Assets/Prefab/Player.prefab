@@ -221,6 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023051330713098728}
   - component: {fileID: 3902702876966139700}
+  - component: {fileID: 2171952920931115046}
   m_Layer: 0
   m_Name: BattleActionsManager
   m_TagString: Untagged
@@ -272,6 +273,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 088588df201d366439d1d640aa129e14, type: 3}
   - {fileID: 21300000, guid: b7e41d31b8629234aa3f59aaed23de06, type: 3}
   selectionArrow: {fileID: 6428469157141527577}
+--- !u!114 &2171952920931115046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649224644062296458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50427db004f91f43853d7102ef7172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  performer: {fileID: 3264189828921214120}
 --- !u!1 &833469360790680870
 GameObject:
   m_ObjectHideFlags: 0

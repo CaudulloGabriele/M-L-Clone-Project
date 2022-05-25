@@ -9,7 +9,7 @@ public class PlayerActionsManager : MonoBehaviour
     private BattleActionsManager battleActionsManager;
 
     //indicates if an action is in execution
-    private bool inAction = false;
+    //private bool inAction = false;
 
 
     /// <summary>
@@ -20,7 +20,7 @@ public class PlayerActionsManager : MonoBehaviour
     public void ManageActionForCharacter(bool confirm, bool actionOfFirstCharacter)
     {
         //if an action is in execution, no other action can be executed
-        if (inAction) return;
+        if (battleActionsManager.IsPerformingAnAction()) return;
 
         //if the player is exploring...
         if (GameStateManager.IsPlayerExploring())

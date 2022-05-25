@@ -22,6 +22,8 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    private SoloAction soloAction;
+
     //reference to the selection arrow
     [SerializeField]
     private Transform selectionArrow;
@@ -37,6 +39,8 @@ public class BattleActionsManager : MonoBehaviour
     //number of possible actions during battle
     private int nActionBlocks = -1;
 
+    private bool performingAnAction = false;
+
     #endregion
 
     #region MonoBehaviour Methods
@@ -45,6 +49,10 @@ public class BattleActionsManager : MonoBehaviour
     {
         //obtains the number of possible actions during battle
         nActionBlocks = actionBlocksSprites.Length;
+
+        //obtains the reference to this entity's SoloAction manager script
+        soloAction = GetComponent<SoloAction>();
+
         //obtains the reference to the gameObject of the selection arrow
         selectionArrowGO = selectionArrow.gameObject;
 
@@ -202,15 +210,22 @@ public class BattleActionsManager : MonoBehaviour
         }
 
     }
-
+    /// <summary>
+    /// Performs the current action
+    /// </summary>
     public void PerformCurrentAction()
     {
+        //comunicates that an action is being performed
+        SetIfPerformingAnAction(true);
 
         switch (currentActionIndex)
         {
             //SOLO ACTION
             case 0:
                 {
+
+                    soloAction.SetPerformingPos(battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos());
+                    soloAction.PerformSoloAction();
 
                     Debug.Log("Solo Action");
 
@@ -366,6 +381,10 @@ public class BattleActionsManager : MonoBehaviour
     private bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
 
     #endregion
+
+    public bool IsPerformingAnAction() { return performingAnAction; }
+
+    public void SetIfPerformingAnAction(bool performing) { performingAnAction = performing; }
 
     #region Getter Methods for Current Action Choice State
 

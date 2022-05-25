@@ -31,6 +31,7 @@ Transform:
   - {fileID: 6045673182449777546}
   - {fileID: 1563316120029032964}
   - {fileID: 5240875511155374493}
+  - {fileID: 1743317704340766296}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,7 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thisEnemySR: {fileID: 3729409984998020494}
   selectionArrowPos: {fileID: 5240875511155374493}
+  damagePointPos: {fileID: 1743317704340766296}
   thisEnemyType: 0
+  thisEnemyLevel: 1
 --- !u!1 &2240823615304696901
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,6 +163,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2164812190260263764}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7512091280686307152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743317704340766296}
+  m_Layer: 0
+  m_Name: DamagePointPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1743317704340766296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7512091280686307152}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2164812190260263764}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8984522773108971456
 GameObject:

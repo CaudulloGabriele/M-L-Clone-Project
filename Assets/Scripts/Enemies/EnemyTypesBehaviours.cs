@@ -33,6 +33,9 @@ public class EnemyTypesBehaviours : MonoBehaviour
     //reference to the position in which the selection arrow has to be in when selecting this enemy
     [SerializeField]
     private Transform selectionArrowPos;
+    //reference to the position in which the player has to be to inflict damage to this enemy
+    [SerializeField]
+    private Transform damagePointPos;
 
     //reference to this enemy's behaviour
     private IAmEnemy thisEnemyBehaviour = null;
@@ -158,6 +161,11 @@ public class EnemyTypesBehaviours : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public Vector2 GetSelectionArrowPos() { return selectionArrowPos.position; }
+    /// <summary>
+    /// Returns the position in which the player has to be to inflict damage to this enemy
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetDamagePointPos() { return damagePointPos.position; }
 
     #endregion
 
