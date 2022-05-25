@@ -22,6 +22,7 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    //reference to the SoloAction manager script of this entity
     private SoloAction soloAction;
 
     //reference to the selection arrow
@@ -39,6 +40,7 @@ public class BattleActionsManager : MonoBehaviour
     //number of possible actions during battle
     private int nActionBlocks = -1;
 
+    //indicates if an action is being performed
     private bool performingAnAction = false;
 
     #endregion
@@ -217,13 +219,15 @@ public class BattleActionsManager : MonoBehaviour
     {
         //comunicates that an action is being performed
         SetIfPerformingAnAction(true);
+        //hides the selection arrow
+        PositionSelectionArrow(Vector2.zero, true);
 
         switch (currentActionIndex)
         {
             //SOLO ACTION
             case 0:
                 {
-
+                    //performs the solo action
                     soloAction.SetPerformingPos(battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos());
                     soloAction.PerformSoloAction();
 
@@ -382,9 +386,20 @@ public class BattleActionsManager : MonoBehaviour
 
     #endregion
 
-    public bool IsPerformingAnAction() { return performingAnAction; }
+    #region Action Performing
 
+    /// <summary>
+    /// Returns wheter or not an action is currently being performed
+    /// </summary>
+    /// <returns></returns>
+    public bool IsPerformingAnAction() { return performingAnAction; }
+    /// <summary>
+    /// Allows to set if there is currently an action being performed or not
+    /// </summary>
+    /// <param name="performing"></param>
     public void SetIfPerformingAnAction(bool performing) { performingAnAction = performing; }
+
+    #endregion
 
     #region Getter Methods for Current Action Choice State
 

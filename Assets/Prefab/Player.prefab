@@ -286,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   performer: {fileID: 3264189828921214120}
+  closeEnoughDist: 0.1
 --- !u!1 &833469360790680870
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,7 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b3c1eafc2136f49a50e03aa1eb2d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.5
+  speed: 10
 --- !u!50 &603498677
 Rigidbody2D:
   serializedVersion: 4
