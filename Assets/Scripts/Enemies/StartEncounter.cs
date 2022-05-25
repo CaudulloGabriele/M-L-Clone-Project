@@ -53,6 +53,8 @@ public class StartEncounter : MonoBehaviour
         //starts the battle
         battleManager.FightStart(enemiesType);
 
+        /*DEACTIVATES COLLIDER*/
+
     }
     /// <summary>
     /// Randomizes the enemies to fight(both in type and quantity)
