@@ -69,6 +69,15 @@ public class BattleActionsManager : MonoBehaviour
         //based on the current choice state, does something different
         switch (currentActionChoiceState)
         {
+            //NOT OWN TURN
+            case ActionChoiceState.notOwnTurn:
+                {
+
+                    /*JUMP OR DODGE SINCE IT'S ENEMY'S TURN*/
+
+                    break;
+
+                }
             //CHOOSING TYPE OF ACTION
             case ActionChoiceState.choosingTypeOfAction:
                 {
@@ -137,6 +146,14 @@ public class BattleActionsManager : MonoBehaviour
         //based on the current choice state, does something different
         switch (currentActionChoiceState)
         {
+            //NOT OWN TURN
+            case ActionChoiceState.notOwnTurn:
+                {
+
+
+                    break;
+
+                }
             //CHOOSING TYPE OF ACTION
             case ActionChoiceState.choosingTypeOfAction:
                 {
