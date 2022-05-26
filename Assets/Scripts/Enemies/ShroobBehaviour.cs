@@ -14,6 +14,8 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     private EnemyTypesBehaviours etb;
     //reference to this enemy's SoloAction manager
     private SoloAction soloAction;
+    //reference to the prefab of the shroob bullet
+    private BulletsBehaviour shroobBullet;
 
     //reference to the player's fight position
     private Vector2 playerFightPos;
