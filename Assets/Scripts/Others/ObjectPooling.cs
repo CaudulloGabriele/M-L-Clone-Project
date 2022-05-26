@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ObjectPooling : MonoBehaviour
@@ -46,6 +47,7 @@ public class ObjectPooling : MonoBehaviour
     //list containing all containers of available objects in pool
     private Transform[] containersOfAvailableObjectsInPool;
     //array that indicates the number of currently available objects in the pool(for each type of PoolingObject)
+    [SerializeField]
     private int[] numberOfAvailableObjectsInPool;
 
     #endregion
@@ -67,9 +69,10 @@ public class ObjectPooling : MonoBehaviour
         //Debug.Log("WITH HASH GET OBJECT: " + GetObjectByName("ShroobBullet"));
     }
 
-    private void OnDestroy()
+    private async void OnDestroy()
     {
         //if this was the sole existing instance, sets the instance as null
+        await Task.Delay(1);
         if (instance == this) instance = null;
 
     }
@@ -105,6 +108,7 @@ public class ObjectPooling : MonoBehaviour
             Transform container = new GameObject("Container Of " + poolObj.GetPoolingObjectIdentifier()).transform;
             container.parent = transform;
             containersOfAvailableObjectsInPool[i] = container;
+            container.gameObject.SetActive(false);
 
             //spawns at least one object to pool each
             availableObjectsInPool.Add(new List<GameObject>());
@@ -122,6 +126,17 @@ public class ObjectPooling : MonoBehaviour
     /// <param name="objToSpawn"></param>
     /// <returns></returns>
     public static GameObject GetObjectFromPool(string objToSpawn) { return instance.GetObjectByName(objToSpawn); }
+
+    public static int AddObjectToPool(int id, GameObject obj)
+    {
+
+        int n = instance.AddToPool(id, obj);
+
+        return n;
+
+    }
+
+    public static void RemoveObjectFromPool(int id, int index) { instance.RemoveFromPool(id, index); }
 
     #endregion
 
@@ -154,12 +169,13 @@ public class ObjectPooling : MonoBehaviour
         GameObject poolObj;
 
         //if there is an available object in the pool...
-        if (numberOfAvailableObjectsInPool[objectID] > 0)
+        if (numberOfAvailableObjectsInPool[objectID] > 0 && IsObjectAvailable(objectID, 0))
         {
             //...returns the reference of the first available object...
             poolObj = availableObjectsInPool[objectID][0];
+
             //...and removes it from the pool
-            RemoveFromPool(objectID, 0);
+            //RemoveFromPool(objectID, 0);
 
         }
         //otherwise...
@@ -170,8 +186,12 @@ public class ObjectPooling : MonoBehaviour
 
             /*ADD POOLING OBJECT BEHAVIOUR FOR READDING ITSELF WHEN FINISHED*/
 
+            PooledObjectBehaviour p = newObj.AddComponent<PooledObjectBehaviour>();
+            p.SetObjectID(objectID);
+
             //...and adds it to the pool...
             AddToPool(objectID, newObj);
+
             //...then finally spawns it from the pool
             poolObj = SpawnFromPool(objectID);
         
@@ -189,14 +209,18 @@ public class ObjectPooling : MonoBehaviour
     /// </summary>
     /// <param name="objectID"></param>
     /// <param name="objectToAdd"></param>
-    private void AddToPool(int objectID, GameObject objectToAdd)
+    private int AddToPool(int objectID, GameObject objectToAdd)
     {
-        //Debug.LogWarning("OBJECT TO ADD: " + objectToAdd + " AT INDEX: " + objectID);
-        //Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+        Debug.LogWarning("OBJECT TO ADD: " + objectToAdd + " AT INDEX: " + objectID);
+        Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+
 
         numberOfAvailableObjectsInPool[objectID]++;
 
         availableObjectsInPool[objectID].Add(objectToAdd);
+
+
+        return numberOfAvailableObjectsInPool[objectID];
 
     }
     /// <summary>
@@ -206,14 +230,18 @@ public class ObjectPooling : MonoBehaviour
     /// <param name="objectIndex"></param>
     private void RemoveFromPool(int objectID, int objectIndex)
     {
-        //Debug.LogWarning("INDEX OF OBJECT TO REMOVE: " + objectID);
-        //Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+        Debug.LogWarning("INDEX OF OBJECT TO REMOVE: " + objectID);
+        Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+
+        if (!IsObjectAvailable(objectID, objectIndex)) return;
 
         numberOfAvailableObjectsInPool[objectID]--;
 
-        availableObjectsInPool[objectID].RemoveAt(objectIndex);
+        //availableObjectsInPool[objectID].RemoveAt(objectIndex);
 
     }
+
+    private bool IsObjectAvailable(int objectID, int objectIndex) { return availableObjectsInPool[objectID][objectIndex] != null; }
 
     #endregion
 
