@@ -42,13 +42,10 @@ public class ObjectPooling : MonoBehaviour
     private Hashtable hashPoolingObjects = new Hashtable();
 
     //list containing all already spawned and available objects in the pool(for each type of PoolingObject)
-    [SerializeField]
     private List<List<GameObject>> availableObjectsInPool = new List<List<GameObject>>();
     //list containing all containers of available objects in pool
-    [SerializeField]
     private Transform[] containersOfAvailableObjectsInPool;
     //array that indicates the number of currently available objects in the pool(for each type of PoolingObject)
-    [SerializeField]
     private int[] numberOfAvailableObjectsInPool;
 
     #endregion
