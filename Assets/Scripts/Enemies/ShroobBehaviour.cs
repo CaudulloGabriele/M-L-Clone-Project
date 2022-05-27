@@ -14,8 +14,8 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     private EnemyTypesBehaviours etb;
     //reference to this enemy's SoloAction manager
     private SoloAction soloAction;
-    //reference to the prefab of the shroob bullet
-    private BulletsBehaviour shroobBullet;
+    //reference to the empty where bullets will come from
+    private Transform bulletSpawner;
 
     //reference to the player's fight position
     private Vector2 playerFightPos;
@@ -68,11 +68,11 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
 
         }
 
-        //shoots a bullet towards the player position
+        //shoots the bullet towards the player position, while setting its damage
         GameObject bullet = ObjectPooling.GetObjectFromPool("ShroobBullet");
-        bullet.transform.position = transform.position;
-        BulletsBehaviour bulletBehaviour = bullet.GetComponent<BulletsBehaviour>();
-        bulletBehaviour.ShootBulletToTarget(playerFightPos);
+        BulletsBehaviour shroobBullet = bullet.GetComponent<BulletsBehaviour>();
+        shroobBullet.SetBulletDamage(etb.GetEnemyAttack());
+        shroobBullet.ShootBulletToTarget(playerFightPos, bulletSpawner.position);
 
         //waits a bit
         await Task.Delay(TimeSpan.FromSeconds(BattleActionsManager.WAIT_AFTER_END_OF_ACTION));
@@ -85,10 +85,17 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     #region Interface Methods
 
     /// <summary>
-    /// Allows to set the reference to this enemy's EnemyTypesBehaviours script
+    /// Allows to initialize the references of this enemy
     /// </summary>
     /// <param name="newEtb"></param>
-    public void SetEnemyTypesBehavioursRef(EnemyTypesBehaviours newEtb) { etb = newEtb; }
+    public void InitializeEnemy(EnemyTypesBehaviours newEtb)
+    {
+        
+        etb = newEtb;
+
+        bulletSpawner = etb.GetEnemyAttackPosition();
+    
+    }
     /// <summary>
     /// Makes the Shroob perform a battle action
     /// </summary>

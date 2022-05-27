@@ -11,6 +11,9 @@ public class BulletsBehaviour : MonoBehaviour
     //indicates how fast this bullet moves
     [SerializeField]
     private float speed;
+    //indicates how much damage the bullet does
+    [SerializeField]
+    private float damage;
     //indicates when the bullet expires after being shot
     [SerializeField]
     private float lifeTime = 1;
@@ -31,10 +34,13 @@ public class BulletsBehaviour : MonoBehaviour
     /// Shoots bullet towards a specified target position
     /// </summary>
     /// <param name="targetPos"></param>
-    public async void ShootBulletToTarget(Vector2 targetPos)
+    public async void ShootBulletToTarget(Vector2 targetPos, Vector2 startPos)
     {
         //activates the bullet
         gameObject.SetActive(true);
+
+        //positions the bullet at the start position received
+        transform.position = startPos;
 
         //shoots the bullet towards the target position
         transform.right = targetPos - (Vector2)transform.position;
@@ -73,5 +79,7 @@ public class BulletsBehaviour : MonoBehaviour
         lifeTime = startLifeTime;
 
     }
+
+    public void SetBulletDamage(float newDmg) { damage = newDmg; }
 
 }

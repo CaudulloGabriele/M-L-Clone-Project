@@ -72,6 +72,13 @@ public class ObjectPooling : MonoBehaviour
         //Debug.Log("WITH HASH GET OBJECT: " + GetObjectByName("ShroobBullet"));
     }
 
+    private void FixedUpdate()
+    {
+
+        shroobBullets = availableObjectsInPool[0];
+        
+    }
+
     private async void OnDestroy()
     {
         //if this was the sole existing instance, sets the instance as null
@@ -130,6 +137,11 @@ public class ObjectPooling : MonoBehaviour
     /// <returns></returns>
     public static GameObject GetObjectFromPool(string objToSpawn) { return instance.GetObjectByName(objToSpawn); }
 
+    /// <summary>
+    /// Allows to add an object to the pool
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="obj"></param>
     public static int AddObjectToPool(int id, GameObject obj)
     {
 
@@ -138,7 +150,11 @@ public class ObjectPooling : MonoBehaviour
         return n;
 
     }
-
+    /// <summary>
+    /// Allows to remove an object from the pool
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="index"></param>
     public static void RemoveObjectFromPool(int id, int index) { instance.RemoveFromPool(id, index); }
 
     #endregion
@@ -171,34 +187,24 @@ public class ObjectPooling : MonoBehaviour
         //local variable that will contain the desired object
         GameObject poolObj;
 
-        //if there is an available object in the pool...
-        if (IsObjectAvailable(objectID, 0))
-        {
-            //...returns the reference of the first available object...
-            poolObj = availableObjectsInPool[objectID][0];
-
-            //...and removes it from the pool
-            RemoveFromPool(objectID, 0);
-
-        }
-        //otherwise...
-        else
+        //if there is no available object of the desired type...
+        if (!IsObjectAvailable(objectID, 0))
         {
             //...instantiates a new object of the desired type...
             GameObject newObj = Instantiate(poolingObjects[objectID].GetPoolingObject(), containersOfAvailableObjectsInPool[objectID]);
-
-            /*ADD POOLING OBJECT BEHAVIOUR FOR READDING ITSELF WHEN FINISHED*/
-
+            //...and gives it the behaviour of a poolable object...
             PooledObjectBehaviour p = newObj.AddComponent<PooledObjectBehaviour>();
             p.SetObjectID(objectID);
 
-            //...and adds it to the pool...
+            //...and adds it to the pool
             AddToPool(objectID, newObj);
 
-            //...then finally spawns it from the pool
-            poolObj = SpawnFromPool(objectID);
-        
         }
+
+        //...gets the reference of the first available object...
+        poolObj = availableObjectsInPool[objectID][0];
+        //...and removes it from the pool
+        RemoveFromPool(objectID, 0);
 
         //Debug.LogWarning("OBJECT RETURNED: " + poolObj);
 
@@ -214,8 +220,8 @@ public class ObjectPooling : MonoBehaviour
     /// <param name="objectToAdd"></param>
     private int AddToPool(int objectID, GameObject objectToAdd)
     {
-        Debug.LogWarning("OBJECT TO ADD: " + objectToAdd + " AT INDEX: " + objectID);
-        Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+        //Debug.LogWarning("OBJECT TO ADD: " + objectToAdd + " AT INDEX: " + objectID);
+        //Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
 
 
         numberOfAvailableObjectsInPool[objectID]++;
@@ -235,8 +241,8 @@ public class ObjectPooling : MonoBehaviour
     /// <param name="objectIndex"></param>
     private void RemoveFromPool(int objectID, int objectIndex)
     {
-        Debug.LogWarning("INDEX OF OBJECT TO REMOVE: " + objectID);
-        Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
+        //Debug.LogWarning("INDEX OF OBJECT TO REMOVE: " + objectID);
+        //Debug.LogWarning("OBJECTS AVAILABLE COUNT: " + availableObjectsInPool.Count);
 
         if (!IsObjectAvailable(objectID, objectIndex)) return;
 
@@ -246,11 +252,12 @@ public class ObjectPooling : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        shroobBullets = availableObjectsInPool[0];
-    }
-
+    /// <summary>
+    /// Returns whetere the desired object is available or not
+    /// </summary>
+    /// <param name="objectID"></param>
+    /// <param name="objectIndex"></param>
+    /// <returns></returns>
     private bool IsObjectAvailable(int objectID, int objectIndex)
     {
 
@@ -262,8 +269,6 @@ public class ObjectPooling : MonoBehaviour
         }
 
         return false;
-
-        //return numberOfAvailableObjectsInPool[objectID] > 0 && availableObjectsInPool[objectID][objectIndex] != null;
     
     }
 
