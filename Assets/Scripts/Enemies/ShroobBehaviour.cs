@@ -69,6 +69,12 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
         }
 
         /*SHOOTS BULLET TOWARDS PLAYER*/
+        Debug.LogWarning("SAS: " + name);
+
+        GameObject bullet = ObjectPooling.GetObjectFromPool("ShroobBullet");
+        bullet.transform.position = transform.position;
+        BulletsBehaviour bulletBehaviour = bullet.GetComponent<BulletsBehaviour>();
+        bulletBehaviour.ShootBulletToTarget(playerFightPos);
 
         //waits a bit
         await Task.Delay(TimeSpan.FromSeconds(BattleActionsManager.WAIT_AFTER_END_OF_ACTION));

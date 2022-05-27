@@ -8,25 +8,41 @@ public class PooledObjectBehaviour : MonoBehaviour
     [SerializeField]
     private int objectID;
 
+    /*
     [SerializeField]
     private int objectIndex;
 
+    private bool isBeingCreated = true;
+    */
+
+    /*
+    private void Start()
+    {
+
+        gameObject.SetActive(false);
+        
+    }
 
     private void OnEnable()
     {
+        
+        if (isBeingCreated) { return; }
 
         Debug.LogError("ABOUT TO BE REMOVED");
 
         ObjectPooling.RemoveObjectFromPool(objectID, objectIndex);
-
+        
     }
+    */
 
     private void OnDisable()
     {
 
-        Debug.LogError("ABOUT TO BE READDED");
+        //if (isBeingCreated) { isBeingCreated = false; return; }
 
-        objectIndex = ObjectPooling.AddObjectToPool(objectID, gameObject);
+        //Debug.LogError("ABOUT TO BE READDED");
+
+        /*objectIndex = */ObjectPooling.AddObjectToPool(objectID, gameObject);
 
     }
 

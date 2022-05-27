@@ -14,6 +14,7 @@ public class BulletsBehaviour : MonoBehaviour
     //indicates when the bullet expires after being shot
     [SerializeField]
     private float lifeTime = 1;
+    private float startLifeTime;
 
 
     private void Awake()
@@ -21,19 +22,23 @@ public class BulletsBehaviour : MonoBehaviour
         //obtains the reference to the Rigidbody2D of this bullet
         bulletRb = GetComponent<Rigidbody2D>();
 
+        startLifeTime = lifeTime;
+
     }
 
-
-    public async void ShootBulletToTarget(Transform target)
+    public async void ShootBulletToTarget(Vector2 targetPos)
     {
 
-        transform.LookAt(target);
+        gameObject.SetActive(true);
+
+        //transform.LookAt(targetPos);
+        transform.right = targetPos - (Vector2)transform.position;
         bulletRb.velocity = transform.right * speed;
 
         while (!HasBulletExpired())
         {
 
-            await Task.Delay(1);
+            await Task.Delay(/*System.TimeSpan.FromSeconds(Time.deltaTime)*/1);
 
             lifeTime -= Time.deltaTime;
 
@@ -49,7 +54,9 @@ public class BulletsBehaviour : MonoBehaviour
     private void Expire()
     {
 
+        lifeTime = startLifeTime;
 
+        gameObject.SetActive(false);
 
     }
 

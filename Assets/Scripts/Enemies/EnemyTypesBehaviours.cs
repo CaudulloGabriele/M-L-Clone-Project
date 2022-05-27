@@ -55,7 +55,16 @@ public class EnemyTypesBehaviours : MonoBehaviour
 
     public void Awake()
     {
+
         enemyStats = new BattleStats();
+
+        IAmEnemy behaviour = GetComponent<IAmEnemy>();
+        if (behaviour != null)
+        {
+            thisEnemyBehaviour = behaviour;
+
+            return;
+        }
 
         GetBehaviourBasedOnType();
 
@@ -127,7 +136,7 @@ public class EnemyTypesBehaviours : MonoBehaviour
     /// </summary>
     private void GetBehaviourBasedOnType()
     {
-        
+
         switch (thisEnemyType)
         {
             //SHROOB

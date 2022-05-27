@@ -44,6 +44,9 @@ public class ObjectPooling : MonoBehaviour
 
     //list containing all already spawned and available objects in the pool(for each type of PoolingObject)
     private List<List<GameObject>> availableObjectsInPool = new List<List<GameObject>>();
+
+    [SerializeField]
+    List<GameObject> shroobBullets;
     //list containing all containers of available objects in pool
     private Transform[] containersOfAvailableObjectsInPool;
     //array that indicates the number of currently available objects in the pool(for each type of PoolingObject)
@@ -108,11 +111,11 @@ public class ObjectPooling : MonoBehaviour
             Transform container = new GameObject("Container Of " + poolObj.GetPoolingObjectIdentifier()).transform;
             container.parent = transform;
             containersOfAvailableObjectsInPool[i] = container;
-            container.gameObject.SetActive(false);
+            //container.gameObject.SetActive(false);
 
             //spawns at least one object to pool each
             availableObjectsInPool.Add(new List<GameObject>());
-            SpawnFromPool(i);
+            //SpawnFromPool(i);
 
         }
 
@@ -169,13 +172,13 @@ public class ObjectPooling : MonoBehaviour
         GameObject poolObj;
 
         //if there is an available object in the pool...
-        if (numberOfAvailableObjectsInPool[objectID] > 0 && IsObjectAvailable(objectID, 0))
+        if (IsObjectAvailable(objectID, 0))
         {
             //...returns the reference of the first available object...
             poolObj = availableObjectsInPool[objectID][0];
 
             //...and removes it from the pool
-            //RemoveFromPool(objectID, 0);
+            RemoveFromPool(objectID, 0);
 
         }
         //otherwise...
@@ -219,6 +222,8 @@ public class ObjectPooling : MonoBehaviour
 
         availableObjectsInPool[objectID].Add(objectToAdd);
 
+        //objectToAdd.transform.parent = containersOfAvailableObjectsInPool[objectID];
+
 
         return numberOfAvailableObjectsInPool[objectID];
 
@@ -237,11 +242,30 @@ public class ObjectPooling : MonoBehaviour
 
         numberOfAvailableObjectsInPool[objectID]--;
 
-        //availableObjectsInPool[objectID].RemoveAt(objectIndex);
+        availableObjectsInPool[objectID].RemoveAt(objectIndex);
 
     }
 
-    private bool IsObjectAvailable(int objectID, int objectIndex) { return availableObjectsInPool[objectID][objectIndex] != null; }
+    private void FixedUpdate()
+    {
+        shroobBullets = availableObjectsInPool[0];
+    }
+
+    private bool IsObjectAvailable(int objectID, int objectIndex)
+    {
+
+        if (numberOfAvailableObjectsInPool[objectID] > 0)
+        {
+
+            if (availableObjectsInPool[objectID][objectIndex] != null) return true;
+
+        }
+
+        return false;
+
+        //return numberOfAvailableObjectsInPool[objectID] > 0 && availableObjectsInPool[objectID][objectIndex] != null;
+    
+    }
 
     #endregion
 
