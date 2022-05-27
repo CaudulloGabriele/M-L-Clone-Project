@@ -84,8 +84,14 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
 
     #region Interface Methods
 
+    /// <summary>
+    /// Allows to set the reference to this enemy's EnemyTypesBehaviours script
+    /// </summary>
+    /// <param name="newEtb"></param>
     public void SetEnemyTypesBehavioursRef(EnemyTypesBehaviours newEtb) { etb = newEtb; }
-
+    /// <summary>
+    /// Makes the Shroob perform a battle action
+    /// </summary>
     public void PerformAction()
     {
 
