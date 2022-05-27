@@ -55,9 +55,11 @@ public class EnemyTypesBehaviours : MonoBehaviour
 
     public void Awake()
     {
-
+        //initializes the enemy's stats
         enemyStats = new BattleStats();
 
+
+        //if the enemy doesn't already have a behaviour, gets and adds the behaviour based on type
         IAmEnemy behaviour = GetComponent<IAmEnemy>();
         if (behaviour != null)
         {

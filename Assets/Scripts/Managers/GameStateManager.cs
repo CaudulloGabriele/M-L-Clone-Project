@@ -64,11 +64,13 @@ public class GameStateManager : MonoBehaviour
         {
             //...it saves the previous state before pausing...
             beforePauseState = currentState;
+
+            Time.timeScale = 0;
             //...and pauses the game
             currentState = GameState.paused;
 
         } //otherwise, sets the game in the state it was before pausing
-        else { currentState = beforePauseState; }
+        else { currentState = beforePauseState; Time.timeScale = 1; }
 
     }
     /// <summary>

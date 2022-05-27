@@ -143,7 +143,7 @@ public class SoloAction : MonoBehaviour
 
                 performer.position = Vector3.MoveTowards(performer.position, newPos, moveSpeed * Time.deltaTime);
 
-                await Task.Delay(System.TimeSpan.FromSeconds(Time.deltaTime));
+                await Task.Delay(1);
 
             }
 
