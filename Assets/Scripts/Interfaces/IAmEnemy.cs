@@ -9,6 +9,10 @@ public interface IAmEnemy
     /// <param name="newEtb"></param>
     void InitializeEnemy(EnemyTypesBehaviours newEtb);
     /// <summary>
+    /// Returns this enemy's EnemyTypesBehaviuors script
+    /// </summary>
+    EnemyTypesBehaviours GetThisEnemyTypesBehaviour();
+    /// <summary>
     /// Makes the enemy perform an action
     /// </summary>
     void PerformAction();

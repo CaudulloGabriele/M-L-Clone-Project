@@ -79,7 +79,10 @@ public class BulletsBehaviour : MonoBehaviour
         lifeTime = startLifeTime;
 
     }
-
+    /// <summary>
+    /// Allows to set this bullet's damage
+    /// </summary>
+    /// <param name="newDmg"></param>
     public void SetBulletDamage(float newDmg) { damage = newDmg; }
 
 }

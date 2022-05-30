@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTypesBehaviours : MonoBehaviour
+public class EnemyTypesBehaviours : EntityBattleManager
 {
 
     private enum EnemyTypes
@@ -22,13 +22,14 @@ public class EnemyTypesBehaviours : MonoBehaviour
 
     #region Variables
 
+    [Header("")]
+    [Header("ENEMY TYPES BEHAVIOUR")]
+
     //references to the SpriteRenderer of this Enemy
     [SerializeField]
     private SpriteRenderer thisEnemySR;
     //reference to the instance of the BattleManager
     private BattleManager battleManager;
-    //reference to the class that manages the enemy's stats
-    private BattleStats enemyStats;
 
     //reference to the position in which the selection arrow has to be in when selecting this enemy
     [SerializeField]
@@ -46,45 +47,18 @@ public class EnemyTypesBehaviours : MonoBehaviour
     //indicates the enemy's type
     [SerializeField]
     private int thisEnemyType = 0;
-    //indicates the enemy's level
-    [SerializeField]
-    private int thisEnemyLevel = 1;
-    //indicates by how much to amplify the enemy's battle stats
-    private float[] thisEnemyStatsMult = { 1, 1, 1 };
 
     #endregion
 
     #region MonoBehaviour Methods
 
-    public void Awake()
+    protected override void Awake()
     {
-        //initializes the enemy's stats
-        enemyStats = new BattleStats();
+        base.Awake();
 
         //adds the appropriate behaviour to this enemy
         GetBehaviourBasedOnType();
 
-    }
-
-    private void OnEnable()
-    {
-        //whenever the enemy gets activated(either by instantiating or respawning) its stats go back to normal
-        bool thereWasAnError = enemyStats.InitializeStats(thisEnemyLevel, thisEnemyStatsMult);
-
-
-        Debug.LogError("THE ENEMY STATS MULTIPLIER STILL CAN'T CHANGE ITS VALUE");
-        
-        
-        if (thereWasAnError) { Debug.LogError("There was an error with the initialization of enemy's stats: " + name); }
-        /*
-        Debug.Log("Enemy Level: " + thisEnemyLevel);
-        Debug.Log("Enemy HP: " + enemyStats.GetCurrentHealth());
-        Debug.Log("Enemy Attack: " + enemyStats.GetAttack());
-        Debug.Log("Enemy Speed: " + enemyStats.GetSpeed());
-        Debug.LogWarning("Begin Debug Log of stats multipliers");
-        for (int i = 0; i < thisEnemyStatsMult.Length; i++) { Debug.Log(i + ") " + thisEnemyStatsMult[i]); }
-        Debug.LogWarning("End Debug Log of stats multipliers");
-        */
     }
 
     private void Start()
@@ -102,6 +76,7 @@ public class EnemyTypesBehaviours : MonoBehaviour
             ChangeHealth(999);
         }
 
+        /*
         if (Input.GetKeyDown(KeyCode.F11))
         {
 
@@ -110,6 +85,7 @@ public class EnemyTypesBehaviours : MonoBehaviour
             thisEnemyBehaviour.PerformAction();
 
         }
+        */
 
     }
 
@@ -122,9 +98,9 @@ public class EnemyTypesBehaviours : MonoBehaviour
     public void ChangeHealth(float dmg)
     {
 
-        enemyStats.SetCurrentHealth(enemyStats.GetCurrentHealth() - dmg);
+        entityStats.SetCurrentHealth(entityStats.GetCurrentHealth() - dmg);
 
-        if (enemyStats.GetCurrentHealth() <= 0) battleManager.AnEnemyWasDefeated(transform.GetSiblingIndex(), thisEnemyType);
+        if (entityStats.GetCurrentHealth() <= 0) battleManager.AnEnemyWasDefeated(GetEnemyIndex(), thisEnemyType);
 
     }
     /// <summary>
@@ -170,6 +146,9 @@ public class EnemyTypesBehaviours : MonoBehaviour
             thisEnemyBehaviour = behaviour;
             thisEnemyBehaviour.InitializeEnemy(this);
 
+            entityLevel = EnemyStats.GetEnemyLevel(thisEnemyType);
+            entityStatsMult = EnemyStats.GetEnemyStatsMult(thisEnemyType);
+
         }
 
     }
@@ -196,12 +175,17 @@ public class EnemyTypesBehaviours : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public Transform GetEnemyAttackPosition() { return enemyAttackPos; }
+    /// <summary>
+    /// Returns the index of this enemy
+    /// </summary>
+    /// <returns></returns>
+    public int GetEnemyIndex() { return transform.GetSiblingIndex(); }
 
     /// <summary>
     /// Return this enemy's attack
     /// </summary>
     /// <returns></returns>
-    public float GetEnemyAttack() { return enemyStats.GetAttack(); }
+    public float GetEnemyAttack() { return entityStats.GetAttack(); }
 
     #endregion
 

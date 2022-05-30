@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -13,6 +12,9 @@ public class BattleManager : MonoBehaviour
 
     //only instance of this manager
     public static BattleManager instance;
+
+    //reference to the script that manages the combat system
+    private TurnBasedCombatManager combatTurnsManager;
 
     //arrays of references to all the enemies
     private EnemyTypesBehaviours[] allEnemies;
@@ -41,6 +43,9 @@ public class BattleManager : MonoBehaviour
     //reference to the script that manages the battle actions of the player(during battle)
     [SerializeField]
     private BattleActionsManager battleActionsManager;
+    //reference to the script that manages the player's stats in battle
+    [SerializeField]
+    private PlayerBattleManager playerBattleManager;
 
     //time to wait to position player in the fight position
     [SerializeField]
@@ -63,6 +68,8 @@ public class BattleManager : MonoBehaviour
         GetAllContainers();
         //gets the references to all fight positions
         GetAllPositions();
+        //gets the reference to the manager of the turns in combat
+        combatTurnsManager = GetComponent<TurnBasedCombatManager>();
 
 
         //foreach (Transform t in enemiesPositions) Debug.LogError(t.name);
@@ -189,9 +196,13 @@ public class BattleManager : MonoBehaviour
     /// <param name="enemyType"></param>
     public void AnEnemyWasDefeated(int enemyChildIndex, int enemyType)
     {
+        //removes the defeated enemy from the array of enemies that need a turn in combat
+        combatTurnsManager.AddOrRemoveEnemyInCombat(false, GetActiveEnemyAtIndex(enemyChildIndex));
+
         //moves the defeated enemy to the container of defeated enemies
         Transform defeatedEnemy = activeEnemiesContainer.GetChild(enemyChildIndex);
         defeatedEnemy.parent = spawnedEnemiesContainer.GetChild(enemyType);
+
         //if there are no more active enemies, the player wins the battle
         if (GetNumberOfCurrentlyActiveEnemies() == 0) { BattleWon(); }
 
@@ -241,6 +252,10 @@ public class BattleManager : MonoBehaviour
         //resets the action blocks
         battleActionsManager.ResetActionBlocks();
 
+        Transform[] enemies = new Transform[GetNumberOfCurrentlyActiveEnemies()];
+        for (int i = 0; i < GetNumberOfCurrentlyActiveEnemies(); i++) { enemies[i] = activeEnemiesContainer.GetChild(i); }
+        combatTurnsManager.BeginTurnBasedCombat(enemies);
+
     }
 
     #endregion
@@ -252,6 +267,16 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public Vector2 GetPlayerFightPos() { return playerFightPos.position; }
+    /// <summary>
+    /// Returns the player's manager of his battle actions
+    /// </summary>
+    /// <returns></returns>
+    public BattleActionsManager GetPlayerBattleActionsManager() { return battleActionsManager; }
+    /// <summary>
+    /// Returns the player's manager of his stats during battle
+    /// </summary>
+    /// <returns></returns>
+    public PlayerBattleManager GetPlayerBattleManager() { return playerBattleManager; }
     /// <summary>
     /// Returns the center position of the battle ground
     /// </summary>

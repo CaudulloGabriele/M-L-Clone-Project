@@ -309,6 +309,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 603498675}
     - target: {fileID: 3499004955797352219, guid: 134081b2682167f47b1763b7657afff5, type: 3}
+      propertyPath: playerBattleManager
+      value: 
+      objectReference: {fileID: 81871518}
+    - target: {fileID: 3499004955797352219, guid: 134081b2682167f47b1763b7657afff5, type: 3}
       propertyPath: battleActionsManager
       value: 
       objectReference: {fileID: 914820047}

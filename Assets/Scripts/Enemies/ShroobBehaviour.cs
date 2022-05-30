@@ -27,9 +27,6 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     private void Awake()
     {
         Debug.Log("CREATO SHROOB");
-
-        /*CHANGE STATS MULTIPLIERS FOR SHROOB*/
-
     }
 
     private void Start()
@@ -94,7 +91,7 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
         etb = newEtb;
 
         bulletSpawner = etb.GetEnemyAttackPosition();
-    
+
     }
     /// <summary>
     /// Makes the Shroob perform a battle action
@@ -105,6 +102,11 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
         soloAction.PerformSoloAction();
 
     }
+    /// <summary>
+    /// Returns the Shroob's EnemyTypesBehaviuor script
+    /// </summary>
+    /// <returns></returns>
+    public EnemyTypesBehaviours GetThisEnemyTypesBehaviour() { return etb; }
 
     #endregion
 
