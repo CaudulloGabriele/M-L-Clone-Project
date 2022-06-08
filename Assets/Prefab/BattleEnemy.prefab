@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2164812190260263764}
   - component: {fileID: 793085345712360488}
+  - component: {fileID: 3619225613220686075}
   - component: {fileID: 8108852061838737011}
   m_Layer: 0
   m_Name: BattleEnemy
@@ -48,12 +49,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83ec8ee277a76df458a521b1d8ec83a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityLevel: 1
+  entityStatsMult:
+  - 1
+  - 1
+  - 1
+  isPlayer: 0
   thisEnemySR: {fileID: 3729409984998020494}
   selectionArrowPos: {fileID: 5240875511155374493}
   damagePointPos: {fileID: 1743317704340766296}
   enemyAttackPos: {fileID: 8737813816972796229}
   thisEnemyType: 0
-  thisEnemyLevel: 1
+--- !u!114 &3619225613220686075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2164812190260263763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f58dbd26c01923f4da30b2fd9803d472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionBlocksSprites: []
+  actionsSprites: []
+  selectionArrow: {fileID: 0}
 --- !u!114 &8108852061838737011
 MonoBehaviour:
   m_ObjectHideFlags: 0

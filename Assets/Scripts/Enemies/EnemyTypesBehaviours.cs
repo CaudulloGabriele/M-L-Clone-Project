@@ -91,6 +91,14 @@ public class EnemyTypesBehaviours : EntityBattleManager
 
     #endregion
 
+    public override void StartOwnTurn()
+    {
+        base.StartOwnTurn();
+
+        thisEnemyBehaviour.PerformAction();
+
+    }
+
     /// <summary>
     /// Allows to give damage to this enemy
     /// </summary>
@@ -181,11 +189,12 @@ public class EnemyTypesBehaviours : EntityBattleManager
     /// <returns></returns>
     public int GetEnemyIndex() { return transform.GetSiblingIndex(); }
 
+    //COMMENTED BECAUSE IT EXISTS IN ENTITY_BATTLE_MANAGER
     /// <summary>
     /// Return this enemy's attack
     /// </summary>
     /// <returns></returns>
-    public float GetEnemyAttack() { return entityStats.GetAttack(); }
+    //public float GetEnemyAttack() { return entityStats.GetAttack(); }
 
     #endregion
 

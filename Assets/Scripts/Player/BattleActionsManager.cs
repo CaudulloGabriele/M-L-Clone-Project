@@ -23,6 +23,10 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Sprite[] actionsSprites;
 
+    [Tooltip("References to the SpriteRenderers of the arrows")]
+    [SerializeField]
+    private SpriteRenderer[] sideArrowsSprites;
+
     //reference to the SoloAction manager script of this entity
     private SoloAction soloAction;
 
@@ -57,7 +61,7 @@ public class BattleActionsManager : MonoBehaviour
         soloAction = GetComponent<SoloAction>();
 
         //obtains the reference to the gameObject of the selection arrow
-        selectionArrowGO = selectionArrow.gameObject;
+        if (selectionArrow) selectionArrowGO = selectionArrow.gameObject;
 
     }
 
@@ -220,6 +224,8 @@ public class BattleActionsManager : MonoBehaviour
     {
         //comunicates that an action is being performed
         SetIfPerformingAnAction(true);
+        //hides the action blocks
+        SetActionBlocksVisibility(false);
         //hides the selection arrow
         PositionSelectionArrow(Vector2.zero, true);
 
@@ -277,6 +283,10 @@ public class BattleActionsManager : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// Tells the BattleManager that a turn has ended
+    /// </summary>
+    public void EndedAnAction() { battleManager.OnTurnFinished(); }
 
     #endregion
 
@@ -301,11 +311,25 @@ public class BattleActionsManager : MonoBehaviour
     public void ResetActionBlocks()
     {
 
+        SetActionBlocksVisibility(true);
+
         SetIsChoosingAction();
 
         currentActionIndex = -1;
 
         RotateActionBlocks(true);
+
+    }
+    /// <summary>
+    /// Allows to show or hide this entity's action blocks
+    /// </summary>
+    /// <param name="show"></param>
+    public void SetActionBlocksVisibility(bool show)
+    {
+
+        Color visibilityColor = show ? Color.white : Color.clear;
+        foreach (SpriteRenderer actionBlock in actionBlocksSprites) { actionBlock.color = visibilityColor; }
+        foreach (SpriteRenderer arrow in sideArrowsSprites) { arrow.color = visibilityColor; }
 
     }
     /// <summary>
@@ -367,6 +391,8 @@ public class BattleActionsManager : MonoBehaviour
     /// <param name="newPos"></param>
     private void PositionSelectionArrow(Vector2 newPos, bool hide = false)
     {
+        //if there is no reference to the selection arrow, returns nothing
+        if (!selectionArrow) return;
 
         selectionArrowGO.SetActive(!hide);
 

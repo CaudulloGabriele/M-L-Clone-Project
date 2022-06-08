@@ -68,7 +68,7 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
         //shoots the bullet towards the player position, while setting its damage
         GameObject bullet = ObjectPooling.GetObjectFromPool("ShroobBullet");
         BulletsBehaviour shroobBullet = bullet.GetComponent<BulletsBehaviour>();
-        shroobBullet.SetBulletDamage(etb.GetEnemyAttack());
+        shroobBullet.SetBulletDamage(etb.GetEntityAttack());
         shroobBullet.ShootBulletToTarget(playerFightPos, bulletSpawner.position);
 
         //waits a bit

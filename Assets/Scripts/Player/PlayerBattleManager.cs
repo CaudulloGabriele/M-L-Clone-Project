@@ -6,6 +6,10 @@ using UnityEngine;
 public class PlayerBattleManager : EntityBattleManager, IUpdateData
 {
 
+    [SerializeField]
+    private BattleActionsManager battleActionsManager;
+
+
     protected override async void OnEnable()
     {
         //waits for the updating of the stats in the Start
@@ -57,6 +61,14 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         for (int i = 0; i < entityStatsMult.Length; i++) { Debug.Log(i+") " + entityStatsMult[i]); }
         Debug.LogWarning("End Debug Log of stats multipliers");
         */
+    }
+
+    public override void StartOwnTurn()
+    {
+        base.StartOwnTurn();
+
+        battleActionsManager.ResetActionBlocks();
+
     }
 
     public void UpdateData()

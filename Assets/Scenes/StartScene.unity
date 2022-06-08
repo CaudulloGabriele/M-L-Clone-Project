@@ -316,6 +316,10 @@ PrefabInstance:
       propertyPath: battleActionsManager
       value: 
       objectReference: {fileID: 914820047}
+    - target: {fileID: 3499004955797352219, guid: 134081b2682167f47b1763b7657afff5, type: 3}
+      propertyPath: playerBattleActionsManager
+      value: 
+      objectReference: {fileID: 914820047}
     - target: {fileID: 8662008655252520442, guid: 134081b2682167f47b1763b7657afff5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.65

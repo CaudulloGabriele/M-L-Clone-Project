@@ -9,7 +9,6 @@ public class TurnBasedCombatManager : MonoBehaviour
     #region Variables
 
     //references to the player's scripts that manage his fight
-    private BattleActionsManager playerBattleActionsManager;
     private PlayerBattleManager playerBattleManager;
 
     //array of references to all the behaviours of the enemies currently in the fight
@@ -17,6 +16,12 @@ public class TurnBasedCombatManager : MonoBehaviour
     //array of references to all the manager of battle stats of the entities in the fight
     [SerializeField]
     private EntityBattleManager[] entitiesInBattle = new EntityBattleManager[1];
+
+    //indicates the current turn in the list
+    private int currentTurn = -1;
+    //indicates how much time to wait before going to the next turn
+    [SerializeField]
+    private float waitForTurnChange = 0.2f;
 
     #endregion
 
@@ -27,8 +32,7 @@ public class TurnBasedCombatManager : MonoBehaviour
         //obtains the reference to the instance of the BattleManager
         BattleManager battleManager = BattleManager.instance;
 
-        //obtains the references to the player's scripts that manage his fight
-        playerBattleActionsManager = battleManager.GetPlayerBattleActionsManager();
+        //obtains the references to the player's scripts that manage their fight
         playerBattleManager = battleManager.GetPlayerBattleManager();
 
         //sets the player's battle manager as the first entity in the array
@@ -62,16 +66,65 @@ public class TurnBasedCombatManager : MonoBehaviour
         }
 
         //sets the turn order of the entities based on their speed
-        EstablishTurnOrder();
+        EstablishTurnOrder(true);
 
     }
     /// <summary>
     /// Sets the turn order of the entities based on their speed
     /// </summary>
-    private void EstablishTurnOrder()
+    public void EstablishTurnOrder(bool fightBegun)
     {
+        //cycles each entity in battle and orders them in order of who is faster
+        int numberOfEntities = entitiesInBattle.Length;
+        for (int i = 0; i < numberOfEntities; i++)
+        {
 
-        /*entitiesInBattle and order based on speed*/
+            EntityBattleManager iEntity = entitiesInBattle[i];
+
+            for (int j = i + 1; j < numberOfEntities; j++)
+            {
+
+                EntityBattleManager jEntity = entitiesInBattle[j];
+
+                if (iEntity.GetEntitySpeed() <= jEntity.GetEntitySpeed())
+                {
+                    EntityBattleManager temp = entitiesInBattle[i];
+                    entitiesInBattle[i] = jEntity;
+                    entitiesInBattle[j] = temp;
+
+                }
+
+            }
+
+        }
+
+        /*
+        Debug.LogWarning("ODERED TURNS:");
+        foreach (EntityBattleManager entity in entitiesInBattle) { Debug.Log("\n " + entity.name + " | " + entity.GetEntitySpeed()); }
+        Debug.LogWarning("\nEND-----------------------------");
+        */
+
+        //se i turni sono stati cambiati durante la battaglia, non fa iniziare un nuovo turno
+        if (!fightBegun) return;
+
+        //starts the first turn of the fight
+        currentTurn = -1;
+        StartNewTurn();
+        
+    }
+    /// <summary>
+    /// Starts the next turn
+    /// </summary>
+    public async void StartNewTurn()
+    {
+        //goes to the next turn
+        currentTurn++;
+        if (currentTurn >= entitiesInBattle.Length) { currentTurn = 0; }
+
+        //waits a bit
+        await System.Threading.Tasks.Task.Delay((int)(waitForTurnChange * 1000));
+
+        entitiesInBattle[currentTurn].StartOwnTurn();
 
     }
 

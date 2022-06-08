@@ -42,7 +42,7 @@ public class BattleManager : MonoBehaviour
     private Transform centerPos;
     //reference to the script that manages the battle actions of the player(during battle)
     [SerializeField]
-    private BattleActionsManager battleActionsManager;
+    private BattleActionsManager playerBattleActionsManager;
     //reference to the script that manages the player's stats in battle
     [SerializeField]
     private PlayerBattleManager playerBattleManager;
@@ -190,6 +190,10 @@ public class BattleManager : MonoBehaviour
 
     }
     /// <summary>
+    /// Allows to start the next turn
+    /// </summary>
+    public void OnTurnFinished() { combatTurnsManager.StartNewTurn(); }
+    /// <summary>
     /// Called when an enemy is defeated, checks if this was the last enemy(so that the player wins)
     /// </summary>
     /// <param name="enemyChildIndex"></param>
@@ -249,9 +253,10 @@ public class BattleManager : MonoBehaviour
         camFollow.ChangeCameraSpeed(99999);
         //moves the battle player in the combat position
         battlePlayer.position = playerFightPos.position;
-        //resets the action blocks
-        battleActionsManager.ResetActionBlocks();
+        //hides the action blocks
+        playerBattleActionsManager.SetActionBlocksVisibility(false);
 
+        //starts the turn based combat
         Transform[] enemies = new Transform[GetNumberOfCurrentlyActiveEnemies()];
         for (int i = 0; i < GetNumberOfCurrentlyActiveEnemies(); i++) { enemies[i] = activeEnemiesContainer.GetChild(i); }
         combatTurnsManager.BeginTurnBasedCombat(enemies);
@@ -271,7 +276,7 @@ public class BattleManager : MonoBehaviour
     /// Returns the player's manager of his battle actions
     /// </summary>
     /// <returns></returns>
-    public BattleActionsManager GetPlayerBattleActionsManager() { return battleActionsManager; }
+    public BattleActionsManager GetPlayerBattleActionsManager() { return playerBattleActionsManager; }
     /// <summary>
     /// Returns the player's manager of his stats during battle
     /// </summary>

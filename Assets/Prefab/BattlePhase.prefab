@@ -578,6 +578,7 @@ MonoBehaviour:
   camFollow: {fileID: 0}
   centerPos: {fileID: 2496972660301873278}
   battleActionsManager: {fileID: 0}
+  playerBattleManager: {fileID: 0}
   positionPlayerTimer: 1.5
 --- !u!114 &7933995681018398002
 MonoBehaviour:
@@ -591,6 +592,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 701279ebc3e763d4ba8014ba816ef254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entitiesInBattle:
+  - {fileID: 0}
+  waitForTurnChange: 0.6
 --- !u!1 &3499004955810577169
 GameObject:
   m_ObjectHideFlags: 0

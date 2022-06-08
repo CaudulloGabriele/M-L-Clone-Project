@@ -106,8 +106,18 @@ public class SoloAction : MonoBehaviour
         while (!IsCloseToPos(prevPos)) { await Task.Delay(1); }
         performer.position = prevPos;
 
-        //informs the battle actions manager that this entity is not performing an action anymore
-        if (battleActionsManager) battleActionsManager.SetIfPerformingAnAction(false);
+        //informs the battle actions manager that this entity has ended the action and is not performing one anymore
+        battleActionsManager.SetIfPerformingAnAction(false);
+        battleActionsManager.EndedAnAction();
+        /*
+        if (battleActionsManager)
+        {
+            battleActionsManager.SetIfPerformingAnAction(false);
+            battleActionsManager.EndOfAction();
+
+        }
+        else { BattleManager.instance.OnTurnFinished(); }
+        */
 
         Debug.LogWarning("Finished moving to start pos");
     }
