@@ -13,7 +13,7 @@ public class BattleActionsManager : MonoBehaviour
     #region Variables
 
     //tells the current state of choice of battle action
-    private ActionChoiceState currentActionChoiceState = ActionChoiceState.choosingTypeOfAction;
+    private ActionChoiceState currentActionChoiceState = ActionChoiceState.notOwnTurn;
 
     [Tooltip("References to the SpriteRenderers of the action blocks in this order:\n1)Current\n2)Right\n3)Back\n4)Left")]
     [SerializeField]
@@ -284,9 +284,16 @@ public class BattleActionsManager : MonoBehaviour
 
     }
     /// <summary>
-    /// Tells the BattleManager that a turn has ended
+    /// Manages what happens when an action has ended
     /// </summary>
-    public void EndedAnAction() { battleManager.OnTurnFinished(); }
+    public void EndedAnAction()
+    {
+
+        SetIsNotOwnTurn();
+
+        battleManager.OnTurnFinished();
+    
+    }
 
     #endregion
 
@@ -310,13 +317,12 @@ public class BattleActionsManager : MonoBehaviour
     /// </summary>
     public void ResetActionBlocks()
     {
-
+        //shows the action blocks
         SetActionBlocksVisibility(true);
-
+        //sets that this entity is currently choosing an action
         SetIsChoosingAction();
-
+        //sets the first action block as selected
         currentActionIndex = -1;
-
         RotateActionBlocks(true);
 
     }

@@ -189,13 +189,6 @@ public class EnemyTypesBehaviours : EntityBattleManager
     /// <returns></returns>
     public int GetEnemyIndex() { return transform.GetSiblingIndex(); }
 
-    //COMMENTED BECAUSE IT EXISTS IN ENTITY_BATTLE_MANAGER
-    /// <summary>
-    /// Return this enemy's attack
-    /// </summary>
-    /// <returns></returns>
-    //public float GetEnemyAttack() { return entityStats.GetAttack(); }
-
     #endregion
 
 }

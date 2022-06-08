@@ -262,6 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58dbd26c01923f4da30b2fd9803d472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentActionChoiceState: -1
   actionBlocksSprites:
   - {fileID: 7303244967110877127}
   - {fileID: 8980786948539536448}

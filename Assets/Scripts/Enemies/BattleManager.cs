@@ -202,6 +202,7 @@ public class BattleManager : MonoBehaviour
     {
         //removes the defeated enemy from the array of enemies that need a turn in combat
         combatTurnsManager.AddOrRemoveEnemyInCombat(false, GetActiveEnemyAtIndex(enemyChildIndex));
+        combatTurnsManager.EstablishTurnOrder(false);
 
         //moves the defeated enemy to the container of defeated enemies
         Transform defeatedEnemy = activeEnemiesContainer.GetChild(enemyChildIndex);

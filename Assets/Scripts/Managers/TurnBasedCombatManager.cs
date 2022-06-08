@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -16,6 +17,9 @@ public class TurnBasedCombatManager : MonoBehaviour
     //array of references to all the manager of battle stats of the entities in the fight
     [SerializeField]
     private EntityBattleManager[] entitiesInBattle = new EntityBattleManager[1];
+
+    [SerializeField]
+    private int[] orderedTurnsOfEntities;
 
     //indicates the current turn in the list
     private int currentTurn = -1;
@@ -74,8 +78,14 @@ public class TurnBasedCombatManager : MonoBehaviour
     /// </summary>
     public void EstablishTurnOrder(bool fightBegun)
     {
-        //cycles each entity in battle and orders them in order of who is faster
+        
         int numberOfEntities = entitiesInBattle.Length;
+
+        //initializes the array of turns order
+        orderedTurnsOfEntities = new int[numberOfEntities];
+        for (int fighterIndex = 0; fighterIndex < numberOfEntities; fighterIndex++) { orderedTurnsOfEntities[fighterIndex] = fighterIndex; }
+
+        //cycles each entity in battle and orders them in order of who is faster
         for (int i = 0; i < numberOfEntities; i++)
         {
 
@@ -88,9 +98,13 @@ public class TurnBasedCombatManager : MonoBehaviour
 
                 if (iEntity.GetEntitySpeed() <= jEntity.GetEntitySpeed())
                 {
+                    orderedTurnsOfEntities[i] = j;
+                    orderedTurnsOfEntities[j] = i;
+                    /*
                     EntityBattleManager temp = entitiesInBattle[i];
                     entitiesInBattle[i] = jEntity;
                     entitiesInBattle[j] = temp;
+                    */
 
                 }
 
@@ -99,8 +113,8 @@ public class TurnBasedCombatManager : MonoBehaviour
         }
 
         /*
-        Debug.LogWarning("ODERED TURNS:");
-        foreach (EntityBattleManager entity in entitiesInBattle) { Debug.Log("\n " + entity.name + " | " + entity.GetEntitySpeed()); }
+        Debug.LogWarning("ORDERED TURNS:");
+        foreach (int entity in orderedTurnsOfEntities) { Debug.Log("\n " + entity); }
         Debug.LogWarning("\nEND-----------------------------");
         */
 
@@ -122,9 +136,10 @@ public class TurnBasedCombatManager : MonoBehaviour
         if (currentTurn >= entitiesInBattle.Length) { currentTurn = 0; }
 
         //waits a bit
-        await System.Threading.Tasks.Task.Delay((int)(waitForTurnChange * 1000));
+        await Task.Delay((int)(waitForTurnChange * 1000));
 
-        entitiesInBattle[currentTurn].StartOwnTurn();
+        int fighterIndex = orderedTurnsOfEntities[currentTurn];
+        entitiesInBattle[fighterIndex].StartOwnTurn();
 
     }
 
