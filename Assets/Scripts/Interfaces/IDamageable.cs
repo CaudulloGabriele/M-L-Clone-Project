@@ -18,5 +18,10 @@ public interface IDamageable
     /// </summary>
     /// <returns></returns>
     float GetDamage();
+    /// <summary>
+    /// Allows to set the damage this damageable has to give
+    /// </summary>
+    /// <returns></returns>
+    void SetDamage(float dmg);
 
 }

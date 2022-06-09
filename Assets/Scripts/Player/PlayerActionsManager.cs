@@ -5,16 +5,43 @@ using UnityEngine;
 
 public class PlayerActionsManager : MonoBehaviour
 {
+
+    //[Header("")]
+    //[Header("IN EXPLORATION")]
+
+
+    [Header("IN BATTLE")]
+    [Header("")]
+
+    //reference to the EntityBattleManager of the player
+    [SerializeField]
+    private EntityBattleManager playerEbm;
     //reference to the script that manages the battle actions of the player(during battle)
     [SerializeField]
     private BattleActionsManager battleActionsManager;
-
     //reference to the manager of the player's SoloAction
     private SoloAction soloAction;
+
+    //reference to the player's solo attack(damageable damage giver)
+    [SerializeField]
+    private GameObject playerSoloAttackGO;
+    private IDamageable playerSoloAttack;
+
+    //indicates how much weaker a missed hit is compared to a perfect hit
+    [SerializeField]
+    private float missedHitDiminisher = 2;
 
     //indicates if an action is in execution
     //private bool inAction = false;
 
+
+    private void Awake()
+    {
+        //obtains the reference to the player's solo attack(damageable damage giver)
+        playerSoloAttack = playerSoloAttackGO.GetComponent<IDamageable>();
+        playerSoloAttackGO.SetActive(false);
+
+    }
 
     private void Start()
     {
@@ -71,8 +98,22 @@ public class PlayerActionsManager : MonoBehaviour
     /// <param name="timeSpan"></param>
     private async void PlayerSoloAction(bool start, float timeSpan = 0)
     {
-        //if the solo action has to end, returns to the idle animation
-        if (!start) { /*RETURNS TO IDLE ANIMATION*/ return; }
+        //if the solo action has to end...
+        if (!start)
+        {
+            //...returns to the idle animation...
+            /*RETURNS TO IDLE ANIMATION*/
+
+            //...deactivates the player's solo attack...
+            playerSoloAttackGO.SetActive(false);
+
+            //...and nothing more
+            return;
+        
+        }
+
+        //indicates if the player executed a perfect hit or not
+        bool perfectHit = false;
 
         //while the timer hasn't ended...
         while (timeSpan > 0)
@@ -80,13 +121,10 @@ public class PlayerActionsManager : MonoBehaviour
             //...if the player presses the action button...
             if (Input.GetButtonDown("Action"))
             {
-                //...ends the anticipation of the solo action...
-                soloAction.SetIfPerforming(false);
-
-                Debug.LogWarning("Perfect Hit");
-
-                //...and ends the solo action
-                return;
+                //...comunicates that the player executed a perfect hit...
+                perfectHit = true;
+                //...and ends the anticipation of the solo action
+                timeSpan = 0;
 
             }
             //...otherwise, the timer continues...
@@ -96,10 +134,21 @@ public class PlayerActionsManager : MonoBehaviour
             
         }
 
+        //calculates the damage of the attack based on the player's timing of attack and activates the attack
+        float attackDmg = playerEbm.GetEntityAttack();
+        if (!perfectHit) attackDmg /= missedHitDiminisher;
+        playerSoloAttack.SetDamage(attackDmg);
+        playerSoloAttackGO.SetActive(true);
+
+        //waits a bit before ending the action
+        int waitBeforeEnding = (int)(BattleActionsManager.WAIT_AFTER_END_OF_ACTION * 1000);
+        await Task.Delay(waitBeforeEnding);
+
+        //the solo action ends
         soloAction.SetIfPerforming(false);
 
-        Debug.LogWarning("Missed Hit");
 
+        Debug.LogWarning(perfectHit ? "Perfect Hit" : "Missed Hit");
     }
 
 }

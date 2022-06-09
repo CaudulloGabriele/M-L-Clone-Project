@@ -51,6 +51,8 @@ public class BattleCollisionsManager : MonoBehaviour, IDamageable
 
     public float GetDamage() { return dmgToGive; }
 
+    public void SetDamage(float dmg) { dmgToGive = dmg; }
+
     public void TakeDamage(float dmg)
     {
 

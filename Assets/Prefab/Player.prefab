@@ -556,7 +556,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72299713d7c19fe478923eeb1131f2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerEbm: {fileID: 6059129555248315945}
   battleActionsManager: {fileID: 3902702876966139700}
+  playerSoloAttackGO: {fileID: 7078245954952456149}
+  missedHitDiminisher: 2
 --- !u!50 &5217026461614833715
 Rigidbody2D:
   serializedVersion: 4
@@ -800,6 +803,78 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7078245954952456149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 274122992573848878}
+  - component: {fileID: 525359621935494135}
+  - component: {fileID: 8680429658462364636}
+  m_Layer: 6
+  m_Name: PlayerSoloAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &274122992573848878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078245954952456149}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3264189828921214120}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &525359621935494135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078245954952456149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42351c7fa0e2394ba5dddfafed90b19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisEntity: {fileID: 0}
+  dmgToGive: 1
+--- !u!61 &8680429658462364636
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078245954952456149}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.78, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.17, y: 0.46}
+  m_EdgeRadius: 0
 --- !u!1 &7456143912940136649
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,6 +941,7 @@ Transform:
   - {fileID: 642312271}
   - {fileID: 1269346145}
   - {fileID: 1023051330713098728}
+  - {fileID: 274122992573848878}
   m_Father: {fileID: 5217026461614833727}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
