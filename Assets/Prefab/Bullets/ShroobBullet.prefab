@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9092113853104800502}
   - component: {fileID: 6953692345964523693}
+  - component: {fileID: 5257259040251171536}
   - component: {fileID: 772702730791303494}
   - component: {fileID: 422399896424371362}
   m_Layer: 0
@@ -129,7 +130,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  damage: 0
   lifeTime: 4
+--- !u!114 &5257259040251171536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9092113853104800501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8048e34510444342b03dae1591a8346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeedOnAxis: {x: 0, y: 0, z: 10}
 --- !u!61 &772702730791303494
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
 
     //reference to this enemy's EnemyTypesBehaviour script
     private EnemyTypesBehaviours etb;
+    //reference to this enemy's BattleActionsManager
+    private BattleActionsManager shroobActionsManager;
     //reference to this enemy's SoloAction manager
     private SoloAction soloAction;
     //reference to the empty where bullets will come from
@@ -33,6 +35,9 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     {
         //obtains the BattleManager instance
         BattleManager battleManager = BattleManager.instance;
+
+        //obtains the reference to this enemy's BattleActionsManager
+        shroobActionsManager = GetComponent<BattleActionsManager>();
 
         //sets the solo action
         soloAction = GetComponent<SoloAction>();
@@ -99,7 +104,10 @@ public class ShroobBehaviour : MonoBehaviour, IAmEnemy
     public void PerformAction()
     {
 
-        soloAction.PerformSoloAction();
+        shroobActionsManager.SelectedActionIsBasicAttack();
+        shroobActionsManager.PerformCurrentAction();
+
+        //soloAction.PerformSoloAction();
 
     }
     /// <summary>

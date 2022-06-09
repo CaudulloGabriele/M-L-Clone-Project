@@ -234,8 +234,9 @@ public class BattleActionsManager : MonoBehaviour
             //SOLO ACTION
             case 0:
                 {
+                    //sets the selected enemy's damage point position as the performing position of the solo action of this entity, if any where selected
+                    if (currentlySelectedEnemyIndex != -1) soloAction.SetPerformingPos(battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos());
                     //performs the solo action
-                    soloAction.SetPerformingPos(battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos());
                     soloAction.PerformSoloAction();
 
                     Debug.Log("Solo Action");
@@ -412,10 +413,10 @@ public class BattleActionsManager : MonoBehaviour
 
     #region Getter Methods for Current Action
 
-    private bool SelectedActionIsBasicAttack() { return currentActionIndex == 0; }
-    private bool SelectedActionIsCoopAttack() { return currentActionIndex == 1; }
-    private bool SelectedActionIsRunAway() { return currentActionIndex == 2; }
-    private bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
+    public bool SelectedActionIsBasicAttack() { return currentActionIndex == 0; }
+    public bool SelectedActionIsCoopAttack() { return currentActionIndex == 1; }
+    public bool SelectedActionIsRunAway() { return currentActionIndex == 2; }
+    public bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
 
     #endregion
 
