@@ -27,6 +27,9 @@ public class PlayerActionsManager : MonoBehaviour
     private GameObject playerSoloAttackGO;
     private IDamageable playerSoloAttack;
 
+    //indicates how fast the player has to press the action button during a solo action to be too early and miss anyway
+    [SerializeField]
+    private float tooEarlyHit = 0.2f;
     //indicates how much weaker a missed hit is compared to a perfect hit
     [SerializeField]
     private float missedHitDiminisher = 2;
@@ -112,6 +115,8 @@ public class PlayerActionsManager : MonoBehaviour
         
         }
 
+        //indicates until when the player's action button press will count as a miss anyway
+        float tooEarlyTimeSpan = (timeSpan - tooEarlyHit);
         //indicates if the player executed a perfect hit or not
         bool perfectHit = false;
 
@@ -121,8 +126,9 @@ public class PlayerActionsManager : MonoBehaviour
             //...if the player presses the action button...
             if (Input.GetButtonDown("Action"))
             {
-                //...comunicates that the player executed a perfect hit...
-                perfectHit = true;
+                //...comunicates that the player executed a perfect hit, if it is not too early...
+                bool tooEarly = timeSpan > tooEarlyTimeSpan;
+                if (!tooEarly) perfectHit = true;
                 //...and ends the anticipation of the solo action
                 timeSpan = 0;
 
