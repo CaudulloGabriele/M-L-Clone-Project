@@ -28,8 +28,6 @@ public class EnemyTypesBehaviours : EntityBattleManager
     //references to the SpriteRenderer of this Enemy
     [SerializeField]
     private SpriteRenderer thisEnemySR;
-    //reference to the instance of the BattleManager
-    private BattleManager battleManager;
 
     //reference to the position in which the selection arrow has to be in when selecting this enemy
     [SerializeField]
@@ -58,13 +56,6 @@ public class EnemyTypesBehaviours : EntityBattleManager
 
         //adds the appropriate behaviour to this enemy
         GetBehaviourBasedOnType();
-
-    }
-
-    private void Start()
-    {
-        //gets the BattleManager instance
-        battleManager = BattleManager.instance;
 
     }
 
@@ -99,18 +90,22 @@ public class EnemyTypesBehaviours : EntityBattleManager
 
     }
 
-    /// <summary>
-    /// Allows to give damage to this enemy
-    /// </summary>
-    /// <param name="dmg"></param>
-    public void ChangeHealth(float dmg)
+    
+    public override void ChangeHealth(float dmg)
     {
-
-        entityStats.SetCurrentHealth(entityStats.GetCurrentHealth() - dmg);
-
-        if (entityStats.GetCurrentHealth() <= 0) battleManager.AnEnemyWasDefeated(GetEnemyIndex(), thisEnemyType);
+        base.ChangeHealth(dmg);
 
     }
+
+    protected override void EntityDeath()
+    {
+        base.EntityDeath();
+
+        //comunicates that this enemy was defeated
+        battleManager.AnEnemyWasDefeated(GetEnemyIndex(), thisEnemyType);
+
+    }
+
     /// <summary>
     /// Adds the behaviour of the enemy based on its type
     /// </summary>

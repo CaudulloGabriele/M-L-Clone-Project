@@ -19,8 +19,10 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         //gets the saved values
         GetSavedPlayerStats();
         //initializes the player's battle stats
@@ -68,6 +70,14 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         base.StartOwnTurn();
 
         battleActionsManager.ResetActionBlocks();
+
+    }
+
+    protected override void EntityDeath()
+    {
+        base.EntityDeath();
+
+        /*MAKE SOMETHING HAPPEN WHEN PLAYER IS DEFEATED-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
     }
 

@@ -235,7 +235,12 @@ public class BattleActionsManager : MonoBehaviour
             case 0:
                 {
                     //sets the selected enemy's damage point position as the performing position of the solo action of this entity, if any where selected
-                    if (currentlySelectedEnemyIndex != -1) soloAction.SetPerformingPos(battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos());
+                    if (currentlySelectedEnemyIndex != -1)
+                    {
+                        Vector2 soloActionPerformPos = battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetDamagePointPos();
+                        soloAction.SetPerformingPos(soloActionPerformPos);
+
+                    }
                     //performs the solo action
                     soloAction.PerformSoloAction();
 

@@ -91,8 +91,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1269346145}
-  - component: {fileID: 1269346146}
-  m_Layer: 0
+  - component: {fileID: 3087072719949690813}
+  - component: {fileID: 4206422259035526668}
+  m_Layer: 6
   m_Name: BattlePlayerCollisionsManager
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -113,8 +114,22 @@ Transform:
   m_Father: {fileID: 3264189828921214120}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &1269346146
-CapsuleCollider2D:
+--- !u!114 &3087072719949690813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269346144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42351c7fa0e2394ba5dddfafed90b19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisEntity: {fileID: 6059129555248315945}
+  dmgToGive: 0
+--- !u!61 &4206422259035526668
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -123,12 +138,22 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.32}
-  m_Size: {x: 1, y: 1.35}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &292524306068591128
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58dbd26c01923f4da30b2fd9803d472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentActionChoiceState: -1
   actionBlocksSprites:
   - {fileID: 7303244967110877127}
   - {fileID: 8980786948539536448}
@@ -820,6 +844,7 @@ GameObject:
   - component: {fileID: 6059129555248315945}
   - component: {fileID: 2856947377976761259}
   - component: {fileID: 603498677}
+  - component: {fileID: 4625869709727167490}
   m_Layer: 0
   m_Name: In-Battle
   m_TagString: Untagged
@@ -897,6 +922,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!70 &4625869709727167490
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8033122599953231260}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.32}
+  m_Size: {x: 1, y: 1.35}
+  m_Direction: 0
 --- !u!1 &8367718659004267429
 GameObject:
   m_ObjectHideFlags: 0

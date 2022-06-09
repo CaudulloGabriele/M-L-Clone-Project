@@ -7,6 +7,9 @@ public abstract class EntityBattleManager : MonoBehaviour
 
     protected BattleStats entityStats;
 
+    //reference to the instance of the BattleManager
+    protected BattleManager battleManager;
+
     [Header("ENTITY BATTLE MANAGER")]
 
     //indicates the entity's level
@@ -23,6 +26,13 @@ public abstract class EntityBattleManager : MonoBehaviour
     {
 
         entityStats = new BattleStats();
+
+    }
+
+    protected virtual void Start()
+    {
+        //gets the BattleManager instance
+        battleManager = BattleManager.instance;
 
     }
 
@@ -58,6 +68,20 @@ public abstract class EntityBattleManager : MonoBehaviour
     public bool IsThisEntityThePlayer() { return isPlayer; }
 
     /// <summary>
+    /// Allows to give damage to this entity
+    /// </summary>
+    /// <param name="dmg"></param>
+    public virtual void ChangeHealth(float dmg)
+    {
+
+        entityStats.SetCurrentHealth(entityStats.GetCurrentHealth() - dmg);
+
+        if (entityStats.GetCurrentHealth() <= 0) EntityDeath();
+
+
+        Debug.Log("ENTITY \"" + name + "\" TOOK DAMAGE: " + dmg + " | CURRENT HEALTH: " + entityStats.GetCurrentHealth());
+    }
+    /// <summary>
     /// Return this entity's attack
     /// </summary>
     /// <returns></returns>
@@ -67,5 +91,13 @@ public abstract class EntityBattleManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public float GetEntitySpeed() { return entityStats.GetSpeed(); }
+
+    /// <summary>
+    /// Manages what happens when this entity is defeated
+    /// </summary>
+    protected virtual void EntityDeath()
+    {
+
+    }
 
 }
