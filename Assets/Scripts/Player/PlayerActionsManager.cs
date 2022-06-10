@@ -6,9 +6,13 @@ using UnityEngine;
 public class PlayerActionsManager : MonoBehaviour
 {
 
-    //[Header("")]
-    //[Header("IN EXPLORATION")]
+    #region Variables
 
+    [Header("IN EXPLORATION")]
+
+    //reference to the player's interactions manager
+    [SerializeField]
+    private PlayerInteractionsManager playerInteractionsManager;
 
     [Header("IN BATTLE")]
     [Header("")]
@@ -37,6 +41,9 @@ public class PlayerActionsManager : MonoBehaviour
     //indicates if an action is in execution
     //private bool inAction = false;
 
+    #endregion
+
+    #region MonoBehaviour Methods
 
     private void Awake()
     {
@@ -53,6 +60,10 @@ public class PlayerActionsManager : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region Actions Managment
+
     /// <summary>
     /// Activates the right action of the player based on the game's state
     /// </summary>
@@ -68,7 +79,7 @@ public class PlayerActionsManager : MonoBehaviour
         {
             Debug.Log("Exploring Action");
 
-            if (confirm) { /*INTERACTION WITH CLOSE OBJECT*/ }
+            if (confirm) { playerInteractionsManager.InteractWithCloseObject(); }
             else { }
 
         }
@@ -112,7 +123,7 @@ public class PlayerActionsManager : MonoBehaviour
 
             //...and nothing more
             return;
-        
+
         }
 
         //indicates until when the player's action button press will count as a miss anyway
@@ -137,7 +148,7 @@ public class PlayerActionsManager : MonoBehaviour
             timeSpan -= Time.deltaTime;
             //...and waits 1 millisecond for the next check
             await Task.Delay(1);
-            
+
         }
 
         //calculates the damage of the attack based on the player's timing of attack and activates the attack
@@ -156,5 +167,7 @@ public class PlayerActionsManager : MonoBehaviour
 
         Debug.LogWarning(perfectHit ? "Perfect Hit" : "Missed Hit");
     }
+
+    #endregion
 
 }

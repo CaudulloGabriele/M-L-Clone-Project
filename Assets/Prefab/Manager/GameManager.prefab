@@ -46,6 +46,8 @@ MonoBehaviour:
   poolingObjects:
   - objName: ShroobBullet
     objToPool: {fileID: 9092113853104800501, guid: 841426765ef95b047bd1a8be440cc7d3, type: 3}
+  shroobBullets: []
+  numberOfAvailableObjectsInPool: 
 --- !u!1 &8291656017590258628
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8291656017590258634}
   - component: {fileID: 8291656017590258629}
+  - component: {fileID: 4418103952999994849}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -93,6 +96,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadSaveButton: {fileID: 0}
   pbm: {fileID: 0}
+--- !u!114 &4418103952999994849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291656017590258628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a95a3448505f547966d4806c9862e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8815024062736283447
 GameObject:
   m_ObjectHideFlags: 0

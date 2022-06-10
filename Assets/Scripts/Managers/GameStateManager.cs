@@ -1,6 +1,8 @@
-//Si occupa di gestire lo stato di gioco
 using UnityEngine;
 
+/// <summary>
+/// Manages the game's states
+/// </summary>
 public class GameStateManager : MonoBehaviour
 {
     //enum for all the possible states of the game

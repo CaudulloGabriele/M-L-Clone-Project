@@ -493,6 +493,7 @@ GameObject:
   - component: {fileID: 5217026461614833712}
   - component: {fileID: 5217026461614833713}
   - component: {fileID: 5217026461614833714}
+  - component: {fileID: 723732269171958829}
   - component: {fileID: 5217026461614833715}
   - component: {fileID: 5217026461614833716}
   m_Layer: 0
@@ -556,10 +557,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72299713d7c19fe478923eeb1131f2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInteractionsManager: {fileID: 723732269171958829}
   playerEbm: {fileID: 6059129555248315945}
   battleActionsManager: {fileID: 3902702876966139700}
   playerSoloAttackGO: {fileID: 7078245954952456149}
+  tooEarlyHit: 0.2
   missedHitDiminisher: 2
+--- !u!114 &723732269171958829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5217026461614833717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec088e9c2035fe44af06784782ec1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  closestInteractable: {fileID: 0}
+  delayInCheck: 0.2
+  checkRadius: 0.75
 --- !u!50 &5217026461614833715
 Rigidbody2D:
   serializedVersion: 4
