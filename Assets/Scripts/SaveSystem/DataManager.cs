@@ -14,23 +14,29 @@ public class DataManager : MonoBehaviour
      * In quanto il giocatore non potrà mai creare uno slot con come nome una stringa vuota(guarda ScrollMultipleSaves)
     */
     private static string currentSaveSlotName = "";
+    [SerializeField]
+    private  string currentSaveSlotNameDebug = "";
     /// <summary>
     /// Indica il nome da usare quando non è stato caricato nessun salvataggio
     /// </summary>
     public static readonly string defaultSaveSlotName = "";
     //indica se vogliamo caricare i dati ad inizio scena o meno(PER DEBUG, COMMENTARE A GIOCO FINITO)
     [SerializeField]
-    private readonly bool loadData = true;
+    private bool loadData = true;
     //riferimento a tutti gli script che usano l'interfaccia per l'aggiornamento dei dati nel GameManag
     public static List<IUpdateData> dataToSave = new List<IUpdateData>();
 
     //GAME DATA-------------------------------------------------------------------------------------------------------------------------------
 
-    public static int lastSaveScene;
+    //indicates the last scene the player was when he saved the game
+    public int lastSaveScene;
 
-    public static int savedPlayerLevel;
+    //indicates the player position when he last saved the game
+    public float[] savedPlayerPos;
 
-    public static float[] savedPlayerStatsMult;
+    //saved values of all the player's stats
+    public int savedPlayerLevel;
+    public float[] savedPlayerStatsMult;
 
     //GAME DATA-------------------------------------------------------------------------------------------------------------------------------
 
@@ -51,7 +57,7 @@ public class DataManager : MonoBehaviour
         if (loadData)
         {
             
-            OnGameLoad(SaveSystem.LoadGame(currentSaveSlotName));
+            OnGameLoad(SaveSystem.LoadGame(this, currentSaveSlotName));
 
             if (currentSaveSlotName != "") { Debug.Log("Caricato salvataggio: " + currentSaveSlotName); }
             else { Debug.Log("Caricato salvataggio di default, per l'inizio del gioco"); }
@@ -60,18 +66,15 @@ public class DataManager : MonoBehaviour
         else { Debug.LogError("NON SONO STATI AGGIORNATI I DATI PERCHE' loadData E' MESSO A FALSE"); }
         //dopo il caricamento dei dati controlla se gli array sono vuoti, nel qual caso li inizializza
         InizializeEmptyArrays();
-        //viene svuotata la lista di script che devono salvare i dati
-        dataToSave.Clear();
-        //viene creato un'array recipiente con tutti gli script che devono salvare dati(anche quelli inattivi)
-        var recipient = FindObjectsOfType<MonoBehaviour>(true).OfType<IUpdateData>();
-        //inizializza la lista di script che devono salvare i dati, aggiungendo tutti gli elementi nella lista recipiente
-        foreach (IUpdateData elem in recipient) { dataToSave.Add(elem); }
+
+        UpdateListOfDataUpdaters();
 
     }
 
     //DEBUG-----------------------------------------------------------------------------------------------------------------------------------
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.F1))
         {
             currentSaveSlotName = defaultSaveSlotName;
@@ -83,6 +86,7 @@ public class DataManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2))
         {
             currentSaveSlotName = defaultSaveSlotName;
+            currentSaveSlotNameDebug = defaultSaveSlotName;
             SaveSystem.EraseAllData();
             SceneChange.StaticLoadThisScene(gameObject.scene.name);
             Debug.LogError("CANCELLATI DATI CON IL TASTO: F2");
@@ -90,6 +94,25 @@ public class DataManager : MonoBehaviour
 
     }
     //DEBUG-----------------------------------------------------------------------------------------------------------------------------------
+
+
+    public static void UpdateListOfDataUpdaters()
+    {
+        //viene svuotata la lista di script che devono salvare i dati
+        dataToSave.Clear();
+        //viene creato un'array recipiente con tutti gli script che devono salvare dati(anche quelli inattivi)
+        var recipient = FindObjectsOfType<MonoBehaviour>(true).OfType<IUpdateData>();
+        //inizializza la lista di script che devono salvare i dati, aggiungendo tutti gli elementi nella lista recipiente
+        foreach (IUpdateData elem in recipient)
+        {
+            
+            dataToSave.Add(elem);
+
+            elem.OnLoad();
+        
+        }
+
+    }
 
     /// <summary>
     /// Carica i dati salvati in SaveData
@@ -105,6 +128,7 @@ public class DataManager : MonoBehaviour
             //GAME DATA-----------------------------------------------------------------------------------------------------------------------
 
             lastSaveScene = sd.lastSaveScene;
+            savedPlayerPos = sd.savedPlayerPos;
             savedPlayerLevel = sd.savedPlayerLevel;
             savedPlayerStatsMult = sd.savedPlayerStatsMult;
 
@@ -139,6 +163,8 @@ public class DataManager : MonoBehaviour
 
         if (savedPlayerStatsMult != null) for (int i = 0; i < 3; i++) { savedPlayerStatsMult[i] = 1; }
 
+        if (savedPlayerPos != null) for (int i = 0; i < 3; i++) { savedPlayerPos = new float[2]; }
+
         //Debug.Log("Cicli fatti per NOME_ARRAY: " + nControl); nControl = 0;
     }
     /// <summary>
@@ -155,6 +181,14 @@ public class DataManager : MonoBehaviour
 
         }
 
+        if (savedPlayerPos == null)
+        {
+
+            savedPlayerPos = new float[3];
+            for (int i = 0; i < 3; i++) { savedPlayerPos[i] = 0; }
+
+        }
+
     }
     /// <summary>
     /// Carica i dati dal file di salvataggio del nome indicato dal parametro e ricarica la scena
@@ -164,6 +198,7 @@ public class DataManager : MonoBehaviour
     {
         //indica il nome dello slot di salvataggio da caricare al riavvio della scena
         currentSaveSlotName = nameOfSlot;
+        currentSaveSlotNameDebug = nameOfSlot;
         //carica la scena in cui è stato effettuato il salvataggio
         SceneChange.StaticLoadThisScene(lastSaveScene, true);
         Debug.Log(nameOfSlot + " | " + "Player Level: " + savedPlayerLevel);
@@ -191,10 +226,11 @@ public class DataManager : MonoBehaviour
         {
             //...imposta il nome dello slot di salvataggio corrente...
             currentSaveSlotName = saveSlotName;
+            currentSaveSlotNameDebug = saveSlotName;
             //...aggiorna i dati...
             UpdateDataBeforeSave();
             //...e salva i dati
-            SaveSystem.DataSave(/*this, */currentSaveSlotName);
+            SaveSystem.DataSave(this, currentSaveSlotName);
 
             Debug.Log("Dati aggiornati e salvati nel salvataggio di nome: " + currentSaveSlotName);
         }

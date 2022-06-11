@@ -1,26 +1,52 @@
-﻿//Script per bottoni che devono portare ad una nuova scena
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manages how scenes are loaded
+/// </summary>
 public class SceneChange : MonoBehaviour
 {
+
+    private static readonly DataManager dataManager;
+    private static DataManager DataManag
+    {
+
+        get
+        {
+
+            //if (!dataManager) PermanentRefs.instance.GetDataManager();
+
+            return PermanentRefs.instance.GetDataManager();
+
+        }
+
+    }
+
+
     /// <summary>
     /// Permette di caricare una scena tramite nome
     /// </summary>
     /// <param name="staticSceneName"></param>
-    public static void StaticLoadThisScene(string staticSceneName, bool additive = false)
+    public async static void StaticLoadThisScene(string staticSceneName, bool additive = false)
     {
 
         UnloadMainMenu();
 
-        SceneManager.LoadScene(staticSceneName, (additive ? LoadSceneMode.Additive : LoadSceneMode.Single));
-        Time.timeScale = 1;
+        
+
+        await Task.Delay(1);
 
         GameStateManager.OnSceneLoad(staticSceneName == "MainMenu");
 
+
+        SceneManager.LoadScene(staticSceneName, (additive ? LoadSceneMode.Additive : LoadSceneMode.Single));
+        Time.timeScale = 1;
+
         int sceneIndex = SceneManager.GetSceneByName(staticSceneName).buildIndex;
 
-        if (sceneIndex > 1) DataManager.lastSaveScene = sceneIndex;
+        if (sceneIndex > 1) DataManag.lastSaveScene = sceneIndex;
+
 
         //Debug.Log("Caricata scena di nome " + staticSceneName);
     }
@@ -29,17 +55,20 @@ public class SceneChange : MonoBehaviour
     /// Permette di caricare una scena tramite buildIndex
     /// </summary>
     /// <param name="staticSceneIndex"></param>
-    public static void StaticLoadThisScene(int staticSceneIndex, bool additive = false)
+    public async static void StaticLoadThisScene(int staticSceneIndex, bool additive = false)
     {
 
         UnloadMainMenu();
 
+        
+
+        await Task.Delay(1);
+        GameStateManager.OnSceneLoad(staticSceneIndex == 1);
+
         SceneManager.LoadScene(staticSceneIndex, (additive ? LoadSceneMode.Additive : LoadSceneMode.Single));
         Time.timeScale = 1;
 
-        GameStateManager.OnSceneLoad(staticSceneIndex == 1);
-
-        if (staticSceneIndex > 1) DataManager.lastSaveScene = staticSceneIndex;
+        if (staticSceneIndex > 1) DataManag.lastSaveScene = staticSceneIndex;
 
         //Debug.Log("Caricata scena ad indice " + staticSceneIndex);
     }

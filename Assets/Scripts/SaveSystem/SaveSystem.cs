@@ -20,7 +20,7 @@ public static class SaveSystem {
     /// </summary>
     /// <param name="dataManager"></param>
     /// <param name="saveSlotName"></param>
-    public static void DataSave(/*DataManager dataManager, */string saveSlotName)
+    public static void DataSave(DataManager dataManager, string saveSlotName)
     {
         //i dati vengono salvati se non stanno venendo cancellati
         if (!isDeleting)
@@ -34,7 +34,7 @@ public static class SaveSystem {
             //flusso di dati per creare il salvataggio
             FileStream fs = new FileStream(path, FileMode.Create);
             //aggiorna i dati da salvare e...
-            SaveData sd = new SaveData(/*dataManager*/);
+            SaveData sd = new SaveData(dataManager);
             //...e li formatta
             bf.Serialize(fs, sd);
             //chiude il flusso di dati
@@ -73,7 +73,7 @@ public static class SaveSystem {
     /// </summary>
     /// <param name="saveSlotName"></param>
     /// <returns></returns>
-    public static SaveData LoadGame(string saveSlotName)
+    public static SaveData LoadGame(DataManager dataManager, string saveSlotName)
     {
         //stringa che indica il percorso in cui cercare il salvataggio da caricare
         string path = Application.persistentDataPath + "/" + saveSlotName + saveFilesExtension;
@@ -85,7 +85,7 @@ public static class SaveSystem {
             //flusso di dati per aprire il file che contiene i dati di salvataggio
             FileStream fs = new FileStream(path, FileMode.Open);
             //ottiene i dati di salvataggio e li decripta(se il nome dello slot è una stringa vuota, istanzia un nuovo SaveData)
-            SaveData sd = (saveSlotName != "") ? bf.Deserialize(fs) as SaveData : new SaveData();
+            SaveData sd = (saveSlotName != "") ? bf.Deserialize(fs) as SaveData : new SaveData(dataManager);
             //chiude il flusso di dati
             fs.Close();
             //ritorna i dati di salvataggio
@@ -107,7 +107,7 @@ public static class SaveSystem {
     /// </summary>
     /// <param name="dataManager"></param>
     /// <param name="saveSlotName"></param>
-    public static void ClearData(string saveSlotName, DataManager dataManager = null)
+    public static void ClearData(string saveSlotName, DataManager dataManager)
     {
         //comunica agli altri script che si stanno cancellando i dati di gioco
         isDeleting = true;
@@ -140,7 +140,7 @@ public static class SaveSystem {
         //comunica che non si stanno più cancellando i dati
         isDeleting = false;
         //infine, aggiorna i dati
-        DataSave(/*null,*/ "");
+        DataSave(null, "");
 
     }
     /// <summary>

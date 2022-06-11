@@ -49,7 +49,7 @@ public class BattleStats
 
         }
         //se il moltiplicatore di statistiche per qualche motivo ha troppi elementi, lo porta alla grandezza normale e annuncia l'errore
-        if (statsMultiplier.Length > N_OF_STATS) { Array.Resize(ref statsMultiplier, N_OF_STATS); thereWasAnError = true; }
+        if (statsMultiplier.Length != N_OF_STATS) { Array.Resize(ref statsMultiplier, N_OF_STATS); thereWasAnError = true; }
 
         //inizializza le statistiche, moltiplicandole per livello e moltiplicatore di statistiche
         hp *= level * statsMultiplier[0];

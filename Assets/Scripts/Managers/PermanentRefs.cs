@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// Stores and returns the reference to all the objects permanently during the game
+/// </summary>
 public class PermanentRefs : MonoBehaviour
 {
     //only instance of this script
     public static PermanentRefs instance;
+
+    [Header("PLAYER REFS")]
 
     //reference to the player's transform
     [SerializeField]
@@ -18,6 +20,12 @@ public class PermanentRefs : MonoBehaviour
     [SerializeField]
     private PlayerInteractionsManager playerInteractionsManager;
 
+    [Header("DATA_MANAGER REFS")]
+
+    //reference to the DataManager
+    [SerializeField]
+    private DataManager dataManager;
+
 
     private void Awake()
     {
@@ -27,6 +35,8 @@ public class PermanentRefs : MonoBehaviour
         else instance = this;
 
     }
+
+    #region Player
 
     /// <summary>
     /// Returns the Transform of the player
@@ -43,5 +53,17 @@ public class PermanentRefs : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public PlayerInteractionsManager GetPlayerInteractionsManager() { return playerInteractionsManager; }
+
+    #endregion
+
+    #region DataManager
+
+    /// <summary>
+    /// Returns the DataManager
+    /// </summary>
+    /// <returns></returns>
+    public DataManager GetDataManager() { return dataManager; }
+
+    #endregion
 
 }

@@ -71,14 +71,10 @@ public class PlayerActionsManager : MonoBehaviour
     /// <param name="actionOfFirstCharacter"></param>
     public void ManageActionForCharacter(bool confirm, bool actionOfFirstCharacter)
     {
-        //if an action is in execution, no other action can be executed
-        if (battleActionsManager.IsPerformingAnAction()) return;
-
         //if the player is exploring...
         if (GameStateManager.IsPlayerExploring())
         {
-            Debug.Log("Exploring Action");
-
+            //...they'll interact with the closest interactable object
             if (confirm) { playerInteractionsManager.InteractWithCloseObject(); }
             else { }
 
@@ -86,6 +82,12 @@ public class PlayerActionsManager : MonoBehaviour
         //otherwise, if the player is fighting...
         else if (GameStateManager.IsPlayerFighting())
         {
+
+            //...if an action is in execution, no other action can be executed
+            if (battleActionsManager.IsPerformingAnAction()) return;
+
+            //otherwise...
+
             //...performs or cancels the currently possible battle action
             if (confirm) { battleActionsManager.PerformAnAction(); }
             else { battleActionsManager.ExitCurrentChoiceOfAction(); }

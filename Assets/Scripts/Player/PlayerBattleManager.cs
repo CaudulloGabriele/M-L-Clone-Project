@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerBattleManager : EntityBattleManager, IUpdateData
 {
 
+    private DataManager dataManager;
+
     [SerializeField]
     private BattleActionsManager battleActionsManager;
 
@@ -23,6 +25,9 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     {
         base.Start();
 
+
+        dataManager = PermanentRefs.instance.GetDataManager();
+
         //gets the saved values
         GetSavedPlayerStats();
         //initializes the player's battle stats
@@ -38,8 +43,8 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     /// </summary>
     public void GetSavedPlayerStats()
     {
-        entityLevel = DataManager.savedPlayerLevel;
-        entityStatsMult = (float[])DataManager.savedPlayerStatsMult.Clone();
+        entityLevel = dataManager.savedPlayerLevel;
+        entityStatsMult = (float[])dataManager.savedPlayerStatsMult.Clone();
 
     }
     /// <summary>
@@ -81,11 +86,16 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     }
 
+    public void OnLoad()
+    {
+
+    }
+
     public void UpdateData()
     {
 
-        DataManager.savedPlayerLevel = entityLevel;
-        DataManager.savedPlayerStatsMult = entityStatsMult;
+        dataManager.savedPlayerLevel = entityLevel;
+        dataManager.savedPlayerStatsMult = entityStatsMult;
 
     }
 

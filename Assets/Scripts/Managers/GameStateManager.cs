@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -39,8 +40,12 @@ public class GameStateManager : MonoBehaviour
     /// <summary>
     /// Initializes various things when a scene is loaded, based on the scene
     /// </summary>
-    public static void OnSceneLoad(bool loadedMainMenu)
+    public async static void OnSceneLoad(bool loadedMainMenu)
     {
+
+        await Task.Delay(1);
+        DataManager.UpdateListOfDataUpdaters();
+
         //activates or deactivates the load button based on wheter the loaded scene is the MainMenu or not
         staticLoadSaveButton.SetActive(loadedMainMenu);
         //if this is not the MainMenu
@@ -51,8 +56,10 @@ public class GameStateManager : MonoBehaviour
             //...and calculates the player stats
             staticPbm.GetSavedPlayerStats();
             staticPbm.CalculatePlayerStats();
-            //Debug.Log("NONNOO");
+
         }
+
+        DataManager.UpdateListOfDataUpdaters();
 
     }
     /// <summary>

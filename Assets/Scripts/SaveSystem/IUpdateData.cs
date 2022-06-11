@@ -3,6 +3,8 @@
 public interface IUpdateData
 {
 
+    void OnLoad();
+
     /// <summary>
     /// Funzione dell'interfaccia per aggiornare i dati nel GameManag prima del salvataggio dei dati
     /// </summary>

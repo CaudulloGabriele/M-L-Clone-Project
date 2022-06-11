@@ -66,9 +66,14 @@ public class PlayerInteractionsManager : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
 
-        Gizmos.color = Color.cyan;
         foreach (Interactable interactable in allCurrentInteractables)
-        { Gizmos.DrawLine(transform.position, interactable.GetClosestPoint(transform.position)); }
+        {
+
+            float dist = Vector2.Distance(transform.position, interactable.GetClosestPoint(transform.position));
+            Gizmos.color = (dist > checkRadius) ? Color.cyan : Color.yellow;
+
+            Gizmos.DrawLine(transform.position, interactable.GetClosestPoint(transform.position));
+        }
 
     }
 

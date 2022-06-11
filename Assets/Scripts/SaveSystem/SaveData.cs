@@ -6,15 +6,19 @@ public class SaveData
 
     //GAME DATA-----------------------------------------------------------------------------------------------------------------------------
 
+    //indicates the last scene the player was when he saved the game
     public int lastSaveScene;
 
-    public int savedPlayerLevel;
+    //indicates the player position when he last saved the game
+    public float[] savedPlayerPos;
 
+    //saved values of all the player's stats
+    public int savedPlayerLevel;
     public float[] savedPlayerStatsMult;
 
     //GAME DATA-----------------------------------------------------------------------------------------------------------------------------
 
-    public SaveData(/*bool delete = false*/)
+    public SaveData(DataManager data)
     {
 
         //if (delete) { }
@@ -23,9 +27,10 @@ public class SaveData
 
         //GAME DATA-------------------------------------------------------------------------------------------------------------------------
 
-        lastSaveScene = DataManager.lastSaveScene;
-        savedPlayerLevel = DataManager.savedPlayerLevel;
-        savedPlayerStatsMult = DataManager.savedPlayerStatsMult;
+        lastSaveScene = data.lastSaveScene;
+        savedPlayerPos = data.savedPlayerPos;
+        savedPlayerLevel = data.savedPlayerLevel;
+        savedPlayerStatsMult = data.savedPlayerStatsMult;
 
         //GAME DATA-------------------------------------------------------------------------------------------------------------------------
 
