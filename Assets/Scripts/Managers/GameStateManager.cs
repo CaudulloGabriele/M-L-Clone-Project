@@ -18,12 +18,18 @@ public class GameStateManager : MonoBehaviour
     //static reference to the player battle manager
     private static PlayerBattleManager staticPbm;
 
+    private static DataManager dataManager;
+
     //reference to the load button in the save menu, to activate only if the currently loaded scene is the MainMenu
     [SerializeField]
     private GameObject loadSaveButton;
+    //reference to the player's position
+    private static Transform player;
     //reference to the player battle manager
     [SerializeField]
     private PlayerBattleManager pbm;
+
+    public static bool isLoadingSave = false;
 
 
     private void Awake()
@@ -37,28 +43,42 @@ public class GameStateManager : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        //gets the reference to the player's position
+        player = PermanentRefs.instance.GetPlayer();
+
+        dataManager = PermanentRefs.instance.GetDataManager();
+
+    }
+
     /// <summary>
     /// Initializes various things when a scene is loaded, based on the scene
     /// </summary>
     public async static void OnSceneLoad(bool loadedMainMenu)
     {
-
-        await Task.Delay(3);
-        DataManager.UpdateListOfDataUpdaters();
-
         //activates or deactivates the load button based on wheter the loaded scene is the MainMenu or not
         staticLoadSaveButton.SetActive(loadedMainMenu);
-        //if this is not the MainMenu
+        //if this is not the MainMenu...
         if (!loadedMainMenu)
         {
-            //...loads the save slot in use...
-            DataManager.instance.SaveDataAfterUpdate(DataManager.GetCurrentlyLoadedSlotName());
-            //...and calculates the player stats
+            //...calculates the player stats
             staticPbm.GetSavedPlayerStats();
-            staticPbm.CalculatePlayerStats();
+            staticPbm.CalculatePlayerStats(true);
 
         }
 
+        //if a save file is being loaded...
+        if (isLoadingSave)
+        {
+            //...the player is positioned
+            player.position = new Vector2(dataManager.savedPlayerPos[0], dataManager.savedPlayerPos[1]);
+            isLoadingSave = false;
+
+        }
+
+        //updates the list of data updaters in the scene(after waiting for the scene to fully load)
+        await Task.Delay(10);
         DataManager.UpdateListOfDataUpdaters();
 
     }
@@ -73,10 +93,9 @@ public class GameStateManager : MonoBehaviour
         {
             //...it saves the previous state before pausing...
             beforePauseState = currentState;
-
-            Time.timeScale = 0;
             //...and pauses the game
             currentState = GameState.paused;
+            Time.timeScale = 0;
 
         } //otherwise, sets the game in the state it was before pausing
         else { currentState = beforePauseState; Time.timeScale = 1; }
@@ -91,7 +110,7 @@ public class GameStateManager : MonoBehaviour
         
         currentState = isFighting ? GameState.fighting : GameState.exploring;
 
-        if (isFighting) { staticPbm.CalculatePlayerStats(); Debug.Log("IS FIGHTING"); }
+        if (isFighting) { staticPbm.CalculatePlayerStats(true); Debug.Log("IS FIGHTING"); }
     
     }
 

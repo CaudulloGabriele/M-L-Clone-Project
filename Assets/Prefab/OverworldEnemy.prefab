@@ -48,9 +48,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySprite: {fileID: 5860784017814400457}
+  enemyColl: {fileID: 6145625428277623200}
   randomized: 0
   isBoss: 0
   enemiesType: 
+  reactivationTimer: 1
 --- !u!210 &5860784017516621437
 SortingGroup:
   m_ObjectHideFlags: 0

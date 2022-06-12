@@ -80,6 +80,9 @@ public static class SaveSystem {
         //se il file esiste lo carica
         if (File.Exists(path))
         {
+
+            Debug.LogWarning("Caricando salvataggio: " + saveSlotName);
+
             //formattatore binario per criptare e decriptare i dati di salvataggio
             BinaryFormatter bf = new BinaryFormatter();
             //flusso di dati per aprire il file che contiene i dati di salvataggio

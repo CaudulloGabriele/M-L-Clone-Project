@@ -47,8 +47,8 @@ public class DataManager : MonoBehaviour
         if (!instance) instance = this;
         //altrimenti, questa istanza si distrugge
         else { Destroy(gameObject); return; }
-        //prima di tutto cancella i dati in modo che i valori statici tornino inizialmente al loro valore originale
-        DataErased();
+
+
         //inizializza l'array dei nomi degli slot salvati nel SaveSystem
         SaveSystem.InitializeArrayOfSaveSlots();
         //se i dati stavano venendo cancellati, indica che il cancellamento è finito in quanto si stanno per caricare i dati
@@ -199,8 +199,14 @@ public class DataManager : MonoBehaviour
         //indica il nome dello slot di salvataggio da caricare al riavvio della scena
         currentSaveSlotName = nameOfSlot;
         currentSaveSlotNameDebug = nameOfSlot;
+
+        //loads the new data
+        OnGameLoad(SaveSystem.LoadGame(this, nameOfSlot));
+
         //carica la scena in cui è stato effettuato il salvataggio
+        GameStateManager.isLoadingSave = true;
         SceneChange.StaticLoadThisScene(lastSaveScene, true);
+
         Debug.Log(nameOfSlot + " | " + "Player Level: " + savedPlayerLevel);
     }
     /// <summary>

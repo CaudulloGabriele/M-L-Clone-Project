@@ -38,8 +38,8 @@ public class SavePoint : Interactable, IUpdateData
     public void OnLoad()
     {
         //when the scene is loaded, the player is positioned in the saved position
-        PermanentRefs.instance.GetPlayer().position = new Vector2(dataManager.savedPlayerPos[0], dataManager.savedPlayerPos[1]);
-        Debug.Log("POSITIONING PLAYER: " + dataManager.savedPlayerPos[0] + " | " + dataManager.savedPlayerPos[1]);
+        //PermanentRefs.instance.GetPlayer().position = new Vector2(dataManager.savedPlayerPos[0], dataManager.savedPlayerPos[1]);
+        //Debug.Log("POSITIONING PLAYER: " + dataManager.savedPlayerPos[0] + " | " + dataManager.savedPlayerPos[1]);
     }
 
     public void UpdateData()

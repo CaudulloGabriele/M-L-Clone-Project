@@ -55,14 +55,22 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     /// <summary>
     /// Calculates the player's battle stats based on the multipliers
     /// </summary>
-    public void CalculatePlayerStats()
+    /// <param name="notStartCalculation">indicates wheter or not this calculation is the starting one or another</param>
+    public void CalculatePlayerStats(bool notStartCalculation)
     {
+        //gets the previous health, if this is not the starting calculation
+        float previousHealth = 0;
+        if (notStartCalculation) previousHealth = entityStats.GetCurrentHealth();
 
+        //calculates the player's stats
         OnEnable();
+
+        //if this is not the starting calculation, the current health is set to the one before the calculation
+        if (notStartCalculation) entityStats.SetCurrentHealth(previousHealth);
+
 
         /*
         bool thereWasAnError = entityStats.InitializeStats(entityLevel, entityStatsMult);
-
 
         if (thereWasAnError) { Debug.LogError("There was an error with the initialization of player's stats:"); }
         Debug.Log("Player Level: " + entityLevel);

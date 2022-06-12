@@ -68,7 +68,12 @@ public class GameOverManager : MonoBehaviour
         canvasGroup.blocksRaycasts = state;
 
         //if the desired state is not of GameOver, loads the desired scene
-        if (!state) SceneChange.StaticLoadThisScene(sceneToLoad, true);
+        if (!state)
+        {
+            GameStateManager.isLoadingSave = true;
+            SceneChange.StaticLoadThisScene(sceneToLoad, true);
+
+        }
 
     }
 

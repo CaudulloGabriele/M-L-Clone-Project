@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BattleManager : MonoBehaviour
 {
@@ -48,8 +49,12 @@ public class BattleManager : MonoBehaviour
     private PlayerBattleManager playerBattleManager;
 
     //time to wait to position player in the fight position
+    [FormerlySerializedAs("positionPlayerTimer")]
     [SerializeField]
-    private float positionPlayerTimer = 1.5f;
+    private float waitBeforeStartingFightTimer = 1.5f;
+
+    //indicates wheter or not the last fight was won
+    private bool wonLastFight = false;
 
     #endregion
 
@@ -220,6 +225,8 @@ public class BattleManager : MonoBehaviour
         //exits the battle
         ExitBattlePhase();
 
+        //comunicates that the last fight was won
+        wonLastFight = true;
 
         Debug.LogError("IL GIOCATORE NON PRENDE ANCORA ESPERIENZA VINCENDO LA BATTAGLIA");
         Debug.Log("Battle Won!");
@@ -235,9 +242,12 @@ public class BattleManager : MonoBehaviour
         {
             //Debug.LogWarning("ENEMY TO REMOVE AFTER LOSS: " + i + " | CURRENTLY ACTIVE: " + GetNumberOfCurrentlyActiveEnemies());
             int enemyType = GetActiveEnemyAtIndex(i).GetEnemyType();
-            AnEnemyWasDefeated(i, enemyType, false);
+            AnEnemyWasDefeated(i, enemyType, true);
 
         }
+
+        //comunicates that the last fight was lost
+        wonLastFight = false;
 
         //Debug.LogError("IL GIOCATORE NON PRENDE ANCORA ESPERIENZA VINCENDO LA BATTAGLIA");
         Debug.Log("Battle Lost!");
@@ -250,8 +260,9 @@ public class BattleManager : MonoBehaviour
         //the camera follows the overworld player like before the battle
         camFollow.ResetCameraSpeed();
         camFollow.ChangeTarget(mapPlayer);
-        //sets the game' state as no more in fight
-        GameStateManager.SetFightingState(false);
+
+        //sets the game' state as no more in fight, if not in game over
+        if (!GameStateManager.IsGameOver()) GameStateManager.SetFightingState(false);
 
     }
 
@@ -266,10 +277,12 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ManageStartFightTiming()
     {
         //waits a bit
-        yield return new WaitForSeconds(positionPlayerTimer);
+        yield return new WaitForSeconds(waitBeforeStartingFightTimer);
+
         //immediately moves the camera in the position of the battleground
         camFollow.ChangeTarget(transform);
         camFollow.ChangeCameraSpeed(99999);
+
         //moves the battle player in the combat position
         battlePlayer.position = playerFightPos.position;
         //hides the action blocks
@@ -330,6 +343,16 @@ public class BattleManager : MonoBehaviour
     /// <param name="enemyType"></param>
     /// <returns></returns>
     public Sprite GetEnemySpriteBasedOnType(int enemyType) { return allEnemies[enemyType].GetEnemySprite(); }
+    /// <summary>
+    /// Returns how much time has to pass before a fight starts
+    /// </summary>
+    /// <returns></returns>
+    public float GetStartFightTimer() { return waitBeforeStartingFightTimer; }
+    /// <summary>
+    /// Returns wheter the player won the last fight or not
+    /// </summary>
+    /// <returns></returns>
+    public bool HasPlayerWonTheLastFight() { return wonLastFight; }
 
     #endregion
 
