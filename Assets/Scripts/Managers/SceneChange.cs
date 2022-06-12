@@ -102,6 +102,13 @@ public class SceneChange : MonoBehaviour
 
     }
 
+    public static string GetSceneNameByIndex(int index)
+    {
+
+        return SceneManager.GetSceneByBuildIndex(index).name;
+
+    }
+
     public void QuitGame()
     {
         Application.Quit();

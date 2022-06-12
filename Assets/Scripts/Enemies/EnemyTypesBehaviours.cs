@@ -183,6 +183,11 @@ public class EnemyTypesBehaviours : EntityBattleManager
     /// </summary>
     /// <returns></returns>
     public int GetEnemyIndex() { return transform.GetSiblingIndex(); }
+    /// <summary>
+    /// Returns this enemy's type
+    /// </summary>
+    /// <returns></returns>
+    public int GetEnemyType() { return thisEnemyType; }
 
     #endregion
 

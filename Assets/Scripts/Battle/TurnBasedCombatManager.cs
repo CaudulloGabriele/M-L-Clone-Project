@@ -131,6 +131,13 @@ public class TurnBasedCombatManager : MonoBehaviour
     /// </summary>
     public async void StartNewTurn()
     {
+
+        if (GameStateManager.IsGameOver())
+        {
+            EndFightEarly();
+            return;
+        }
+
         //goes to the next turn
         currentTurn++;
         if (currentTurn >= entitiesInBattle.Length) { currentTurn = 0; }
@@ -140,6 +147,17 @@ public class TurnBasedCombatManager : MonoBehaviour
 
         int fighterIndex = orderedTurnsOfEntities[currentTurn];
         entitiesInBattle[fighterIndex].StartOwnTurn();
+
+    }
+
+    public async void EndFightEarly()
+    {
+
+        /*HAVE A TRANSITION IN BETWEEN*/
+
+        await Task.Delay(1500);
+
+        BattleManager.instance.BattleLost();
 
     }
 

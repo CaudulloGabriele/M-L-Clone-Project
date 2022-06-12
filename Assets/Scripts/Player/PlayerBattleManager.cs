@@ -8,6 +8,8 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     private DataManager dataManager;
 
+    private GameOverManager gameOverManager;
+
     [SerializeField]
     private BattleActionsManager battleActionsManager;
 
@@ -26,7 +28,9 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         base.Start();
 
 
-        dataManager = PermanentRefs.instance.GetDataManager();
+        PermanentRefs permaRefs = PermanentRefs.instance;
+        dataManager = permaRefs.GetDataManager();
+        gameOverManager = permaRefs.GetGameOverManager();
 
         //gets the saved values
         GetSavedPlayerStats();
@@ -78,18 +82,25 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     }
 
+    public override void ChangeHealth(float dmg)
+    {
+        base.ChangeHealth(dmg);
+
+        Debug.Log("PLAYER AFTER DAMAGE: " + entityStats.GetCurrentHealth());
+    }
+
     protected override void EntityDeath()
     {
         base.EntityDeath();
 
         /*MAKE SOMETHING HAPPEN WHEN PLAYER IS DEFEATED-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    }
-
-    public void OnLoad()
-    {
+        //comunicates that the player died and the game is over
+        gameOverManager.SetGameOverState(true);
 
     }
+
+    public void OnLoad() { }
 
     public void UpdateData()
     {

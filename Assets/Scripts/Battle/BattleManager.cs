@@ -198,7 +198,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="enemyChildIndex"></param>
     /// <param name="enemyType"></param>
-    public void AnEnemyWasDefeated(int enemyChildIndex, int enemyType)
+    public void AnEnemyWasDefeated(int enemyChildIndex, int enemyType, bool battleLost = false)
     {
         //removes the defeated enemy from the array of enemies that need a turn in combat
         combatTurnsManager.AddOrRemoveEnemyInCombat(false, GetActiveEnemyAtIndex(enemyChildIndex));
@@ -208,8 +208,8 @@ public class BattleManager : MonoBehaviour
         Transform defeatedEnemy = activeEnemiesContainer.GetChild(enemyChildIndex);
         defeatedEnemy.parent = spawnedEnemiesContainer.GetChild(enemyType);
 
-        //if there are no more active enemies, the player wins the battle
-        if (GetNumberOfCurrentlyActiveEnemies() == 0) { BattleWon(); }
+        //if there are no more active enemies and the player is not dead, the player wins the battle
+        if (GetNumberOfCurrentlyActiveEnemies() == 0 && !battleLost) { BattleWon(); }
 
     }
     /// <summary>
@@ -223,6 +223,24 @@ public class BattleManager : MonoBehaviour
 
         Debug.LogError("IL GIOCATORE NON PRENDE ANCORA ESPERIENZA VINCENDO LA BATTAGLIA");
         Debug.Log("Battle Won!");
+    }
+    public void BattleLost()
+    {
+        //exits the battle
+        ExitBattlePhase();
+
+        //removes every enemy from the battle
+        int nEnemies = GetNumberOfCurrentlyActiveEnemies() - 1;
+        for (int i = nEnemies; i > -1; i--)
+        {
+            //Debug.LogWarning("ENEMY TO REMOVE AFTER LOSS: " + i + " | CURRENTLY ACTIVE: " + GetNumberOfCurrentlyActiveEnemies());
+            int enemyType = GetActiveEnemyAtIndex(i).GetEnemyType();
+            AnEnemyWasDefeated(i, enemyType, false);
+
+        }
+
+        //Debug.LogError("IL GIOCATORE NON PRENDE ANCORA ESPERIENZA VINCENDO LA BATTAGLIA");
+        Debug.Log("Battle Lost!");
     }
     /// <summary>
     /// Returns the player to the overworld map

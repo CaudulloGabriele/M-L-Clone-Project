@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameStateManager : MonoBehaviour
 {
     //enum for all the possible states of the game
-    private enum GameState { exploring = 0, fighting = 1, paused = 2 };
+    private enum GameState { exploring = 0, fighting = 1, paused = 2, gameOver = 3 };
     //tells the current state of the game
     private static GameState currentState = GameState.exploring;
     //tells the state in which the game was before getting paused
@@ -94,6 +94,14 @@ public class GameStateManager : MonoBehaviour
         if (isFighting) { staticPbm.CalculatePlayerStats(); Debug.Log("IS FIGHTING"); }
     
     }
+
+    public static void SetIfGameIsOver(bool state)
+    {
+
+        GameState newState = state ? GameState.gameOver : GameState.exploring;
+        currentState = newState;
+
+    }
     /// <summary>
     /// Returns true if the state of the game is set to "exploring"
     /// </summary>
@@ -109,5 +117,10 @@ public class GameStateManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public static bool IsGamePaused() { return (currentState == GameState.paused); }
+    /// <summary>
+    /// Returns true if the player is in GameOver
+    /// </summary>
+    /// <returns></returns>
+    public static bool IsGameOver() { return (currentState == GameState.gameOver); }
 
 }

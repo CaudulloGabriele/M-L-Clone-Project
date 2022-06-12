@@ -26,6 +26,12 @@ public class PermanentRefs : MonoBehaviour
     [SerializeField]
     private DataManager dataManager;
 
+    [Header("GAME_OVER_MANAGER REFS")]
+
+    //reference to the GameOverManager
+    [SerializeField]
+    private GameOverManager gameOverManager;
+
 
     private void Awake()
     {
@@ -63,6 +69,16 @@ public class PermanentRefs : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public DataManager GetDataManager() { return dataManager; }
+
+    #endregion
+
+    #region GameOverManager
+
+    /// <summary>
+    /// Returns the GameOverManager
+    /// </summary>
+    /// <returns></returns>
+    public GameOverManager GetGameOverManager() { return gameOverManager; }
 
     #endregion
 

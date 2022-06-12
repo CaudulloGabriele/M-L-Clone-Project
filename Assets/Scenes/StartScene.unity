@@ -819,6 +819,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 907630252}
+  - component: {fileID: 907630255}
   - component: {fileID: 907630251}
   - component: {fileID: 907630250}
   - component: {fileID: 907630249}
@@ -925,7 +926,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 0
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!95 &907630254
 Animator:
@@ -946,6 +947,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &907630255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907630248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb4705ed482ebb4ca4ca18b527d817a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitBeforeShowingGameOver: 3
 --- !u!114 &914820047 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3902702876966139700, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
@@ -1114,7 +1128,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1273518567}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 907630255}
+        m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
+        m_MethodName: RetryFromLastSave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1273518567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1336,7 +1362,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1357775391}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 907630255}
+        m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
+        m_MethodName: ReturnToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1357775391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1572,6 +1610,10 @@ PrefabInstance:
       propertyPath: dataManager
       value: 
       objectReference: {fileID: 1780666513}
+    - target: {fileID: 4418103952999994849, guid: f590e2e41bda4cc4c84dcc3f135083a0, type: 3}
+      propertyPath: gameOverManager
+      value: 
+      objectReference: {fileID: 907630255}
     - target: {fileID: 4418103952999994849, guid: f590e2e41bda4cc4c84dcc3f135083a0, type: 3}
       propertyPath: playerActionsManager
       value: 

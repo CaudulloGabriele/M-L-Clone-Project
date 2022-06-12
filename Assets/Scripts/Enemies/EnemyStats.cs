@@ -37,7 +37,7 @@ public class EnemyStats
     private static float[] enemiesAtkMult =
         {
 
-        0.2f, //shroob
+        1f, //shroob
         0.45f, //commander shroob
         1f, //shroob-omb
         0.25f, //shroob rex
