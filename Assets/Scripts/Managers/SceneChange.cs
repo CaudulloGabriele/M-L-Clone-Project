@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -23,31 +22,30 @@ public class SceneChange : MonoBehaviour
 
     }
 
+    private static string previouslyLoadedSceneName = "StartScene";
+
 
     /// <summary>
     /// Permette di caricare una scena tramite nome
     /// </summary>
     /// <param name="staticSceneName"></param>
-    public async static void StaticLoadThisScene(string staticSceneName, bool additive = false)
+    public static void StaticLoadThisScene(string staticSceneName, bool additive = false)
     {
-
-        UnloadMainMenu();
-
-        
-
-        await Task.Delay(1);
-
+        //comunicates to the GameStateManager that a scene is being loaded
         GameStateManager.OnSceneLoad(staticSceneName == "MainMenu");
 
+        //if the scene is being loaded additively, the previously loaded one gets unloaded
+        if (additive) UnloadPreviousScene();
 
+        //loads the desired scene
         SceneManager.LoadScene(staticSceneName, (additive ? LoadSceneMode.Additive : LoadSceneMode.Single));
+
+        //lets the time run normally in case it was paused
         Time.timeScale = 1;
 
-        int sceneIndex = SceneManager.GetSceneByName(staticSceneName).buildIndex;
+        previouslyLoadedSceneName = staticSceneName;
 
-        if (sceneIndex > 1) DataManag.lastSaveScene = sceneIndex;
-
-
+        //Debug.LogWarning("PREVIOUSLY LOADED SCENE NAME: " + previouslyLoadedSceneName);
         //Debug.Log("Caricata scena di nome " + staticSceneName);
     }
 
@@ -55,21 +53,19 @@ public class SceneChange : MonoBehaviour
     /// Permette di caricare una scena tramite buildIndex
     /// </summary>
     /// <param name="staticSceneIndex"></param>
-    public async static void StaticLoadThisScene(int staticSceneIndex, bool additive = false)
+    public static void StaticLoadThisScene(int staticSceneIndex, bool additive = false)
     {
 
-        UnloadMainMenu();
-
-        
-
-        await Task.Delay(1);
         GameStateManager.OnSceneLoad(staticSceneIndex == 1);
+
+        if (additive) UnloadPreviousScene();
 
         SceneManager.LoadScene(staticSceneIndex, (additive ? LoadSceneMode.Additive : LoadSceneMode.Single));
         Time.timeScale = 1;
 
-        if (staticSceneIndex > 1) DataManag.lastSaveScene = staticSceneIndex;
+        previouslyLoadedSceneName = GetSceneNameByIndex(staticSceneIndex);
 
+        //Debug.LogWarning("PREVIOUSLY LOADED SCENE NAME: " + previouslyLoadedSceneName);
         //Debug.Log("Caricata scena ad indice " + staticSceneIndex);
     }
     /// <summary>
@@ -92,22 +88,30 @@ public class SceneChange : MonoBehaviour
     /// <param name="sceneIndex"></param>
     public void AddNewScene(int sceneIndex) { StaticLoadThisScene(sceneIndex, true); }
     /// <summary>
-    /// Toglie la scena del menù principale
+    /// Toglie la scena precedentemente caricata
     /// </summary>
-    private static void UnloadMainMenu()
+    private static void UnloadPreviousScene()
     {
 
-        Scene mainMenuScene = SceneManager.GetSceneByName("MainMenu");
-        if (mainMenuScene.buildIndex == 1) SceneManager.UnloadSceneAsync(mainMenuScene);
+        Scene previousScene = SceneManager.GetSceneByName(previouslyLoadedSceneName);
 
+        if (previousScene.buildIndex == 0) return;
+
+        SceneManager.UnloadSceneAsync(previousScene);
+
+        Debug.Log("UNLOADED SCENE: " + previouslyLoadedSceneName + " -> " + previousScene.name);
     }
-
-    public static string GetSceneNameByIndex(int index)
-    {
-
-        return SceneManager.GetSceneByBuildIndex(index).name;
-
-    }
+    /// <summary>
+    /// Returns the name of the scene of the desired index
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public static string GetSceneNameByIndex(int index) { return SceneManager.GetSceneByBuildIndex(index).name; }
+    /// <summary>
+    /// Returns the index of the currently loaded scene
+    /// </summary>
+    /// <returns></returns>
+    public static int GetCurrentlyLoadedSceneIndex() { return SceneManager.GetSceneByName(previouslyLoadedSceneName).buildIndex; }
 
     public void QuitGame()
     {

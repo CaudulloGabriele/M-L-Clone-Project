@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class PlayerBattleManager : EntityBattleManager, IUpdateData
 {
-
+    //reference to the DataManager
     private DataManager dataManager;
-
+    //reference to the GameOverManager
     private GameOverManager gameOverManager;
 
+    //reference to the player's battle actions manager
     [SerializeField]
     private BattleActionsManager battleActionsManager;
 

@@ -15,7 +15,7 @@ public class DataManager : MonoBehaviour
     */
     private static string currentSaveSlotName = "";
     [SerializeField]
-    private  string currentSaveSlotNameDebug = "";
+    private string currentSaveSlotNameDebug = "";
     /// <summary>
     /// Indica il nome da usare quando non è stato caricato nessun salvataggio
     /// </summary>

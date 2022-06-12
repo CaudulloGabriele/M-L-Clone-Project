@@ -43,7 +43,7 @@ public class GameStateManager : MonoBehaviour
     public async static void OnSceneLoad(bool loadedMainMenu)
     {
 
-        await Task.Delay(1);
+        await Task.Delay(3);
         DataManager.UpdateListOfDataUpdaters();
 
         //activates or deactivates the load button based on wheter the loaded scene is the MainMenu or not

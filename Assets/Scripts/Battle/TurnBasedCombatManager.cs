@@ -78,7 +78,7 @@ public class TurnBasedCombatManager : MonoBehaviour
     /// </summary>
     public void EstablishTurnOrder(bool fightBegun)
     {
-        
+        //gets the number of entities in this fight
         int numberOfEntities = entitiesInBattle.Length;
 
         //initializes the array of turns order
@@ -131,25 +131,31 @@ public class TurnBasedCombatManager : MonoBehaviour
     /// </summary>
     public async void StartNewTurn()
     {
-
+        //if when trying to start a new turn the player lost...
         if (GameStateManager.IsGameOver())
         {
+            //...ends the fight early...
             EndFightEarly();
+            //...and no new turn starts
             return;
         }
 
-        //goes to the next turn
+        //otherwise...
+
+        //...the next turn starts...
         currentTurn++;
         if (currentTurn >= entitiesInBattle.Length) { currentTurn = 0; }
 
-        //waits a bit
+        //...after waiting a bit
         await Task.Delay((int)(waitForTurnChange * 1000));
 
         int fighterIndex = orderedTurnsOfEntities[currentTurn];
         entitiesInBattle[fighterIndex].StartOwnTurn();
 
     }
-
+    /// <summary>
+    /// Ends the fight before all enemies are defeated
+    /// </summary>
     public async void EndFightEarly()
     {
 
@@ -157,6 +163,7 @@ public class TurnBasedCombatManager : MonoBehaviour
 
         await Task.Delay(1500);
 
+        //comunicates the battle manager that the player lost the battle
         BattleManager.instance.BattleLost();
 
     }
