@@ -17,7 +17,7 @@ public class GameStateManager : MonoBehaviour
     private static GameObject staticLoadSaveButton;
     //static reference to the player battle manager
     private static PlayerBattleManager staticPbm;
-
+    //static reference to the DataManager
     private static DataManager dataManager;
 
     //reference to the load button in the save menu, to activate only if the currently loaded scene is the MainMenu
@@ -29,6 +29,7 @@ public class GameStateManager : MonoBehaviour
     [SerializeField]
     private PlayerBattleManager pbm;
 
+    //indicates if, when a scene is being loaded, a save file has been loaded(in which case, the player needs to be moved to the last saved position)
     public static bool isLoadingSave = false;
 
 
@@ -47,7 +48,7 @@ public class GameStateManager : MonoBehaviour
     {
         //gets the reference to the player's position
         player = PermanentRefs.instance.GetPlayer();
-
+        //gets the reference to the DataManager
         dataManager = PermanentRefs.instance.GetDataManager();
 
     }
@@ -71,7 +72,7 @@ public class GameStateManager : MonoBehaviour
         //if a save file is being loaded...
         if (isLoadingSave)
         {
-            //...the player is positioned
+            //...the player is positioned to the last saved position
             player.position = new Vector2(dataManager.savedPlayerPos[0], dataManager.savedPlayerPos[1]);
             isLoadingSave = false;
 
