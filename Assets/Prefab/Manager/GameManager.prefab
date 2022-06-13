@@ -108,6 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a95a3448505f547966d4806c9862e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  playerActionsManager: {fileID: 0}
+  playerInteractionsManager: {fileID: 0}
+  dataManager: {fileID: 8175770334872701135}
+  gameOverManager: {fileID: 0}
 --- !u!1 &8815024062736283447
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,3 +156,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe59c02faed66b4d8d7f1bb7f0789b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentSaveSlotNameDebug: 
+  loadData: 1
+  lastSaveScene: 2
+  savedPlayerPos:
+  - 0
+  - 0
+  savedPlayerLevel: 1
+  savedPlayerStatsMult:
+  - 1
+  - 1
+  - 1
