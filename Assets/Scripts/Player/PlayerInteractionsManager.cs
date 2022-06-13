@@ -10,7 +10,7 @@ public class PlayerInteractionsManager : MonoBehaviour
     //list of all the interactable objects currently in the scene
     private List<Interactable> allCurrentInteractables = new List<Interactable>();
     //reference to the currently closest interactable
-    [SerializeField]
+    //[SerializeField]
     private Interactable closestInteractable;
 
     //indicates how much time has to pass between checks

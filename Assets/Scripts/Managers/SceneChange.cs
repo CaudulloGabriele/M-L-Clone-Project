@@ -7,8 +7,7 @@ using UnityEngine.SceneManagement;
 public class SceneChange : MonoBehaviour
 {
 
-    private static readonly DataManager dataManager;
-    private static DataManager DataManag
+    private static DataManager DataManager
     {
 
         get
@@ -86,7 +85,14 @@ public class SceneChange : MonoBehaviour
     /// Carica una scena additivamente
     /// </summary>
     /// <param name="sceneIndex"></param>
-    public void AddNewScene(int sceneIndex) { StaticLoadThisScene(sceneIndex, true); }
+    public void StartANewGame(int sceneIndex)
+    {
+
+        DataManager.LoadNewData("");
+
+        //StaticLoadThisScene(sceneIndex, true);
+    
+    }
     /// <summary>
     /// Toglie la scena precedentemente caricata
     /// </summary>
