@@ -17,6 +17,9 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     protected override async void OnEnable()
     {
+
+        transform.parent = null;
+
         //waits for the updating of the stats in the Start
         await Task.Delay(1);
 
@@ -28,7 +31,7 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     {
         base.Start();
 
-
+        //gets some permanent references
         PermanentRefs permaRefs = PermanentRefs.instance;
         dataManager = permaRefs.GetDataManager();
         gameOverManager = permaRefs.GetGameOverManager();

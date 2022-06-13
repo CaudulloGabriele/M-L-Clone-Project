@@ -13,6 +13,7 @@ public class BattleActionsManager : MonoBehaviour
     #region Variables
 
     //tells the current state of choice of battle action
+    [SerializeField]
     private ActionChoiceState currentActionChoiceState = ActionChoiceState.notOwnTurn;
 
     [Tooltip("References to the SpriteRenderers of the action blocks in this order:\n1)Current\n2)Right\n3)Back\n4)Left")]
@@ -29,6 +30,10 @@ public class BattleActionsManager : MonoBehaviour
 
     //reference to the SoloAction manager script of this entity
     private SoloAction soloAction;
+
+    //reference to the manager of this entity's dodge counterattack
+    [SerializeField]
+    private BattleDodgeCounter battleDodgeManager;
 
     //reference to the selection arrow
     [SerializeField]
@@ -87,8 +92,8 @@ public class BattleActionsManager : MonoBehaviour
             //NOT OWN TURN
             case ActionChoiceState.notOwnTurn:
                 {
-
-                    /*JUMP OR DODGE SINCE IT'S ENEMY'S TURN*/
+                    //starts a dodge, since it's not own turn
+                    battleDodgeManager.StartDodgeCounter();
 
                     break;
 
