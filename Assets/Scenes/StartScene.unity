@@ -1623,6 +1623,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1282673500}
     - target: {fileID: 8175770334872701135, guid: f590e2e41bda4cc4c84dcc3f135083a0, type: 3}
+      propertyPath: lastSaveScene
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8175770334872701135, guid: f590e2e41bda4cc4c84dcc3f135083a0, type: 3}
       propertyPath: savedPlayerLevel
       value: 1
       objectReference: {fileID: 0}
