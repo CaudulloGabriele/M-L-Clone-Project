@@ -13,6 +13,9 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     //reference to the player's battle actions manager
     [SerializeField]
     private BattleActionsManager battleActionsManager;
+    //reference to the player's dodge and counter manager
+    [SerializeField]
+    private BattleDodgeCounter battleDodgeCounter;
 
 
     protected override async void OnEnable()

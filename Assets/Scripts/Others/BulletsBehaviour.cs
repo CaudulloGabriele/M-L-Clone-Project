@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class BulletsBehaviour : MonoBehaviour
 {
+
+    #region Variables
+
     //reference to this bullet collisions manager
     [SerializeField]
     private BattleCollisionsManager collisionsManager;
@@ -18,6 +21,9 @@ public class BulletsBehaviour : MonoBehaviour
     [SerializeField]
     private float damage;
 
+    #endregion
+
+    #region MonoBehaviour Methods
 
     private void Awake()
     {
@@ -28,6 +34,10 @@ public class BulletsBehaviour : MonoBehaviour
         SetBulletDamage(damage);
 
     }
+
+    #endregion
+
+    #region Bullet Methods
 
     /// <summary>
     /// Shoots bullet towards a specified target position
@@ -62,6 +72,13 @@ public class BulletsBehaviour : MonoBehaviour
 
     }
 
+    public void DeflectThisBullet()
+    {
+
+        bulletRb.velocity = -bulletRb.velocity;
+
+    }
+
     /// <summary>
     /// The bullet expires
     /// </summary>
@@ -71,6 +88,11 @@ public class BulletsBehaviour : MonoBehaviour
         gameObject.SetActive(false);
 
     }
+
+    #endregion
+
+    #region Setter Methods
+
     /// <summary>
     /// Allows to set this bullet's damage
     /// </summary>
@@ -83,5 +105,7 @@ public class BulletsBehaviour : MonoBehaviour
         collisionsManager.SetDamage(damage);
     
     }
+
+    #endregion
 
 }

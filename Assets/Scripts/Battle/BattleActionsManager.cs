@@ -8,7 +8,7 @@ public class BattleActionsManager : MonoBehaviour
     /// <summary>
     /// enum that indicates the states of battle actions
     /// </summary>
-    private enum ActionChoiceState { notOwnTurn = -1, choosingTypeOfAction = 0, choosingItem = 1, choosingEnemyOrPlayer = 2 }
+    private enum ActionChoiceState { notOwnTurn = -1, choosingTypeOfAction = 0, choosingItem = 1, choosingTarget = 2 }
 
     #region Variables
 
@@ -110,7 +110,7 @@ public class BattleActionsManager : MonoBehaviour
                         //...selects the first active enemy...
                         ChangeSelectedEnemy(Vector2.zero, true);
                         //...indicates that the player is selecting which enemy to attack
-                        SetIsChoosingEnemyOrPlayer();
+                        SetIsChoosingTarget();
 
                     }
                     else if (SelectedActionIsItemUse())
@@ -143,8 +143,8 @@ public class BattleActionsManager : MonoBehaviour
                     break;
 
                 }
-            //CHOOSING ENEMY OR PLAYER
-            case ActionChoiceState.choosingEnemyOrPlayer:
+            //CHOOSING TARGET
+            case ActionChoiceState.choosingTarget:
                 {
                     //performs the selected action
                     PerformCurrentAction();
@@ -205,8 +205,8 @@ public class BattleActionsManager : MonoBehaviour
                     break;
 
                 }
-            //CHOOSING ENEMY OR PLAYER
-            case ActionChoiceState.choosingEnemyOrPlayer:
+            //CHOOSING TARGET
+            case ActionChoiceState.choosingTarget:
                 {
                     //returns to the action blocks selection state
                     SetIsChoosingAction();
@@ -450,7 +450,7 @@ public class BattleActionsManager : MonoBehaviour
     private bool IsNotOwnTurn() { return currentActionChoiceState == ActionChoiceState.notOwnTurn; }
     private bool IsChoosingAction() { return currentActionChoiceState == ActionChoiceState.choosingTypeOfAction; }
     private bool IsChoosingItem() { return currentActionChoiceState == ActionChoiceState.choosingItem; }
-    private bool IsChoosingEnemyOrPlayer() { return currentActionChoiceState == ActionChoiceState.choosingEnemyOrPlayer; }
+    private bool IsChoosingTarget() { return currentActionChoiceState == ActionChoiceState.choosingTarget; }
 
     #endregion
 
@@ -459,7 +459,7 @@ public class BattleActionsManager : MonoBehaviour
     private void SetIsNotOwnTurn() { currentActionChoiceState = ActionChoiceState.notOwnTurn; }
     private void SetIsChoosingAction() { currentActionChoiceState = ActionChoiceState.choosingTypeOfAction; }
     private void SetIsChoosingItem() { currentActionChoiceState = ActionChoiceState.choosingItem; }
-    private void SetIsChoosingEnemyOrPlayer() { currentActionChoiceState = ActionChoiceState.choosingEnemyOrPlayer; }
+    private void SetIsChoosingTarget() { currentActionChoiceState = ActionChoiceState.choosingTarget; }
 
     #endregion
 

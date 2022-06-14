@@ -12,6 +12,10 @@ public class BattleDodgeCounter : MonoBehaviour
     //reference to this entity's jump manager
     [SerializeField]
     private CharacterJump entityJump;
+    //reference to this entity's bullets deflector
+    [SerializeField]
+    private BulletsDeflect bulletsDeflector;
+
 
     //indicates wheter this entity dodges or counters automatically
     [SerializeField]
@@ -130,10 +134,38 @@ public class BattleDodgeCounter : MonoBehaviour
 
     #region Counters
 
-    private void DeflectBullets()
+    /// <summary>
+    /// Executes a counter that allows to deflect bullets
+    /// </summary>
+    private async void DeflectBullets()
     {
 
+        //if this entity counters automatically...
+        if (isAutomatic)
+        {
 
+            await Task.Delay(1);
+
+        }
+        else //otherwise...
+        {
+            //Debug.LogError("JUMP DODGE START");
+
+            bulletsDeflector.Deflect();
+
+
+            float deflectDuration = bulletsDeflector.GetDeflectDuration();
+            float deflectCD = bulletsDeflector.GetDeflectCooldown();
+
+            await Task.Delay((int)(deflectDuration * 1000));
+            await Task.Delay((int)(deflectCD * 1000));
+
+            //...the counter ends
+            EndDodgeCounter();
+
+
+            //Debug.LogError("JUMP DODGE END");
+        }
 
     }
 

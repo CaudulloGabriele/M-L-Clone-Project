@@ -1517,14 +1517,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7159591321769697515, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
-      propertyPath: jumpStartForce
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7159591321769697515, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
-      propertyPath: maxJumpCapacity
-      value: 4.2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
 --- !u!4 &5217026462840296680 stripped

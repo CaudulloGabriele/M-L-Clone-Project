@@ -152,6 +152,10 @@ public class TurnBasedCombatManager : MonoBehaviour
         int fighterIndex = orderedTurnsOfEntities[currentTurn];
         entitiesInBattle[fighterIndex].StartOwnTurn();
 
+
+        /*CHANGE THE PLAYER'S DODGE OR COUNTER BASED ON ENEMY TYPE OF ATTACK, WHEN NOT PLAYER'S TURN*/
+        //playerBattleManager.
+
     }
     /// <summary>
     /// Ends the fight before all enemies are defeated
