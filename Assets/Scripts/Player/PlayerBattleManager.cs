@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerBattleManager : EntityBattleManager, IUpdateData
 {
+
+    #region Variables
+
     //reference to the DataManager
     private DataManager dataManager;
     //reference to the GameOverManager
@@ -13,10 +14,10 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
     //reference to the player's battle actions manager
     [SerializeField]
     private BattleActionsManager battleActionsManager;
-    //reference to the player's dodge and counter manager
-    [SerializeField]
-    private BattleDodgeCounter battleDodgeCounter;
 
+    #endregion
+
+    #region MonoBehaviour Methods
 
     protected override async void OnEnable()
     {
@@ -49,6 +50,11 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
         //Debug.Log("GETTING SAVED STATS");
     }
+
+    #endregion
+
+    #region Player Stats Methods
+
     /// <summary>
     /// Gets the player's saved battle stats values
     /// </summary>
@@ -89,13 +95,27 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         */
     }
 
+    #endregion
+
+    #region EntityBattleManager Methods
+
     public override void StartOwnTurn()
     {
         base.StartOwnTurn();
 
+        //resets the player's action blocks
         battleActionsManager.ResetActionBlocks();
 
     }
+
+    /*
+    public override void SetEntityDodgeCounter(bool hasToDodge, bool onlyThis)
+    {
+        base.Awake();
+
+        Debug.LogError("Player can now " + (hasToDodge ? "dodge" : "counter") + " attacks -> " + onlyThis);
+    }
+    */
 
     public override void ChangeHealth(float dmg)
     {
@@ -115,6 +135,10 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
 
     }
 
+    #endregion
+
+    #region IUpdateData Methods
+
     public void OnLoad() { }
 
     public void UpdateData()
@@ -124,5 +148,7 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         dataManager.savedPlayerStatsMult = entityStatsMult;
 
     }
+
+    #endregion
 
 }

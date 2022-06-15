@@ -22,6 +22,27 @@ public abstract class EntityBattleManager : MonoBehaviour
     [SerializeField]
     private bool isPlayer = false;
 
+    [Header("")]
+
+    //reference to the player's dodge and counter manager
+    [SerializeField]
+    protected BattleDodgeCounter battleDodgeCounter;
+
+    //indicates wheter or not the attack that this entity is about to use can be dodged
+    [SerializeField]
+    protected bool canOwnAttackBeDodged = false;
+    //indicates wheter or not the attack that this entity is about to use can be countered
+    [SerializeField]
+    protected bool canOwnAttackBeCountered = false;
+
+    //indicates what type of dodge this entity can do
+    [SerializeField]
+    protected int entityDodgeType = -1;
+    //indicates what type of counter this entity can do
+    [SerializeField]
+    protected int entityCounterType = -1;
+
+
     protected virtual void Awake()
     {
 
@@ -99,5 +120,49 @@ public abstract class EntityBattleManager : MonoBehaviour
     {
 
     }
+
+    #region Methods For Entity DodgeCounter
+
+    /// <summary>
+    /// Allows to change what type of dodge and or counter this entity can do
+    /// 
+    ///    <para>
+    ///         DODGES INDEXES: 0 - jump dodge | 1 - vanish dodge
+    ///     </para>
+    ///     <para>
+    ///         COUNTERS INDEXES: 0 - deflect bullets counter | 1 - spiky body counter
+    ///     </para>
+    ///     
+    /// </summary>
+    /// <param name="hasToDodge"></param>
+    /// <param name="onlyThis"></param>
+    public virtual void SetEntityDodgeCounter(bool hasToDodge, bool onlyThis)
+    {
+        //gets the type of dodge or counter to use based on the received parameter("hasToDodge")
+        int dodgeCounterType = hasToDodge ? entityDodgeType : entityCounterType;
+
+        //if the entity has to do only this dodge or counter, removes all the previously active ones and sets only the desired one
+        if (onlyThis) { battleDodgeCounter.SetSingleDodgeCounter(hasToDodge, dodgeCounterType); }
+        //otherwise, the desired dodge counter gets added to the already active ones
+        else { battleDodgeCounter.AddOrRemoveDodgeCounter(hasToDodge, dodgeCounterType, true); }
+        
+    }
+    /// <summary>
+    /// Makes this entity unable to dodge and or counter any attacks
+    /// </summary>
+    public void MakeEntityUnableToDodgeCounter() { battleDodgeCounter.RemoveAllDodgeCounters(); }
+
+    /// <summary>
+    /// Returns wheter or not the attack that this entity is about to use can be dodged
+    /// </summary>
+    /// <returns></returns>
+    public bool AttackAboutToUseIsDodgeable() { return canOwnAttackBeDodged; }
+    /// <summary>
+    /// Returns wheter or not the attack that this entity is about to use can be countered
+    /// </summary>
+    /// <returns></returns>
+    public bool AttackAboutToUseIsCounterable() { return canOwnAttackBeCountered; }
+
+    #endregion
 
 }

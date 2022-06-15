@@ -150,11 +150,24 @@ public class TurnBasedCombatManager : MonoBehaviour
         await Task.Delay((int)(waitForTurnChange * 1000));
 
         int fighterIndex = orderedTurnsOfEntities[currentTurn];
-        entitiesInBattle[fighterIndex].StartOwnTurn();
+        EntityBattleManager fighterThatStartsTurn = entitiesInBattle[fighterIndex];
+        fighterThatStartsTurn.StartOwnTurn();
 
 
-        /*CHANGE THE PLAYER'S DODGE OR COUNTER BASED ON ENEMY TYPE OF ATTACK, WHEN NOT PLAYER'S TURN*/
-        //playerBattleManager.
+        //if the fighter that is starting the turn is an enemy...
+        bool enemyTurn = !fighterThatStartsTurn.IsThisEntityThePlayer();
+        if (enemyTurn)
+        {
+            //...tells the player how to neutralize the attack...
+            //...(BY DODGING)...
+            if (fighterThatStartsTurn.AttackAboutToUseIsDodgeable()) { playerBattleManager.SetEntityDodgeCounter(true, true); }
+            //...(BY COUNTERING)...
+            else if (fighterThatStartsTurn.AttackAboutToUseIsCounterable()) { playerBattleManager.SetEntityDodgeCounter(false, true); }
+            //...otherwise, if the attack can't be dodged nor countered, tells the player that he can't dodge or counter
+            else { playerBattleManager.MakeEntityUnableToDodgeCounter(); }
+
+            //Debug.LogError("CHANGED PLAYER DODGECOUNTER BECAUSE IT'S ENEMY'S TURN");
+        }
 
     }
     /// <summary>

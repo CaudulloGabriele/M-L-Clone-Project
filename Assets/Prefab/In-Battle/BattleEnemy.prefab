@@ -55,6 +55,11 @@ MonoBehaviour:
   - 1
   - 1
   isPlayer: 0
+  battleDodgeCounter: {fileID: 0}
+  canOwnAttackBeDodged: 1
+  canOwnAttackBeCountered: 0
+  entityDodgeType: -1
+  entityCounterType: -1
   thisEnemySR: {fileID: 3729409984998020494}
   selectionArrowPos: {fileID: 5240875511155374493}
   damagePointPos: {fileID: 1743317704340766296}
@@ -72,9 +77,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58dbd26c01923f4da30b2fd9803d472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentActionChoiceState: -1
   actionBlocksSprites: []
   actionsSprites: []
   sideArrowsSprites: []
+  battleDodgeManager: {fileID: 0}
   selectionArrow: {fileID: 0}
 --- !u!114 &8108852061838737011
 MonoBehaviour:

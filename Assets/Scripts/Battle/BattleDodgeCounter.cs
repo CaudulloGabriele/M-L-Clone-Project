@@ -7,6 +7,9 @@ using UnityEngine;
 public class BattleDodgeCounter : MonoBehaviour
 {
 
+    private const int NUMBER_OF_DODGES = 2,
+                      NUMBER_OF_COUNTERS = 2;
+
     #region Variables
 
     //reference to this entity's jump manager
@@ -33,7 +36,7 @@ public class BattleDodgeCounter : MonoBehaviour
     [Header("COUNTER-ATTACKS")]
 
     [SerializeField]
-    private bool deflectBullets; //the entity will try to counter-attack by deflecting incoming bullets
+    private bool deflectBulletsCounter; //the entity will try to counter-attack by deflecting incoming bullets
     [SerializeField]
     private bool spikyBodyCounter; //the entity will counter-attack any physical attack
 
@@ -41,6 +44,8 @@ public class BattleDodgeCounter : MonoBehaviour
     private bool isDodgeCountering = false;
 
     #endregion
+
+    #region Dodge AND/OR Counter Management
 
     /// <summary>
     /// Starts dodging or countering
@@ -61,7 +66,7 @@ public class BattleDodgeCounter : MonoBehaviour
 
         //COUNTERS
 
-        if (deflectBullets) DeflectBullets();
+        if (deflectBulletsCounter) DeflectBullets();
         if (spikyBodyCounter) SpikyBodyCounter();
 
     }
@@ -74,6 +79,8 @@ public class BattleDodgeCounter : MonoBehaviour
         isDodgeCountering = false;
 
     }
+
+    #endregion
 
     #region Dodges
 
@@ -151,12 +158,13 @@ public class BattleDodgeCounter : MonoBehaviour
         {
             //Debug.LogError("JUMP DODGE START");
 
+            //...starts the deflection counter...
             bulletsDeflector.Deflect();
 
-
+            //...gets the duration and cooldown of the counter...
             float deflectDuration = bulletsDeflector.GetDeflectDuration();
             float deflectCD = bulletsDeflector.GetDeflectCooldown();
-
+            //...waits for the deflect counter to end...
             await Task.Delay((int)(deflectDuration * 1000));
             await Task.Delay((int)(deflectCD * 1000));
 
@@ -173,6 +181,93 @@ public class BattleDodgeCounter : MonoBehaviour
     {
 
 
+
+    }
+
+    #endregion
+
+    #region Setter Methods
+
+    /// <summary>
+    /// Allows to set the only dodge/counter the entity can do
+    /// 
+    ///     <para>
+    ///         DODGES INDEXES: 0 - jump dodge | 1 - vanish dodge
+    ///     </para>
+    ///     <para>
+    ///         COUNTERS INDEXES: 0 - deflect bullets counter | 1 - spiky body counter
+    ///     </para>
+    ///     
+    /// </summary>
+    /// <param name="dodge"></param>
+    /// <param name="dodgeCounterType"></param>
+    public void SetSingleDodgeCounter(bool dodge, int dodgeCounterType)
+    {
+        //removes all the active dodges and counters
+        RemoveAllDodgeCounters();
+
+        //activates the desired dodge or counter
+        AddOrRemoveDodgeCounter(dodge, dodgeCounterType, true);
+
+    }
+    /// <summary>
+    /// Allows to add or remove a dodge or counter that the entity can do
+    /// 
+    ///    <para>
+    ///         DODGES INDEXES: 0 - jump dodge | 1 - vanish dodge
+    ///     </para>
+    ///     <para>
+    ///         COUNTERS INDEXES: 0 - deflect bullets counter | 1 - spiky body counter
+    ///     </para>
+    ///     
+    /// </summary>
+    /// <param name="dodge"></param>
+    /// <param name="dodgeCounterType"></param>
+    /// <param name="toAdd"></param>
+    public void AddOrRemoveDodgeCounter(bool dodge, int dodgeCounterType, bool toAdd)
+    {
+        //if it wants to add or remove a dodge...
+        if (dodge)
+        {
+            //...adds or removes a dodge, based on the received type
+            switch (dodgeCounterType)
+            {
+
+                case 0: { jumpDodge = toAdd; break; }
+
+                case 1: { vanishDodge = toAdd; break; }
+
+                default: { Debug.LogError("TRIED TO " + (toAdd ? "ADD" : "REMOVE") + " INCORRECT TYPE OF DODGE: " + dodgeCounterType); break; }
+
+            }
+
+        }
+        //otherwise, it wants to add or remove a counter, so...
+        else
+        {
+            //...adds or removes a counter, based on the received type
+            switch (dodgeCounterType)
+            {
+
+                case 0: { deflectBulletsCounter = toAdd; break; }
+
+                case 1: { spikyBodyCounter = toAdd; break; }
+
+                default: { Debug.LogError("TRIED TO " + (toAdd ? "ADD" : "REMOVE") + " INCORRECT TYPE OF COUNTER: " + dodgeCounterType); break; }
+
+            }
+
+        }
+
+    }
+    /// <summary>
+    /// Makes the entity unable to dodge or counter anything
+    /// </summary>
+    public void RemoveAllDodgeCounters()
+    {
+
+        for (int dodge = 0; dodge < NUMBER_OF_DODGES; dodge++) { AddOrRemoveDodgeCounter(true, dodge, false); }
+        for (int counter = 0; counter < NUMBER_OF_COUNTERS; counter++) { AddOrRemoveDodgeCounter(false, counter, false); }
 
     }
 

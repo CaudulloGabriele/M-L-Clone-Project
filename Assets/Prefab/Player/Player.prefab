@@ -1120,8 +1120,12 @@ MonoBehaviour:
   - 1
   - 1
   isPlayer: 1
+  battleDodgeCounter: {fileID: 7276305456194002487}
+  canOwnAttackBeDodged: 1
+  canOwnAttackBeCountered: 1
+  entityDodgeType: 0
+  entityCounterType: 0
   battleActionsManager: {fileID: 3902702876966139700}
-  battleDodgeCounter: {fileID: 0}
 --- !u!114 &2856947377976761259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1323,7 +1327,7 @@ MonoBehaviour:
   isAutomatic: 0
   jumpDodge: 1
   vanishDodge: 0
-  deflectBullets: 0
+  deflectBulletsCounter: 0
   spikyBodyCounter: 0
 --- !u!61 &7495374366005131575
 BoxCollider2D:
