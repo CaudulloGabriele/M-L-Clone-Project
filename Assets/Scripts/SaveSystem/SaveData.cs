@@ -16,6 +16,11 @@ public class SaveData
     public int savedPlayerLevel;
     public float[] savedPlayerStatsMult;
 
+    //indicates which dodge the player equipped, and will perform, during a battle
+    public int savedPlayerDodge;
+    //indicates which counter the player equipped, and will perform, during a battle
+    public int savedPlayerCounter;
+
     //GAME DATA-----------------------------------------------------------------------------------------------------------------------------
 
     public SaveData(DataManager data)
@@ -31,6 +36,8 @@ public class SaveData
         savedPlayerPos = data.savedPlayerPos;
         savedPlayerLevel = data.savedPlayerLevel;
         savedPlayerStatsMult = data.savedPlayerStatsMult;
+        savedPlayerDodge = data.savedPlayerDodge;
+        savedPlayerCounter = data.savedPlayerCounter;
 
         //GAME DATA-------------------------------------------------------------------------------------------------------------------------
 

@@ -134,6 +134,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d3c692d965cce43b658c9d729461d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &182856419 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3499004955797352218, guid: 134081b2682167f47b1763b7657afff5, type: 3}
+  m_PrefabInstance: {fileID: 381091117}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &182856423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182856419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9e8d75e7c00ed4d8d92003f5d97f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allDodgesSprites:
+  - {fileID: 21300000, guid: 607723c6661781847ba8119f102c9879, type: 3}
+  - {fileID: 21300000, guid: 3f2b2ae23793baa48a66d98f01154d95, type: 3}
+  allCountersSprites:
+  - {fileID: 21300000, guid: 0ac554b6b6fdc8340a250324992bfd73, type: 3}
+  - {fileID: 21300000, guid: 0e73ecb4b59ad7647b801154b1c41431, type: 3}
 --- !u!1 &205256584 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 345589200675425109, guid: 80c800a1f53cd054baae198ee70402b1, type: 3}
@@ -1469,6 +1492,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 88650554, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1320461899, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0e73ecb4b59ad7647b801154b1c41431, type: 3}
     - target: {fileID: 5217026461614833717, guid: 97e38dd0ce7ec9b4fbb5d0014d7c3634, type: 3}
       propertyPath: m_Name
       value: Player

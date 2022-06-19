@@ -16,6 +16,9 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private ActionChoiceState currentActionChoiceState = ActionChoiceState.notOwnTurn;
 
+    //reference to the DataManager
+    private DataManager dataManager;
+
     [Tooltip("References to the SpriteRenderers of the action blocks in this order:\n1)Current\n2)Right\n3)Back\n4)Left")]
     [SerializeField]
     private SpriteRenderer[] actionBlocksSprites;
@@ -39,6 +42,17 @@ public class BattleActionsManager : MonoBehaviour
     [SerializeField]
     private Transform selectionArrow;
     private GameObject selectionArrowGO;
+
+    //reference to the tip to dodge/counter the incoming attack
+    [SerializeField]
+    private GameObject dodgeCounterTip;
+    //reference to the SpriteRenderer that shows what the player can do to neutralize the incoming attack
+    [SerializeField]
+    private SpriteRenderer dodgeCounterModeSR;
+
+    //reference to the sprite to show when the player has to dodge or counter an incoming attack
+    private Sprite dodgeTipSprite, 
+                   counterTipSprite;
 
     //reference to the instance of the BattleManager
     private BattleManager battleManager;
@@ -68,12 +82,21 @@ public class BattleActionsManager : MonoBehaviour
         //obtains the reference to the gameObject of the selection arrow
         if (selectionArrow) selectionArrowGO = selectionArrow.gameObject;
 
+        //hides the tip on how to dodge or counter the incoming attack
+        ToggleDodgeCounterTip(false);
+
     }
 
     private void Start()
     {
         //gets the reference to the instance of the BattleManager
         battleManager = BattleManager.instance;
+
+        //gets the reference to the DataManager
+        dataManager = PermanentRefs.instance.GetDataManager();
+
+        //updates the tips for dodging/countering, based on what the player has equipped
+        UpdateDodgeCounterTips(dataManager.savedPlayerDodge, dataManager.savedPlayerCounter);
 
     }
 
@@ -324,6 +347,40 @@ public class BattleActionsManager : MonoBehaviour
         else { ChangeSelectedEnemy(selection); }
     }
     /// <summary>
+    /// Changes the currently selected enemy
+    /// </summary>
+    /// <param name="selection"></param>
+    /// <param name="firstSelection"></param>
+    private void ChangeSelectedEnemy(Vector2 selection, bool firstSelection = false)
+    {
+        //if this is the first selection, selects the first active enemy
+        if (firstSelection) currentlySelectedEnemyIndex = 0;
+        //otherwise...
+        else
+        {
+            //...selects the next enemy based on selection...
+            currentlySelectedEnemyIndex += (selection.x > 0) ? 1 : -1;
+
+            //...and makes sure the index doesn't go out of the expected range
+            int currentlyActiveEnemiesAmount = battleManager.GetNumberOfCurrentlyActiveEnemies();
+
+            if (currentlySelectedEnemyIndex >= currentlyActiveEnemiesAmount) currentlySelectedEnemyIndex = 0;
+
+            else if (currentlySelectedEnemyIndex < 0) currentlySelectedEnemyIndex = currentlyActiveEnemiesAmount - 1;
+
+        }
+
+        //positions the arrow over the selected enemy
+        Vector2 overEnemyPos = battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetSelectionArrowPos();
+        PositionSelectionArrow(overEnemyPos);
+
+    }
+
+    #endregion
+
+    #region "HUD" Management
+
+    /// <summary>
     /// Resets the action blocks state
     /// </summary>
     public void ResetActionBlocks()
@@ -374,35 +431,6 @@ public class BattleActionsManager : MonoBehaviour
 
     }
     /// <summary>
-    /// Changes the currently selected enemy
-    /// </summary>
-    /// <param name="selection"></param>
-    /// <param name="firstSelection"></param>
-    private void ChangeSelectedEnemy(Vector2 selection, bool firstSelection = false)
-    {
-        //if this is the first selection, selects the first active enemy
-        if (firstSelection) currentlySelectedEnemyIndex = 0;
-        //otherwise...
-        else
-        {
-            //...selects the next enemy based on selection...
-            currentlySelectedEnemyIndex += (selection.x > 0) ? 1 : -1;
-
-            //...and makes sure the index doesn't go out of the expected range
-            int currentlyActiveEnemiesAmount = battleManager.GetNumberOfCurrentlyActiveEnemies();
-
-            if (currentlySelectedEnemyIndex >= currentlyActiveEnemiesAmount) currentlySelectedEnemyIndex = 0;
-
-            else if (currentlySelectedEnemyIndex < 0) currentlySelectedEnemyIndex = currentlyActiveEnemiesAmount - 1;
-
-        }
-
-        //positions the arrow over the selected enemy
-        Vector2 overEnemyPos = battleManager.GetActiveEnemyAtIndex(currentlySelectedEnemyIndex).GetSelectionArrowPos();
-        PositionSelectionArrow(overEnemyPos);
-
-    }
-    /// <summary>
     /// Allows to change the position of the selection arrow or hide it
     /// </summary>
     /// <param name="newPos"></param>
@@ -416,16 +444,66 @@ public class BattleActionsManager : MonoBehaviour
         if (hide) return;
 
         selectionArrow.position = newPos;
-    
+
+    }
+    /// <summary>
+    /// Allows to show or hide the tip for how to dodge or counter an incoming attack
+    /// </summary>
+    /// <param name="toggle"></param>
+    /// <param name="hasToDodge"></param>
+    public void ToggleDodgeCounterTip(bool toggle, bool hasToDodge = true)
+    {
+        //if there is no reference to the dodge/counter tip, nothing happens
+        if (!dodgeCounterTip) return;
+
+        //toggles the dodge/counter tip
+        dodgeCounterTip.SetActive(toggle);
+
+        //if hidden, the sprite doesn't get changed
+        if (!toggle) return;
+
+        //changes the sprite to show how to neutralize the incoming attack
+        dodgeCounterModeSR.sprite = hasToDodge ? dodgeTipSprite : counterTipSprite;
+
+
+    }
+    /// <summary>
+    /// Allows to change the tips for dodging and countering
+    /// </summary>
+    /// <param name="dodgeIndex"></param>
+    /// <param name="counterIndex"></param>
+    public void UpdateDodgeCounterTips(int dodgeIndex, int counterIndex)
+    {
+        dodgeTipSprite = BattleHUD.GetDodgeCounterSpriteByIndex(true, dodgeIndex);
+        counterTipSprite = BattleHUD.GetDodgeCounterSpriteByIndex(false, counterIndex);
+
     }
 
     #endregion
 
+
+
     #region Getter Methods for Current Action
 
+    /// <summary>
+    /// Returns true if this entity is currently performing a solo action
+    /// </summary>
+    /// <returns></returns>
     public bool SelectedActionIsBasicAttack() { return currentActionIndex == 0; }
+    /// <summary>
+    /// Returns true if this entity is currently performing a co-op action
+    /// </summary>
+    /// <returns></returns>
     public bool SelectedActionIsCoopAttack() { return currentActionIndex == 1; }
+    /// <summary>
+    /// Returns true if this entity is currently running away
+    /// </summary>
+    /// <returns></returns>
     public bool SelectedActionIsRunAway() { return currentActionIndex == 2; }
+    /// <summary>
+    /// Returns true if this entity is using an item
+    /// </summary>
+    /// <returns></returns>
     public bool SelectedActionIsItemUse() { return currentActionIndex == 3; }
 
     #endregion
@@ -447,24 +525,56 @@ public class BattleActionsManager : MonoBehaviour
 
     #region Getter Methods for Current Action Choice State
 
+    /// <summary>
+    /// Returns true if the current turn is not of this entity
+    /// </summary>
+    /// <returns></returns>
     private bool IsNotOwnTurn() { return currentActionChoiceState == ActionChoiceState.notOwnTurn; }
+    /// <summary>
+    /// Returns true if this entity is currently choosing an action to perform
+    /// </summary>
+    /// <returns></returns>
     private bool IsChoosingAction() { return currentActionChoiceState == ActionChoiceState.choosingTypeOfAction; }
+    /// <summary>
+    /// Returns true if this entity is choosing an item to use
+    /// </summary>
+    /// <returns></returns>
     private bool IsChoosingItem() { return currentActionChoiceState == ActionChoiceState.choosingItem; }
+    /// <summary>
+    /// Returns true if this entity is choosing a target for its decided action
+    /// </summary>
+    /// <returns></returns>
     private bool IsChoosingTarget() { return currentActionChoiceState == ActionChoiceState.choosingTarget; }
 
     #endregion
 
     #region Setter Methods for Current Action Choice State
 
+    /// <summary>
+    /// Sets that the current turn is not the one of this entity
+    /// </summary>
     private void SetIsNotOwnTurn() { currentActionChoiceState = ActionChoiceState.notOwnTurn; }
+    /// <summary>
+    /// Sets that this entity is choosing an action to perform
+    /// </summary>
     private void SetIsChoosingAction() { currentActionChoiceState = ActionChoiceState.choosingTypeOfAction; }
+    /// <summary>
+    /// Sets that this entity is choosing an item to use
+    /// </summary>
     private void SetIsChoosingItem() { currentActionChoiceState = ActionChoiceState.choosingItem; }
+    /// <summary>
+    /// Sets that this entity is choosing a target for the decided action
+    /// </summary>
     private void SetIsChoosingTarget() { currentActionChoiceState = ActionChoiceState.choosingTarget; }
 
     #endregion
 
     #region Getter Methods for Actions Scripts
 
+    /// <summary>
+    /// Returns this entity's SoloAction manager
+    /// </summary>
+    /// <returns></returns>
     public SoloAction GetSoloActionManager() { return soloAction; }
 
     #endregion

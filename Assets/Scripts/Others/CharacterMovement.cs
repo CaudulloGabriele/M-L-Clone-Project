@@ -14,6 +14,8 @@ public class CharacterMovement : MonoBehaviour
     //movement speed of the character
     [SerializeField]
     private float speed = 1;
+    //start value of the gravity scale
+    private float startGravityScale = 1;
 
     //indicates wheter or not this character moves by changing the velocity immediately or by adding force
     [SerializeField]
@@ -25,8 +27,10 @@ public class CharacterMovement : MonoBehaviour
 
     private void Awake()
     {
-        //gets the reference to the Rigidbody2D of the character
+        //gets the reference to the Rigidbody2D of the character and its starting values
         rb = GetComponent<Rigidbody2D>();
+
+        startGravityScale = rb.gravityScale;
 
     }
 
@@ -54,6 +58,7 @@ public class CharacterMovement : MonoBehaviour
         rb.velocity = (newVelocity * speed);
 
         movesWithAddedForces = false;
+        rb.gravityScale = 0;
 
     }
     /// <summary>
@@ -66,6 +71,7 @@ public class CharacterMovement : MonoBehaviour
         rb.AddForce(forceToAdd, ForceMode2D.Force);
 
         movesWithAddedForces = true;
+        rb.gravityScale = startGravityScale;
 
     }
 
@@ -73,8 +79,15 @@ public class CharacterMovement : MonoBehaviour
 
     #region Getter Methdos
 
+    /// <summary>
+    /// Returns wheter this character is touching ground or not
+    /// </summary>
+    /// <returns></returns>
     public bool IsCharacterGrounded() { return rb.velocity == Vector2.zero; }
-
+    /// <summary>
+    /// Returns the character's current velocity
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetCurrentVelocity() { return rb.velocity; }
 
     #endregion

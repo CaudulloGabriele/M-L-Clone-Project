@@ -106,16 +106,23 @@ public class PlayerBattleManager : EntityBattleManager, IUpdateData
         //resets the player's action blocks
         battleActionsManager.ResetActionBlocks();
 
+        //hides the tip on how to dodge/counter the incoming attack(since it's the player's turn)
+        battleActionsManager.ToggleDodgeCounterTip(false);
+
     }
 
-    /*
+    
     public override void SetEntityDodgeCounter(bool hasToDodge, bool onlyThis)
     {
-        base.Awake();
+        base.SetEntityDodgeCounter(hasToDodge, onlyThis);
+
+        //shows which button to press to dodge/counter the incoming attack
+        battleActionsManager.ToggleDodgeCounterTip(true, hasToDodge);
+
 
         Debug.LogError("Player can now " + (hasToDodge ? "dodge" : "counter") + " attacks -> " + onlyThis);
     }
-    */
+    
 
     public override void ChangeHealth(float dmg)
     {

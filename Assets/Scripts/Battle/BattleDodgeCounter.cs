@@ -40,6 +40,7 @@ public class BattleDodgeCounter : MonoBehaviour
     [SerializeField]
     private bool spikyBodyCounter; //the entity will counter-attack any physical attack
 
+
     //indicates wheter or not this entity is currently dodging or countering
     private bool isDodgeCountering = false;
 

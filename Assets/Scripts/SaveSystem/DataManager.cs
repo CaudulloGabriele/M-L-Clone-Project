@@ -38,6 +38,11 @@ public class DataManager : MonoBehaviour
     public int savedPlayerLevel;
     public float[] savedPlayerStatsMult;
 
+    //indicates which dodge the player equipped, and will perform, during a battle
+    public int savedPlayerDodge;
+    //indicates which counter the player equipped, and will perform, during a battle
+    public int savedPlayerCounter;
+
     //GAME DATA-------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -131,6 +136,8 @@ public class DataManager : MonoBehaviour
             savedPlayerPos = sd.savedPlayerPos;
             savedPlayerLevel = sd.savedPlayerLevel;
             savedPlayerStatsMult = sd.savedPlayerStatsMult;
+            savedPlayerDodge = sd.savedPlayerDodge;
+            savedPlayerCounter = sd.savedPlayerCounter;
 
             //GAME DATA-----------------------------------------------------------------------------------------------------------------------
 
@@ -150,6 +157,8 @@ public class DataManager : MonoBehaviour
 
         lastSaveScene = 2;
         savedPlayerLevel = 1;
+        savedPlayerDodge = 0;
+        savedPlayerCounter = 0;
 
         Debug.LogWarning("Cancellati dati");
     }
