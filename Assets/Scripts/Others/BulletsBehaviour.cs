@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BulletsBehaviour : MonoBehaviour
+public class BulletsBehaviour : MonoBehaviour, ICounterable
 {
 
     #region Variables
@@ -71,7 +71,9 @@ public class BulletsBehaviour : MonoBehaviour
         Expire();
 
     }
-
+    /// <summary>
+    /// Deflects this bullet the way it is supposed to
+    /// </summary>
     public void DeflectThisBullet()
     {
 
@@ -104,6 +106,18 @@ public class BulletsBehaviour : MonoBehaviour
 
         collisionsManager.SetDamage(damage);
     
+    }
+
+    #endregion
+
+    #region ICounterable Methods
+
+
+    public void CounterThis()
+    {
+
+        DeflectThisBullet();
+
     }
 
     #endregion
