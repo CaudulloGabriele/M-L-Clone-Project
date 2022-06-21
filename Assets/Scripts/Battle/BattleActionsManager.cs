@@ -115,8 +115,8 @@ public class BattleActionsManager : MonoBehaviour
             //NOT OWN TURN
             case ActionChoiceState.notOwnTurn:
                 {
-                    //starts a dodge, since it's not own turn
-                    battleDodgeManager.StartDodgeCounter();
+                    //starts a dodge, since it's not own turn(if an enemy is attacking)
+                    if (TurnBasedCombatManager.IsCurrentlyAnEnemyTurn()) battleDodgeManager.StartDodgeCounter();
 
                     break;
 

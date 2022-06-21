@@ -27,6 +27,9 @@ public class TurnBasedCombatManager : MonoBehaviour
     [SerializeField]
     private float waitForTurnChange = 0.2f;
 
+    //indicates wheter or not the current turn is of an enemy
+    private static bool currentlyEnemyTurn = false;
+
     #endregion
 
     #region MonoBehaviour Methods
@@ -155,8 +158,8 @@ public class TurnBasedCombatManager : MonoBehaviour
 
 
         //if the fighter that is starting the turn is an enemy...
-        bool enemyTurn = !fighterThatStartsTurn.IsThisEntityThePlayer();
-        if (enemyTurn)
+        currentlyEnemyTurn = !fighterThatStartsTurn.IsThisEntityThePlayer();
+        if (currentlyEnemyTurn)
         {
             //...tells the player how to neutralize the attack...
             //...(BY DODGING)...
@@ -182,6 +185,15 @@ public class TurnBasedCombatManager : MonoBehaviour
 
         //comunicates the battle manager that the player lost the battle
         BattleManager.instance.BattleLost();
+
+    }
+    /// <summary>
+    /// Manages what the turn manager has to do when a fight ends
+    /// </summary>
+    public void OnFightEnd()
+    {
+        //comunicates that there is currently no enemy in turn(so the player can't "dodge" during the fight start transition)
+        currentlyEnemyTurn = false;
 
     }
 
@@ -240,5 +252,11 @@ public class TurnBasedCombatManager : MonoBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// Returns wheter the current turn is of an enemy
+    /// </summary>
+    /// <returns></returns>
+    public static bool IsCurrentlyAnEnemyTurn() { return currentlyEnemyTurn; }
 
 }

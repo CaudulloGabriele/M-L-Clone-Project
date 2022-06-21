@@ -264,6 +264,9 @@ public class BattleManager : MonoBehaviour
         //sets the game' state as no more in fight, if not in game over
         if (!GameStateManager.IsGameOver()) GameStateManager.SetFightingState(false);
 
+        //tells the turn manager that the fight ended
+        combatTurnsManager.OnFightEnd();
+
     }
 
     #endregion
